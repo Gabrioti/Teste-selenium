@@ -1,0 +1,1219 @@
+{
+    "mapa_municipal": {
+        "12655348000104": [
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "57029627000192": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "57201446000100": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "20481433000113": [
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Catalão",
+                "automatizado": true,
+                "url": "https://sig.catalao.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "37407156000100": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "37382081000141": [
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "50257147000130": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "51226163000128": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "51565236000106": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "53710866000152": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "53711038000139": [
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "63244973000196": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "03021440000113": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            },
+            {
+                "cidade": "Mara Rosa",
+                "automatizado": true,
+                "url": "https://mararosa.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Santo Antônio",
+                "automatizado": true,
+                "url": "https://santoantoniodegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "17920217000112": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "20514671000188": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "37857810000179": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "11325535000159": [
+            {
+                "cidade": "Formosa",
+                "automatizado": true,
+                "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "08225371000183": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "49723420000195": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "41088225000129": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "49738654000106": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "49722869000139": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "53090677000124": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "53106256000144": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "48933613000108": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "03662952000169": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "03662952000754": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "02156313000169": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Aparecida de Goiânia",
+                "automatizado": true,
+                "url": "https://sigp.aparecida.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "48158886000122": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "05376495000171": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "05376495000414": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "10983854000199": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "50350365000114": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "52468415000198": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "07721416000148": [
+            {
+                "cidade": "Nerópolis",
+                "automatizado": true,
+                "url": "https://neropolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Nova Veneza",
+                "automatizado": true,
+                "url": "https://novaveneza.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Terezópolis",
+                "automatizado": true,
+                "url": "https://terezopolisdegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "39967396000186": [
+            {
+                "cidade": "Nerópolis",
+                "automatizado": true,
+                "url": "https://neropolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Terezópolis",
+                "automatizado": true,
+                "url": "https://terezopolisdegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "10677952000106": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "36276239000136": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "36441610000178": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "23732109000119": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": true,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            }
+        ],
+        "03030662000100": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Goianésia",
+                "automatizado": true,
+                "url": "https://aplicacoes.goianesia.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Porangatu",
+                "automatizado": true,
+                "url": "https://porangatu.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Itaberai",
+                "automatizado": false,
+                "url": "https://itaberai.centi.com.br/servicos/certidaonegativa"
+            }
+        ],
+        "57061667000111": [
+            {
+                "cidade": "Goianésia",
+                "automatizado": true,
+                "url": "https://aplicacoes.goianesia.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "58740525000143": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": true,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            }
+        ],
+        "57066221000180": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Porangatu",
+                "automatizado": true,
+                "url": "https://porangatu.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "12644689003353": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "48342313000154": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "46868324000147": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "11454168000193": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "34210394000124": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "27907624000143": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "57567629000135": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "50631643000101": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "23844675000112": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "41750124000171": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "41749986000184": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "49381226000179": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "45873266000187": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "08310501000186": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Novo Gama",
+                "automatizado": true,
+                "url": "https://novogama.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "11490163000116": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "57003948000118": [
+            {
+                "cidade": "Planaltina",
+                "automatizado": false,
+                "url": "https://planaltina.centi.com.br/servicos/certidaonegativa"
+            }
+        ],
+        "49260899000170": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Estadual DF",
+                "automatizado": false,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "54806499000158": [
+            {
+                "cidade": "Luziana",
+                "automatizado": true,
+                "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "24657951000104": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "21370540000137": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "00670588000190": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "29796800000142": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "35833258000153": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "46659143000100": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            }
+        ],
+        "19758842000135": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": true,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Campo Alegre",
+                "automatizado": true,
+                "url": "https://campoalegredegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "05469973000198": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "36181289000130": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "26040933000104": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "34352790000196": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "06341708000192": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Senador Canedo",
+                "automatizado": false,
+                "url": "https://servicosweb.senadorcanedo.go.gov.br/servicosweb/home.jsf"
+            }
+        ],
+        "39847300000146": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Senador Canedo",
+                "automatizado": false,
+                "url": "https://servicosweb.senadorcanedo.go.gov.br/servicosweb/home.jsf"
+            }
+        ],
+        "55187497000190": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            }
+        ],
+        "13798155000167": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "13798155001996": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "12218450000134": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "55357878000251": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "12367441000105": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "17914170000184": [
+            {
+                "cidade": "Aragoiania",
+                "automatizado": true,
+                "url": "https://aragoiania.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "37517912000145": [
+            {
+                "cidade": "Aragoiania",
+                "automatizado": true,
+                "url": "https://aragoiania.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "12887263000143": [
+            {
+                "cidade": "Abadiânia",
+                "automatizado": true,
+                "url": "https://abadiania.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            },
+            {
+                "cidade": "Iporá",
+                "automatizado": true,
+                "url": "https://ipora.centi.com.br/servicos/certidaonegativa"
+            },
+            {
+                "cidade": "Paraúna",
+                "automatizado": true,
+                "url": "https://parauna.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "23061020000178": [
+            {
+                "cidade": "Bom Jesus",
+                "automatizado": true,
+                "url": "https://bomjesus.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Nerópolis",
+                "automatizado": true,
+                "url": "https://neropolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "28248100000150": [
+            {
+                "cidade": "Nerópolis",
+                "automatizado": true,
+                "url": "https://neropolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
+            }
+        ],
+        "11379044000190": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "54407318000110": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "54873571000160": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "57163621000103": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "16530021000230": [
+            {
+                "cidade": "Cidade Ocidental",
+                "automatizado": true,
+                "url": "https://gestao.cidadeocidental.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "16991176000192": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "42580195000136": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "16991176000869": [
+            {
+                "cidade": "Anápolis",
+                "automatizado": false,
+                "url": "https://portaldocidadao.anapolis.go.gov.br"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "14290582000100": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "37929293000104": [
+            {
+                "cidade": "Estadual DF",
+                "automatizado": true,
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "57831153000106": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "58313657000199": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "58324395000168": [
+            {
+                "cidade": "Águas Lindas",
+                "automatizado": true,
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            }
+        ],
+        "17940416000192": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "24200430000115": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "07663389000102": [
+            {
+                "cidade": "Valparaiso",
+                "automatizado": true,
+                "url": "https://nfe.valparaisodegoias.go.gov.br/Certidao_Index.aspx"
+            }
+        ],
+        "26602020000126": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": true,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "43228462000173": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "43234433000114": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "46546337000108": [
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "54563863000104": [
+            {
+                "cidade": "Caldas Novas",
+                "automatizado": true,
+                "url": "https://caldasnovas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": false,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "40104579000157": [
+            {
+                "cidade": "Aparecida de Goiânia",
+                "automatizado": true,
+                "url": "https://sigp.aparecida.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": true,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "52781783000191": [
+            {
+                "cidade": "Aparecida de Goiânia",
+                "automatizado": true,
+                "url": "https://sigp.aparecida.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Goiânia",
+                "automatizado": true,
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
+            }
+        ],
+        "44111101000105": [
+            {
+                "cidade": "Águas Lindas",
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte",
+                "automatizado": true
+            }
+        ],
+        "43393674000106": [
+            {
+                "cidade": "Aparecida de Goiânia",
+                "url": "https://sigp.aparecida.go.gov.br/sig/app.html#/servicosonline/debito-contribuinte",
+                "automatizado": true
+            }
+        ],
+        "19758842001298": [
+            {
+                "cidade": "Anápolis",
+                "url": "https://portaldocidadao.anapolis.go.gov.br",
+                "automatizado": false
+            },
+            {
+                "cidade": "Flores",
+                "url": "https://floresdegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat",
+                "automatizado": true
+            }
+        ]
+    },
+    "mapa_matriz": {
+        "13798155001996": "13798155000167",
+        "03662952000754": "03662952000169",
+        "16530021000230": "16530021000159",
+        "16991176000869": "16991176000192",
+        "19758842001298": "19758842000135"
+    },
+    "nomes_empreendimentos": {
+        "12655348000104": "7 LM EMPREENDIMENTOS",
+        "57029627000192": "SPE AGL035 LTDA",
+        "57201446000100": "SPE FSA 013 E FSA 014 LTDA",
+        "20481433000113": "SPE PARQUE IMPERIAL II",
+        "37407156000100": "SPE RESERVA 1 LTDA",
+        "37382081000141": "SPE RESERVA 2 LTDA",
+        "50257147000130": "SPE RESERVA 3 LTDA",
+        "51226163000128": "SPE RESERVA 4 LTDA",
+        "51565236000106": "SPE RESERVA 6 LTDA",
+        "53710866000152": "SPE RESERVA 7 LTDA",
+        "53711038000139": "SPE RESERVA 8 LTDA",
+        "63244973000196": "SPE FSA016 LTDA",
+        "03021440000113": "AG MELLO",
+        "17920217000112": "AMÉRICA",
+        "20514671000188": "APICY",
+        "37857810000179": "ATLAS LTDA",
+        "11325535000159": "BELA MARES",
+        "08225371000183": "BP CONSTRUTORA",
+        "49723420000195": "BP GA 005",
+        "41088225000129": "BP GA 007",
+        "49738654000106": "BP GA 008",
+        "49722869000139": "BP GA 009",
+        "53090677000124": "BP GA 011",
+        "53106256000144": "BP GA 012",
+        "48933613000108": "BP GA VI",
+        "03662952000169": "CASA AMSTERDAM Matriz",
+        "03662952000754": "CASA AMSTERDAM Filial",
+        "02156313000169": "CCB",
+        "48158886000122": "ANÁPOLIS 01",
+        "05376495000171": "CONCRETIZA MATRIZ",
+        "05376495000414": "CONCRETIZA FILIAL",
+        "10983854000199": "CONSTRUTETO",
+        "50350365000114": "FK GO",
+        "52468415000198": "ILHAS DO CERRADO I",
+        "07721416000148": "EB CONSTRUTORA",
+        "39967396000186": "EB TEREZÓPOLIS",
+        "10677952000106": "EDIFICAR",
+        "36276239000136": "EDI 2",
+        "36441610000178": "EDI 3",
+        "23732109000119": "EGRÉGORA",
+        "03030662000100": "EXCEL",
+        "57061667000111": "SPE PARQUE",
+        "58740525000143": "PLD",
+        "57066221000180": "SPE PARANAÍBA",
+        "12644689003353": "F.A MOURA",
+        "48342313000154": "RESIDENCIAL IPÊS",
+        "46868324000147": "VILLA CAMPOS",
+        "11454168000193": "FOCO",
+        "34210394000124": "VARANDAS PRIME",
+        "27907624000143": "VILA VERDE III",
+        "57567629000135": "VARANDAS LIVING SPE",
+        "50631643000101": "VARANDAS RESERVA",
+        "23844675000112": "GLOBAL",
+        "41750124000171": "AP 01 SPE",
+        "41749986000184": "AP 02 SPE",
+        "49381226000179": "AP 04 SPE",
+        "45873266000187": "CANI SPE01",
+        "08310501000186": "GOIS",
+        "11490163000116": "PALMO",
+        "57003948000118": "PLANALTINA VILLE SPE",
+        "49260899000170": "JC02",
+        "54806499000158": "JC07",
+        "24657951000104": "JBN",
+        "21370540000137": "JOBS",
+        "00670588000190": "LUNER LTDA",
+        "29796800000142": "JOBS 1 ENGENHARIA LTDA",
+        "35833258000153": "KOEX",
+        "46659143000100": "MORADA JARDIM AMÉRICA SPE LTDA",
+        "19758842000135": "LCM",
+        "05469973000198": "MABEL LTDA",
+        "36181289000130": "EDI 01",
+        "26040933000104": "MAUÁ 21",
+        "34352790000196": "URB MAUÁ 21",
+        "06341708000192": "MBC",
+        "39847300000146": "FAZENDUCHA II",
+        "55187497000190": "PIETRO SPE",
+        "13798155000167": "MENDONÇA E GONÇALVES 13798155000167",
+        "13798155001996": "MENDONÇA E GONÇALVES 13798155001996",
+        "12218450000134": "MIG",
+        "55357878000251": "MV EMPREENDIMENTOS",
+        "12367441000105": "REAL ENGENHARIA",
+        "17914170000184": "NOVA FRONTEIRA",
+        "37517912000145": "DONA TOTA",
+        "12887263000143": "NOVO HORIZONTE",
+        "23061020000178": "ON INCORPORADORA",
+        "28248100000150": "NASCIMENTO SILVA",
+        "11379044000190": "PARK",
+        "54407318000110": "RIVIERA PARK",
+        "54873571000160": "VIENA PARK",
+        "57163621000103": "IMPERIAL VILLE III",
+        "16530021000230": "PATRIMONIAL",
+        "16991176000192": "REALIZA",
+        "42580195000136": "GOIANIA II",
+        "16991176000869": "FILIAL",
+        "14290582000100": "REBRASCON",
+        "37929293000104": "JGS",
+        "57831153000106": "VENEZA SPE",
+        "58313657000199": "MILÃO SPE",
+        "58324395000168": "GOLDEN PARK III",
+        "17940416000192": "RRCI",
+        "24200430000115": "BELLO PARK",
+        "07663389000102": "SILVA BRANCO",
+        "26602020000126": "VILA BRASIL",
+        "43228462000173": "PORTO JACARANDÁ",
+        "43234433000114": "PORTO HORIZONTE",
+        "46546337000108": "PORTO ARARAS II",
+        "54563863000104": "GRAMADO SPE",
+        "40104579000157": "CONVIDA",
+        "52781783000191": "VEIGA JARDIM",
+        "44111101000105": "PORTO QUARESMEIRA SPE",
+        "43393674000106": "PORTO JATOBÁ",
+        "19758842001298": "LCM"
+    }
+}
