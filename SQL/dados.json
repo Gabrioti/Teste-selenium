@@ -1093,6 +1093,20 @@
                 "url": "https://floresdegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat",
                 "automatizado": true
             }
+        ],
+        "48802897000101": [
+            {
+                "cidade": "Goiânia",
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp",
+                "automatizado": true
+            }
+        ],
+        "50343795000109": [
+            {
+                "cidade": "Goiânia",
+                "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp",
+                "automatizado": false
+            }
         ]
     },
     "mapa_matriz": {
@@ -1214,6 +1228,8 @@
         "52781783000191": "VEIGA JARDIM",
         "44111101000105": "PORTO QUARESMEIRA SPE",
         "43393674000106": "PORTO JATOBÁ",
-        "19758842001298": "LCM"
+        "19758842001298": "LCM",
+        "48802897000101": "PORTO BELVEDERTE 1",
+        "50343795000109": "PORTO BOUGAINVILLE 1"
     }
 }

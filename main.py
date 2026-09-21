@@ -341,7 +341,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade in ("Anápolis", "Ánapolis"):
                     rodar_coleta(Anápolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Goiânia":
-                    rodar_coleta(Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Caldas Novas":
                     rodar_coleta(Caldas_Novas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Campo Alegre":
@@ -380,7 +380,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
         
         # A FEDERAL É A ÚNICA QUE RODA FORA DO SELENIUM
         if "FEDERAL" in tipos_cnd_norm and not flag_cancelamento:
-            teste_FEDERAL.recolher_FEDERAL(cnpj, site[1])
+            teste_FEDERAL.recolher_FEDERAL(cnpj, site[1], pasta_download)
 
         # LIMPEZA DE ARQUIVOS INDESEJADOS 
 
