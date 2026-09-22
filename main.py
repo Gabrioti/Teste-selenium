@@ -17,7 +17,7 @@ from selenium.webdriver.chrome.service import Service # Essa biblioteca permite 
 from selenium.webdriver.chrome.options import Options # Essa biblioteca permite que você configure o Chrome.
 
 from Processos import teste_FEDERAL, teste_ESTADUAL, teste_TRABALISTA,teste_COMPRASNET, teste_FGTS, teste_AGEHAB
-from Cidades import Anápolis, Águas_Lindas, Cidade_Ocidental, Formosa, Catalão, Aparecida_de_Goiânia, Luziana, Goianésia, Novo_Gama, Aragoiania, Paraúna, Abadiânia, Santo_Antônio, Mara_Rosa, Nerópolis, Terezópolis, Porangatu, Flores, Iporá, Bom_Jesus, Valparaiso, Goiânia, Caldas_Novas, Campo_Alegre, Nova_Veneza, Senador_Canedo, Planaltina, Itaberai
+from Cidades import Anápolis, Águas_Lindas, Cidade_Ocidental, Formosa, Catalão, Aparecida_de_Goiânia, Luziana, Goianésia, Novo_Gama, Aragoiania, Paraúna, Abadiânia, Santo_Antônio, Mara_Rosa, Nerópolis, Terezópolis, Porangatu, Flores, Iporá, Bom_Jesus, Valparaiso, Goiânia, Caldas_Novas, Campo_Alegre, Nova_Veneza, Senador_Canedo, Planaltina, Itaberai, Estadual_DF
 
 import pandas as pd
 from openpyxl.styles import PatternFill
@@ -180,36 +180,6 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
 
         # 1. Criamos os navegadores fixos
         navegadores_fixos = []
-        if "ESTADUAL" in tipos_cnd_norm:
-            nav_estadual = criar_navegador_configurado()
-            nav_estadual.maximize_window()
-            nav_estadual.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_estadual)
-        
-        if "FGTS" in tipos_cnd_norm:
-            nav_fgts = criar_navegador_configurado()
-            nav_fgts.maximize_window()
-            nav_fgts.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_fgts)
-        
-        if "AGEHAB" in tipos_cnd_norm:
-            nav_agehab = criar_navegador_configurado()
-            nav_agehab.maximize_window()
-            nav_agehab.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_agehab)
-
-        if "TRABALHISTA" in tipos_cnd_norm and not flag_cancelamento:
-            nav_trabalhista = criar_navegador_configurado()
-            nav_trabalhista.maximize_window()
-            nav_trabalhista.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_trabalhista)
-
-        if "COMPRASNET" in tipos_cnd_norm and not flag_cancelamento:
-            nav_comprasnet = criar_navegador_configurado()
-            nav_comprasnet.maximize_window()
-            nav_comprasnet.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_comprasnet)
-
         # Lista para guardar os navegadores municipais DINÂMICOS
         navegadores_municipais = []
         
@@ -250,22 +220,46 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             except Exception as e:
                 print(f"❌ Erro crítico ao executar a tarefa {nome_da_certidao}: {e}")
 
+        # A FEDERAL É A ÚNICA QUE RODA FORA DO SELENIUM
+        if "FEDERAL" in tipos_cnd_norm and not flag_cancelamento:
+            rodar_coleta(teste_FEDERAL.recolher_FEDERAL, "Federal", cnpj, site[1], pasta_download)
+
         # ---------------------------------------------------------
         # A. COLETAS FIXAS
         # ---------------------------------------------------------
         if "ESTADUAL" in tipos_cnd_norm and not flag_cancelamento:
+            nav_estadual = criar_navegador_configurado()
+            nav_estadual.maximize_window()
+            nav_estadual.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+            navegadores_fixos.append(nav_estadual)
             rodar_coleta(teste_ESTADUAL.recolher_estadual, "Estadual", cnpj, site[0], nav_estadual, pasta_download)
             
         if "FGTS" in tipos_cnd_norm and not flag_cancelamento:
+            nav_fgts = criar_navegador_configurado()
+            nav_fgts.maximize_window()
+            nav_fgts.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+            navegadores_fixos.append(nav_fgts)
             rodar_coleta(teste_FGTS.recolher_FGTS, "FGTS", cnpj, site[2], nav_fgts, pasta_download)
             
         if "AGEHAB" in tipos_cnd_norm and not flag_cancelamento:
+            nav_agehab = criar_navegador_configurado()
+            nav_agehab.maximize_window()
+            nav_agehab.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+            navegadores_fixos.append(nav_agehab)
             rodar_coleta(teste_AGEHAB.recolher_agehab, "AGEHAB", cnpj, site[3], nav_agehab, usuario=Usuario.AGEHAB_USUARIO, senha=Usuario.AGEHAB_SENHA)
 
         if "COMPRASNET" in tipos_cnd_norm and not flag_cancelamento:
+            nav_comprasnet = criar_navegador_configurado()
+            nav_comprasnet.maximize_window()
+            nav_comprasnet.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+            navegadores_fixos.append(nav_comprasnet)
             rodar_coleta(teste_COMPRASNET.recolher, "Comprasnet", cnpj, site[4], nav_comprasnet, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
 
         if "TRABALHISTA" in tipos_cnd_norm and not flag_cancelamento:
+            nav_trabalhista = criar_navegador_configurado()
+            nav_trabalhista.maximize_window()
+            nav_trabalhista.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+            navegadores_fixos.append(nav_trabalhista)
             rodar_coleta(teste_TRABALISTA.recolher, "Trabalhista", cnpj, site[5], nav_trabalhista, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
 
 
@@ -276,7 +270,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             for municipio in cidades_da_empresa:
                 if flag_cancelamento:
                     break
-                    
+
                 nome_cidade = municipio["cidade"]
                 print(f"\n[{nome_cidade}] Iniciando verificação do município: {nome_cidade}")
                 
@@ -333,13 +327,13 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade == "Flores":
                     rodar_coleta(Flores.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Iporá":
-                    rodar_coleta(Iporá.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Iporá.recolher, nome_cidade, site_da_cidade, cnpj, pasta_download)
                 elif nome_cidade == "Porangatu":
                     rodar_coleta(Porangatu.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Bom Jesus":
                     rodar_coleta(Bom_Jesus.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade in ("Anápolis", "Ánapolis"):
-                    rodar_coleta(Anápolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Anápolis.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Goiânia":
                     rodar_coleta(Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Caldas Novas":
@@ -353,7 +347,9 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade == "Planaltina":
                     rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Itaberai":
-                    rodar_coleta(Itaberai.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Itaberai.recolher, nome_cidade, site_da_cidade, cnpj, pasta_download)
+                elif nome_cidade == "Estadual DF":
+                    rodar_coleta(Estadual_DF.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 else:
                     print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}\033[0m")
                     navegadores_municipais.remove(nav_mun)
@@ -378,9 +374,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
         for nav in navegadores_municipais:
             nav.quit()
         
-        # A FEDERAL É A ÚNICA QUE RODA FORA DO SELENIUM
-        if "FEDERAL" in tipos_cnd_norm and not flag_cancelamento:
-            teste_FEDERAL.recolher_FEDERAL(cnpj, site[1], pasta_download)
+        
 
         # LIMPEZA DE ARQUIVOS INDESEJADOS 
 
@@ -541,9 +535,7 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                     shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
                     print(f"✅ Troca concluída: {nome_antigo} -> {nome_novo}")
                     if interface:
-                        # Passamos o CNPJ (que já existe no loop) em vez do empresa_nome
-                        interface.janela.after(0, lambda c=cnpj, nd=nome_cnd, dn=data_str_nova, sn=status_novo, m=motivo: 
-                                               interface.adicionar_linha_conferencia(c, nd, dn, sn, m))
+                        interface.janela.after(0, interface.atualizar_painel_conferencia)
                 else:
                     print(f"ℹ️ TROCA RECUSADA: {motivo}")
                     os.remove(caminho_novo) # Apaga o download indesejado
@@ -728,6 +720,8 @@ class InterfaceAutomacao:
             estilo.theme_use("clam")
         except Exception:
             pass
+        
+
         estilo.configure("TNotebook", background="#002b36", borderwidth=0)
         estilo.configure(
             "TNotebook.Tab",
@@ -972,34 +966,40 @@ class InterfaceAutomacao:
         frame_busca_conf.pack(fill="x", padx=14, pady=(14, 0))
         
         tk.Label(
-            frame_busca_conf, text="🔍 Buscar (CNPJ ou Nome):", 
+            frame_busca_conf, text="🔍 Filtrar por Construtora:", 
             bg="#002b36", fg="#38bdf8", font=("Segoe UI", 9, "bold")
         ).pack(side="left")
         
-        self.campo_busca_conf = tk.Entry(
-            frame_busca_conf, width=40, font=("Segoe UI", 10),
-            bg="#073642", fg="#f8fafc", insertbackground="#38bdf8", relief="flat"
+        self.campo_busca_conf = ttk.Combobox(
+            frame_busca_conf, width=40, font=("Segoe UI", 10), state="readonly"
         )
         self.campo_busca_conf.pack(side="left", padx=10)
-        # Aciona o filtro toda vez que uma tecla for solta
-        self.campo_busca_conf.bind("<KeyRelease>", lambda event: self.atualizar_painel_conferencia(self.campo_busca_conf.get()))
+        
+        # Dispara a atualização assim que o usuário seleciona uma opção na lista
+        self.campo_busca_conf.bind("<<ComboboxSelected>>", self.atualizar_painel_conferencia)
 
-        # Configurando a Tabela (Treeview)
+        # --- NOVO: Contêiner exclusivo para agrupar a Tabela e a Barra ---
+        frame_tabela = tk.Frame(self.aba_conferencia, bg="#002b36")
+        frame_tabela.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Configurando a Tabela (Treeview) apontando para o frame_tabela
         colunas = ("Empresa", "Certidão", "Data Validade", "Status Original", "Observações")
-        self.tabela_conferencia = ttk.Treeview(self.aba_conferencia, columns=colunas, show="headings", height=20)
+        self.tabela_conferencia = ttk.Treeview(frame_tabela, columns=colunas, show="headings", height=20)
 
         # Cabeçalhos e Larguras
         for col in colunas:
             self.tabela_conferencia.heading(col, text=col)
             self.tabela_conferencia.column(col, width=150, anchor="center")
-        self.tabela_conferencia.column("Observações", width=350, anchor="w") # Observação precisa ser mais larga
+        self.tabela_conferencia.column("Observações", width=350, anchor="w")
 
-        # Barra de rolagem
-        scroll_tabela = ttk.Scrollbar(self.aba_conferencia, orient="vertical", command=self.tabela_conferencia.yview)
+        # Barra de rolagem clássica (tk) apontando para o frame_tabela
+        scroll_tabela = tk.Scrollbar(frame_tabela, orient="vertical", command=self.tabela_conferencia.yview)
         self.tabela_conferencia.configure(yscroll=scroll_tabela.set)
 
-        self.tabela_conferencia.pack(side="top", fill="both", expand=True, padx=10, pady=10)
-        scroll_tabela.pack(side="right", fill="y", pady=10)
+        # O SEGREDO DO ALINHAMENTO: 
+        # Empacota a barra grudada na direita primeiro, depois a tabela preenche todo o resto!
+        scroll_tabela.pack(side="right", fill="y")
+        self.tabela_conferencia.pack(side="left", fill="both", expand=True)
 
         # Botão para exportar para Excel
         btn_exportar = tk.Button(
@@ -1018,44 +1018,115 @@ class InterfaceAutomacao:
         self.tabela_conferencia.tag_configure('erro', background='#fca5a5', foreground='#7f1d1d') # Vermelho
         self.tabela_conferencia.tag_configure('pendente', background='#f8fafc', foreground='#64748b') # Branco
 
+        # NOVO: Ativa a cópia por duplo clique na tabela
+        self.tabela_conferencia.bind("<Double-1>", self.copiar_texto_celula)
+
         # Remove tela de carregamento suavemente
         self.tela_splash.destroy()
+
+        # Preenche a Combobox de empresas assim que o widget for criado
+        self.carregar_opcoes_empresas_painel()
 
         # Inicia loop de atualização do terminal
         self.janela.after(100, self.atualizar_interface)
 
-    def atualizar_painel_conferencia(self, filtro=""):
-        """Constrói o painel criando as Linhas Mestres e as Certidões Esperadas"""
+    def copiar_texto_celula(self, event):
+        """Identifica qual célula recebeu o duplo clique e envia o texto (ou o CNPJ isolado) para a área de transferência."""
+        # Verifica se o clique foi realmente em uma célula
+        regiao = self.tabela_conferencia.identify_region(event.x, event.y)
+        if regiao == "cell":
+            coluna_id = self.tabela_conferencia.identify_column(event.x) # Ex: '#1' é a Empresa
+            linha_id = self.tabela_conferencia.identify_row(event.y)
+            
+            valores = self.tabela_conferencia.item(linha_id, "values")
+            if valores:
+                indice_coluna = int(coluna_id.replace('#', '')) - 1
+                texto_celula = str(valores[indice_coluna]).strip()
+                
+                if texto_celula:
+                    texto_copiado = texto_celula
+                    
+                    # Inteligência extra: Se clicou na coluna da Empresa e tem "CNPJ:", copia só os números do CNPJ
+                    if indice_coluna == 0 and "CNPJ:" in texto_celula:
+                        import re
+                        # Pega os números logo após a palavra CNPJ:
+                        busca_cnpj = re.search(r'CNPJ:\s*(\d+)', texto_celula)
+                        if busca_cnpj:
+                            texto_copiado = busca_cnpj.group(1)
+                            
+                    # Limpa a memória e copia
+                    self.janela.clipboard_clear()
+                    self.janela.clipboard_append(texto_copiado)
+                    
+                    # Mostra um aviso rápido confirmando a ação (opcional)
+                    messagebox.showinfo("Copiado", f"O seguinte texto foi copiado para sua área de transferência:\n\n{texto_copiado}", parent=self.janela)
+
+    def carregar_opcoes_empresas_painel(self):
+        """Lê os nomes das Construtoras (pastas raiz) na rede e preenche o filtro de opções."""
+        try:
+            construtoras = gerenciador_pastas.listar_construtoras()
+        except Exception as e:
+            print(f"Erro ao carregar construtoras para o painel: {e}")
+            construtoras = []
+            
+        # Cria a lista com a opção "Todas" no topo, seguida das construtoras em ordem alfabética
+        lista_opcoes = ["Todas as Construtoras"] + sorted(construtoras)
+        self.campo_busca_conf['values'] = lista_opcoes
+        self.campo_busca_conf.current(0) # Deixa "Todas as Construtoras" selecionado por padrão
+
+    def atualizar_painel_conferencia(self, event=None):
+        """Constrói o painel filtrando os CNPJs pela Construtora selecionada."""
         # 1. Limpa a tabela
         for item in self.tabela_conferencia.get_children():
             self.tabela_conferencia.delete(item)
+
+        maior_largura_coluna = 150 # Largura mínima padrão em pixels
             
-        termo = filtro.strip().lower()
+        # Pega a construtora exata que foi selecionada na Combobox
+        try:
+            construtora_selecionada = self.campo_busca_conf.get()
+        except AttributeError:
+            construtora_selecionada = "Todas as Construtoras"
+            
+        # 2. Descobre os CNPJs que pertencem à Construtora selecionada vasculhando as pastas
+        cnpjs_da_construtora = set()
+        if construtora_selecionada != "Todas as Construtoras":
+            try:
+                empreendimentos = gerenciador_pastas.listar_empreendimentos(construtora_selecionada)
+                for emp in empreendimentos:
+                    # Extrai os números do CNPJ do nome da pasta (ex: SPE RESERVA 1 - 12655348000104)
+                    numeros = re.findall(r'\d{14}', emp)
+                    if numeros:
+                        cnpjs_da_construtora.add(numeros[0])
+            except Exception as e:
+                print(f"Erro ao listar empreendimentos da construtora {construtora_selecionada}: {e}")
         
-        # 2. Puxa os bancos de dados
+        # 3. Puxa os bancos de dados
         mapa_municipal = gerenciador_cnpj.obter_mapa_municipal()
         historico = gerenciador_historico.carregar_historico()
-        
-        # Certidões padrão que toda empresa tem
-        certidoes_padrao = ["Federal", "Estadual", "Trabalhista", "FGTS", "Comprasnet", "AGEHAB"]
+        certidoes_padrao = ["Federal", "Estadual", "Trabalhista", "FGTS", "ComprasNet", "AGEHAB"]
 
-        # 3. Monta a árvore para cada empresa
+        # 4. Monta a árvore para cada empresa
         for cnpj, cidades_config in mapa_municipal.items():
+            
+            # FILTRO EXATO PELA CONSTRUTORA:
+            if construtora_selecionada != "Todas as Construtoras" and cnpj not in cnpjs_da_construtora:
+                continue
+                
             nome_empresa = gerenciador_cnpj.obter_nome_empreendimento(cnpj) or "Empresa Não Cadastrada"
             matriz = gerenciador_cnpj.obter_matriz_do_cnpj(cnpj)
-            
-            # Se tiver pesquisa, verifica se o CNPJ ou Nome batem. Se não, pula para o próximo.
-            if termo and termo not in cnpj and termo not in nome_empresa.lower():
-                continue
             
             # --- LINHA MESTRE (CABEÇALHO DA EMPRESA) ---
             if matriz:
                 texto_cabecalho = f"🏢 CERTIDÕES {nome_empresa} (CNPJ: {cnpj} | Matriz: {matriz})"
             else:
                 texto_cabecalho = f"🏢 CERTIDÕES {nome_empresa} (CNPJ: {cnpj})"
+
+            # NOVO: Mede o tamanho aproximado do texto (8 pixels por letra) e atualiza o recorde
+            largura_estimada = len(texto_cabecalho) * 8
+            if largura_estimada > maior_largura_coluna:
+                maior_largura_coluna = largura_estimada
                 
-            # Inserimos uma linha onde apenas a coluna "Empresa" tem texto, o resto fica vazio.
-            # A tag 'cabecalho' deixará a linha cinza/destacada
             self.tabela_conferencia.insert(
                 "", "end", 
                 values=(texto_cabecalho, "", "", "", ""), 
@@ -1065,7 +1136,6 @@ class InterfaceAutomacao:
             # --- DESCOBRE TODAS AS CNDS DESSA EMPRESA ---
             certidoes_esperadas = certidoes_padrao.copy()
             for config in cidades_config:
-                # Adiciona as cidades automatizadas na lista de esperadas
                 if config.get("automatizado"):
                     certidoes_esperadas.append(config.get("cidade"))
                     
@@ -1073,25 +1143,23 @@ class InterfaceAutomacao:
             hist_empresa = historico.get(cnpj, {})
             
             for certidao in certidoes_esperadas:
-                # Busca se já tem resultado no JSON, se não, preenche como vazio/Pendente
                 dados_cnd = hist_empresa.get(certidao, {"validade": "", "status": "Pendente", "observacao": ""})
                 
                 val = dados_cnd["validade"]
                 stat = dados_cnd["status"]
                 obs = dados_cnd["observacao"]
                 
-                # Regras de Cor para as tags (Igual a sua planilha)
-                tag = "pendente" # Branco ou cinza clarinho
+                # Regras de Cor
+                tag = "pendente"
                 if "Falha" in stat or "Bloqueio" in obs or "Vencida" in stat:
-                    tag = "erro" # Vermelho
+                    tag = "erro"
                 elif "Efeito" in stat:
-                    tag = "atencao" # Amarelo
+                    tag = "atencao"
                 elif "Positiva" in stat:
                     tag = "erro"
                 elif "Negativa" in stat:
-                    tag = "negativa" # Verde
+                    tag = "negativa"
                     
-                # Insere a certidão embaixo do cabeçalho
                 self.tabela_conferencia.insert(
                     "", "end", 
                     values=("", certidao, val, stat, obs), 

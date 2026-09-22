@@ -1,20 +1,35 @@
-# [HEADLESS: NÃO APLICÁVEL - COLETA MANUAL]
-# Este portal requer emissão manual pelo contribuinte.
-# No arquivo dados.py, o município de Anápolis está configurado com 'automatizado: False'.
-
 import os
 import sys
+# Ajuste o import abaixo dependendo da pasta onde você salvou o assistente_manual.py
+from Gerenciadores.assistente_manual import solicitar_acao_manual
 
-siteCadastro = "https://portaldocidadao.anapolis.go.gov.br"
 
+def recolher(CNPJ, site, pasta_download):
+    nome_cidade = "Estadual DF"
 
-def recolher(CNPJ, site, navegador, pasta_download):
-    print(f"\033[33m[Anápolis] A emissão para Anápolis é manual (automatizado: False no dados.py).\033[0m")
-    return
-
+    print(f"[{nome_cidade}] Iniciando coleta assistida para o CNPJ: {CNPJ}...")
+    
+    # Chama o módulo isolado passando o nome do órgão para personalizar a janela
+    sucesso, mensagem = solicitar_acao_manual(
+        cnpj=CNPJ,
+        site=site,
+        pasta_download=pasta_download,
+        nome_orgao=nome_cidade
+    )
+    
+    return sucesso, mensagem
 
 if __name__ == "__main__":
-    print(f"\033[36m--- Anápolis (Coleta Manual) ---\033[0m")
-    print(f"URL: {siteCadastro}")
-    print("Este município deve ser emitido manualmente pelo usuário.")
+    sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
+    
+    CNPJ_TESTE = "13798155001996" 
+    SITE_TESTE = "https://portaldocidadao.anapolis.go.gov.br"
+    PASTA_TESTE = r"C:\Users\FAGabrioti\Desktop\Teste selenium\RenomearCNDs\CNDs"
+    NOME_CIDADE = "Anápolis"
+
+    print(f"\033[36m--- Teste Avulso: CND {NOME_CIDADE} ---\033[0m")
+    sucesso, mensagem = recolher(CNPJ_TESTE,SITE_TESTE, PASTA_TESTE)
+    
+    print("\n\033[36m--- Resultado Final ---\033[0m")
+    print(f"Sucesso: {sucesso} | Observação: '{mensagem}'")
 

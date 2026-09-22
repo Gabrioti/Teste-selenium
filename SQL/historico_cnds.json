@@ -194,5 +194,248 @@
             "status": "Negativa",
             "observacao": ""
         }
+    },
+    "43228462000173": {
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "43234433000114": {
+        "AGEHAB": {
+            "validade": "19.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "43400608000116": {
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "46546337000108": {
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "07663389000102": {
+        "Valparaiso": {
+            "validade": "21.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "36441610000178": {
+        "Valparaiso": {
+            "validade": "22.10.26",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "21.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FEDERAL": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: As informações disponíveis na Receita Federal e na Procuradoria-Geral da Fazenda Nacional sobre o contribuinte 36.441.610/0001-78 são insuficientes para emitir a certidão pela Internet."
+        },
+        "Federal": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: As informações disponíveis na Receita Federal e na Procuradoria-Geral da Fazenda Nacional sobre o contribuinte 36.441.610/0001-78 são insuficientes para emitir a certidão pela Internet."
+        }
+    },
+    "12644689003353": {
+        "Cidade Ocidental": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Estadual": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "21.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "29.09.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Falha ao abrir navegador: 'list' object has no attribute 'lstrip'"
+        }
+    },
+    "12644689000176": {
+        "Federal": {
+            "validade": "03.03.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "48342313000154": {
+        "Cidade Ocidental": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Estadual": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "12.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "01.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "46868324000147": {
+        "Cidade Ocidental": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Estadual": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "20.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "12.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "57066221000180": {
+        "Porangatu": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: A certidão não poderá ser emitida procure o departamento de Arrecadação da prefeitura"
+        },
+        "Comprasnet": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Anápolis": {
+            "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "57029627000192": {
+        "Estadual": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Botão de Confirmação não encontrado na nova aba!"
+        },
+        "Comprasnet": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Falha ao emitir certidão após 3 tentativas."
+        },
+        "Águas Lindas": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Não foi possível emitir a Certidão, por favor procure o setor de arrecadação"
+        }
+    },
+    "57201446000100": {
+        "Estadual": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Botão de Confirmação não encontrado na nova aba!"
+        },
+        "Comprasnet": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Falha ao emitir certidão após 3 tentativas."
+        }
+    },
+    "20481433000113": {
+        "Federal": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Cancelado pelo usuário ou timeout."
+        }
     }
 }
