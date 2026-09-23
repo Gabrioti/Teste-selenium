@@ -6,7 +6,37 @@
             "observacao": "Bloqueio: Não foi possível emitir a Certidão, por favor procure o setor de arrecadação"
         },
         "Formosa": {
-            "validade": "16.12.26",
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "29.09.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "13.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -404,38 +434,177 @@
     },
     "57029627000192": {
         "Estadual": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Botão de Confirmação não encontrado na nova aba!"
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
         },
         "Comprasnet": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Falha ao emitir certidão após 3 tentativas."
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
         },
         "Águas Lindas": {
             "validade": "",
             "status": "Falha na Coleta",
             "observacao": "Bloqueio: Não foi possível emitir a Certidão, por favor procure o setor de arrecadação"
+        },
+        "Trabalhista": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "57201446000100": {
         "Estadual": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Botão de Confirmação não encontrado na nova aba!"
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
         },
         "Comprasnet": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Falha ao emitir certidão após 3 tentativas."
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Formosa": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "20481433000113": {
         "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Formosa": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "04.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Catalão": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "01505643000150": {
+        "Catalão": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "03021440000113": {
+        "Mara Rosa": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Cancelado pelo usuário ou timeout."
+            "observacao": "Bloqueio: A certidão não poderá ser emitida procure o departamento de Arrecadação da prefeitura"
+        },
+        "Estadual": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "21.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "28.09.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Santo Antonio": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "16.03.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "Goiânia": {
+            "validade": "21.12.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     }
 }

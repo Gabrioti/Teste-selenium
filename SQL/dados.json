@@ -22,7 +22,7 @@
         "57201446000100": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             },
             {
@@ -60,7 +60,7 @@
         "50257147000130": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             },
             {
@@ -86,7 +86,7 @@
         "53710866000152": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             },
             {
@@ -105,7 +105,7 @@
         "63244973000196": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             },
             {
@@ -117,7 +117,7 @@
         "03021440000113": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             },
             {
@@ -263,14 +263,14 @@
         "03662952000169": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             }
         ],
         "03662952000754": [
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             },
             {
@@ -282,7 +282,7 @@
         "02156313000169": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
@@ -292,19 +292,19 @@
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "48158886000122": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -316,7 +316,7 @@
             },
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             }
         ],
@@ -423,7 +423,7 @@
         "03030662000100": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
@@ -438,7 +438,7 @@
             },
             {
                 "cidade": "Itaberai",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://itaberai.centi.com.br/servicos/certidaonegativa"
             }
         ],
@@ -616,7 +616,7 @@
         "57003948000118": [
             {
                 "cidade": "Planaltina",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://planaltina.centi.com.br/servicos/certidaonegativa"
             }
         ],
@@ -628,7 +628,7 @@
             },
             {
                 "cidade": "Estadual DF",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             }
         ],
@@ -709,7 +709,7 @@
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -744,7 +744,7 @@
         "06341708000192": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
@@ -756,7 +756,7 @@
         "39847300000146": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
@@ -768,7 +768,7 @@
         "55187497000190": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             }
         ],
@@ -915,31 +915,31 @@
         "16991176000192": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "42580195000136": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "16991176000869": [
             {
                 "cidade": "Anápolis",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://portaldocidadao.anapolis.go.gov.br"
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -986,14 +986,14 @@
         "17940416000192": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "24200430000115": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -1014,21 +1014,21 @@
         "43228462000173": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "43234433000114": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
         "46546337000108": [
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -1040,7 +1040,7 @@
             },
             {
                 "cidade": "Goiânia",
-                "automatizado": false,
+                "automatizado": true,
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
             }
         ],
@@ -1086,7 +1086,7 @@
             {
                 "cidade": "Anápolis",
                 "url": "https://portaldocidadao.anapolis.go.gov.br",
-                "automatizado": false
+                "automatizado": true
             },
             {
                 "cidade": "Flores",
@@ -1105,7 +1105,14 @@
             {
                 "cidade": "Goiânia",
                 "url": "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp",
-                "automatizado": false
+                "automatizado": true
+            }
+        ],
+        "43400608000116": [
+            {
+                "cidade": "Goiânia",
+                "url": "",
+                "automatizado": true
             }
         ]
     },
@@ -1231,6 +1238,7 @@
         "43393674000106": "PORTO JATOBÁ",
         "19758842001298": "LCM",
         "48802897000101": "PORTO BELVEDERTE 1",
-        "50343795000109": "PORTO BOUGAINVILLE 1"
+        "50343795000109": "PORTO BOUGAINVILLE 1",
+        "43400608000116": "PORTO ARARAS I"
     }
 }

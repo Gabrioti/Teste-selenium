@@ -15,6 +15,9 @@ def extrair_cnpj(texto):
     Procura o CNPJ tolerando rótulos mistos (CNPJ/CPF), corrigindo a falta 
     do zero à esquerda e blindado contra espaços em branco gerados pelo OCR.
     """
+    # NOVO: Apaga os CNPJs das prefeituras do texto para o robô focar apenas no da empresa
+    texto = texto.replace("01.505.643/0001-50", "").replace("01505643000150", "").replace("01.505.643-0001-50", "")
+
     # TENTATIVA 1: O jeito super seguro (Busca a linha que contém CNPJ e remove espaços dos números)
     # Procuramos o marcador e pegamos até 30 caracteres na frente dele
     busca_linha = re.search(r'CNPJ(?:/CPF)?\s*:?\s*(.{1,30})', texto)

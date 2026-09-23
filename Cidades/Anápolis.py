@@ -5,7 +5,7 @@ from Gerenciadores.assistente_manual import solicitar_acao_manual
 
 
 def recolher(CNPJ, site, pasta_download):
-    nome_cidade = "Estadual DF"
+    nome_cidade = "Anápolis"
 
     print(f"[{nome_cidade}] Iniciando coleta assistida para o CNPJ: {CNPJ}...")
     

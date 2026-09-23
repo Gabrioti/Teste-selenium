@@ -45,32 +45,44 @@ def recolher_estadual(CNPJ, site, navegador, pasta_download):
         WebDriverWait(navegador, 10).until(EC.number_of_windows_to_be(2)) 
 
         # PASSO C: MUDANDO DE ABA ---
+        
+        try:
+            # Espera até 10 segundos para a nova aba abrir
+            WebDriverWait(navegador, 10).until(EC.number_of_windows_to_be(2)) 
+            abas_abertas = navegador.window_handles
 
-        # 1. Pegamos uma lista com todas as abas que o navegador abriu até agora
-        abas_abertas = navegador.window_handles
+            # 1. Mudamos o foco do Selenium para a última aba da lista (a nova)
+            if len(abas_abertas) > 1:
+                navegador.switch_to.window(abas_abertas[-1])
 
-        # 2. Mudamos o foco do Selenium para a última aba da lista (índice -1), que é a aba nova. Se uma nova aba realmente abriu, mudamos para ela
-        if len(abas_abertas) > 1:
-            navegador.switch_to.window(abas_abertas[-1])
+                # 2. Tenta clicar no botão de confirmação tolerando que ele não exista
+                try:
+                    # Espera só 3 segundos, pois se a tela carregou sem ele, o download já começou
+                    botoes_final = WebDriverWait(navegador, 3).until(
+                        EC.presence_of_all_elements_located((By.XPATH, '//*[@id="Certidao.ConfirmaNomeContribuinteSim"]'))
+                    )
+                    if botoes_final and botoes_final[0].is_displayed():
+                        botoes_final[0].click()
+                        time.sleep(2)
+                except Exception:
+                    print(f"\033[33m[ESTADUAL] Botão de confirmação ignorado (aba fechou ou download foi automático).\033[0m")
+                
+                # 3. Fecha a segunda aba caso ela tenha ficado aberta travada
+                if len(navegador.window_handles) > 1:
+                    navegador.close()
 
-        time.sleep(2)
+            # Volta o foco para a tela original para não quebrar os próximos passos
+            navegador.switch_to.window(aba_principal)
+            
+        except Exception:
+            print(f"\033[33m[ESTADUAL] Aba secundária não abriu ou fechou rápido demais. Verificando arquivos...\033[0m")
+            if len(navegador.window_handles) > 0:
+                navegador.switch_to.window(navegador.window_handles[0])
 
-        # 3. Agora sim, clicamos no botão final (o Selenium já está olhando para a aba certa!)
-        botoes_final = navegador.find_elements(By.XPATH, '//*[@id="Certidao.ConfirmaNomeContribuinteSim"]')
-        if botoes_final:
-            botoes_final[0].click()
-        else:
-            msg = "Botão de Confirmação não encontrado na nova aba!"
-            print(f"\033[31m[ESTADUAL] {msg}\033[0m")
-            return False, msg
+        time.sleep(2) # Pausa rápida para dar tempo do arquivo .asp terminar de cair na pasta
 
-        time.sleep(2)
-
-        if len(navegador.window_handles) > 1:
-            navegador.close()
-
-        navegador.switch_to.window(aba_principal)
-
+        # --- FASE DE VERIFICAÇÃO DE ARQUIVO ---
+        
         # 1. Usa o curinga *.asp para listar todos os arquivos com essa extensão na pasta
         arquivos_asp = glob.glob(os.path.join(pasta_download, "*.asp"))
 

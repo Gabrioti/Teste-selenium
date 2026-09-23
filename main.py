@@ -157,6 +157,18 @@ def criar_navegador_configurado():
     opcoes.add_experimental_option("prefs", preferencias)
     opcoes.add_experimental_option("detach", True)
 
+    # NOVO: Limpeza automática de travas (locks) do webdriver-manager
+    caminho_wdm = os.path.join(os.path.expanduser("~"), ".wdm")
+    # Busca por qualquer arquivo de lock que tenha ficado travado
+    arquivos_lock = glob.glob(os.path.join(caminho_wdm, "*.lock*")) + glob.glob(os.path.join(caminho_wdm, ".wdm-lock-*"))
+
+    for lock in arquivos_lock:
+        try:
+            os.remove(lock)
+        except Exception:
+            pass
+
+    # A partir daqui o seu código original continua...
     servico = Service(ChromeDriverManager().install())
 
     # IMPORTANTE: Removi o "detach: True" para que o código Python consiga fechar as janelas no final
@@ -345,7 +357,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade == "Senador Canedo":
                     rodar_coleta(Senador_Canedo.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Planaltina":
-                    rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Itaberai":
                     rodar_coleta(Itaberai.recolher, nome_cidade, site_da_cidade, cnpj, pasta_download)
                 elif nome_cidade == "Estadual DF":
@@ -1104,7 +1116,7 @@ class InterfaceAutomacao:
         # 3. Puxa os bancos de dados
         mapa_municipal = gerenciador_cnpj.obter_mapa_municipal()
         historico = gerenciador_historico.carregar_historico()
-        certidoes_padrao = ["Federal", "Estadual", "Trabalhista", "FGTS", "ComprasNet", "AGEHAB"]
+        certidoes_padrao = ["Federal", "Estadual", "Trabalhista", "FGTS", "Comprasnet", "AGEHAB"]
 
         # 4. Monta a árvore para cada empresa
         for cnpj, cidades_config in mapa_municipal.items():
