@@ -606,5 +606,163 @@
             "status": "Negativa",
             "observacao": ""
         }
+    },
+    "37407156000100": {
+        "Águas": {
+            "validade": "24.10.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "23.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "37382081000141": {
+        "Formosa": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Estadual": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "23.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "50257147000130": {
+        "Formosa": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Estadual": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "23.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "23.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "17920217000112": {
+        "Estadual": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Nenhum arquivo .asp foi encontrado na pasta. O download pode ter falhado ou demorado muito."
+        },
+        "Luziania": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "23.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "07.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "20.01.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
     }
 }
