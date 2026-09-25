@@ -47,6 +47,15 @@ def extrair_codigo_captcha(navegador):
         else:
             raw_bytes = img_el.screenshot_as_png
 
+        # Cria a pasta se não existir
+        if not os.path.exists("dataset_captchas"):
+            os.makedirs("dataset_captchas")
+
+        # Salva a imagem com um timestamp para não sobrescrever
+        nome_arquivo = f"dataset_captchas/img_{int(time.time())}.png"
+        with open(nome_arquivo, "wb") as f:
+            f.write(raw_bytes)
+
         cod_pred = _ocr.classification(raw_bytes).strip()
         cod_limpo = "".join(c for c in cod_pred if c.isalnum() and c.isascii())
 

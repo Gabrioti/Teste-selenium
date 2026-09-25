@@ -226,6 +226,9 @@ def processar_todas_cnds(pasta_trabalho, modo_debug=False):
                     resposta = simpledialog.askstring("Cidade não identificada", f"Arquivo: {nome_arquivo}\nPor favor, digite o nome da cidade:")
                     cidade = resposta.strip().title() if resposta else "Desconhecida"
 
+                if cidade == "Águas" or cidade == "Aguas":
+                    cidade = "Águas Lindas"
+
                 # Faxina anti-erro do Windows
                 cidade = re.sub(r'[<>:"/\\|?*]', '', cidade).strip()
                 

@@ -10,6 +10,7 @@ import tkinter as tk # Essa biblioteca permite que você crie interfaces gráfic
 from tkinter import messagebox, scrolledtext, ttk, simpledialog # Essas bibliotecas permitem que você trabalhe com filas, que são muito usadas para armazenar dados de forma estruturada.
 from datetime import datetime # Essa biblioteca permite que você trabalhe com datas e horas.
 import subprocess # Essa biblioteca permite que você execute comandos do sistema operacional.
+import unicodedata
 
 from selenium import webdriver # Essa biblioteca permite que você automatize ações no navegador.
 from webdriver_manager.chrome import ChromeDriverManager # Essa biblioteca permite que você gerencie o driver do Chrome.
@@ -109,6 +110,35 @@ def extrair_cnpjs_do_nome(nome):
         if len(cnpj_normalizado) == 14:
             cnpjs.add(cnpj_normalizado)
     return cnpjs
+
+def normalizar_nome_certidao(texto):
+    """Normaliza o nome da certidão para busca tolerante a acentos, maiúsculas e grafia."""
+    if not texto:
+        return ""
+    texto_sem_acento = ''.join(
+        c for c in unicodedata.normalize('NFD', str(texto))
+        if unicodedata.category(c) != 'Mn'
+    ).lower().strip()
+    texto_limpo = re.sub(r'[^a-z0-9]', '', texto_sem_acento)
+    if texto_limpo == "luziana":
+        return "luziania"
+    return texto_limpo
+
+def buscar_dados_historico_tolerante(hist_empresa, nome_certidao):
+    """Busca os dados de uma certidão no histórico, tolerando variações de acento, caixa e grafia."""
+    if not isinstance(hist_empresa, dict):
+        return None
+    # 1. Tentativa exata
+    if nome_certidao in hist_empresa:
+        return hist_empresa[nome_certidao]
+    
+    # 2. Tentativa normalizada
+    chave_norm = normalizar_nome_certidao(nome_certidao)
+    for k, v in hist_empresa.items():
+        if normalizar_nome_certidao(k) == chave_norm:
+            return v
+            
+    return None
 
 def criar_navegador_configurado():
     
@@ -229,8 +259,25 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                             observacao=observacao
                         )
                         houve_falha = True
+                elif resultado is False:
+                    gerenciador_historico.registrar_resultado(
+                        cnpj=cnpj,
+                        certidao=nome_da_certidao,
+                        validade="",
+                        status="Falha na Coleta",
+                        observacao="Automação retornou falha sem detalhar observação."
+                    )
+                    houve_falha = True
             except Exception as e:
                 print(f"❌ Erro crítico ao executar a tarefa {nome_da_certidao}: {e}")
+                gerenciador_historico.registrar_resultado(
+                    cnpj=cnpj,
+                    certidao=nome_da_certidao,
+                    validade="",
+                    status="Falha na Coleta",
+                    observacao=f"Erro crítico: {e}"
+                )
+                houve_falha = True
 
         # A FEDERAL É A ÚNICA QUE RODA FORA DO SELENIUM
         if "FEDERAL" in tipos_cnd_norm and not flag_cancelamento:
@@ -304,11 +351,11 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 navegadores_municipais.append(nav_mun)
                 
                 # CHAMA A FUNÇÃO DIRETO (O código vai esperar ela terminar)
-                if nome_cidade == "Águas Lindas":
+                if nome_cidade in ("Águas Lindas", "Aguas Lindas"):
                     rodar_coleta(Águas_Lindas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Cidade Ocidental":
                     rodar_coleta(Cidade_Ocidental.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Valparaiso":
+                elif nome_cidade in ("Valparaiso", "Valparaíso"):
                     rodar_coleta(Valparaiso.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download, solicitar_captcha=solicitar_captcha)
                 elif nome_cidade == "Formosa":
                     rodar_coleta(Formosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
@@ -316,19 +363,19 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                     rodar_coleta(Catalão.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Aparecida de Goiânia":
                     rodar_coleta(Aparecida_de_Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Luziana":
+                elif nome_cidade in ("Luziana", "Luziânia", "Luziania"):
                     rodar_coleta(Luziana.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Goianésia":
                     rodar_coleta(Goianésia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Novo Gama":
                     rodar_coleta(Novo_Gama.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Aragoiania":
+                elif nome_cidade in ("Aragoiania", "Aragoiânia"):
                     rodar_coleta(Aragoiania.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Paraúna":
                     rodar_coleta(Paraúna.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Abadiânia":
                     rodar_coleta(Abadiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Santo Antônio":
+                elif nome_cidade in ("Santo Antônio", "Santo Antonio"):
                     rodar_coleta(Santo_Antônio.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Mara Rosa":
                     rodar_coleta(Mara_Rosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
@@ -339,7 +386,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade == "Flores":
                     rodar_coleta(Flores.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Iporá":
-                    rodar_coleta(Iporá.recolher, nome_cidade, site_da_cidade, cnpj, pasta_download)
+                    rodar_coleta(Iporá.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Porangatu":
                     rodar_coleta(Porangatu.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Bom Jesus":
@@ -358,12 +405,20 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                     rodar_coleta(Senador_Canedo.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
                 elif nome_cidade == "Planaltina":
                     rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Itaberai":
-                    rodar_coleta(Itaberai.recolher, nome_cidade, site_da_cidade, cnpj, pasta_download)
+                elif nome_cidade in ("Itaberai", "Itaberaí"):
+                    rodar_coleta(Itaberai.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Estadual DF":
                     rodar_coleta(Estadual_DF.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 else:
                     print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}\033[0m")
+                    gerenciador_historico.registrar_resultado(
+                        cnpj=cnpj,
+                        certidao=nome_cidade,
+                        validade="",
+                        status="Sem Automação",
+                        observacao="Nenhuma automação vinculada para esta cidade no sistema."
+                    )
+                    houve_falha = True
                     navegadores_municipais.remove(nav_mun)
                     nav_mun.quit()
         else:
@@ -1029,6 +1084,7 @@ class InterfaceAutomacao:
         self.tabela_conferencia.tag_configure('atencao', background='#fde047', foreground='#713f12') # Amarelo
         self.tabela_conferencia.tag_configure('erro', background='#fca5a5', foreground='#7f1d1d') # Vermelho
         self.tabela_conferencia.tag_configure('pendente', background='#f8fafc', foreground='#64748b') # Branco
+        self.tabela_conferencia.tag_configure('manual', background='#bae6fd', foreground='#0369a1') # Azul claro para Coleta Manual
 
         # NOVO: Ativa a cópia por duplo clique na tabela
         self.tabela_conferencia.bind("<Double-1>", self.copiar_texto_celula)
@@ -1147,23 +1203,32 @@ class InterfaceAutomacao:
             
             # --- DESCOBRE TODAS AS CNDS DESSA EMPRESA ---
             certidoes_esperadas = certidoes_padrao.copy()
+            cidades_manuais = set()
             for config in cidades_config:
-                if config.get("automatizado"):
-                    certidoes_esperadas.append(config.get("cidade"))
+                nome_cid = config.get("cidade")
+                if nome_cid:
+                    certidoes_esperadas.append(nome_cid)
+                    if not config.get("automatizado", True):
+                        cidades_manuais.add(nome_cid)
                     
             # --- PREENCHE OS ESPAÇOS DAS CNDS ---
             hist_empresa = historico.get(cnpj, {})
             
             for certidao in certidoes_esperadas:
-                dados_cnd = hist_empresa.get(certidao, {"validade": "", "status": "Pendente", "observacao": ""})
+                dados_cnd = buscar_dados_historico_tolerante(hist_empresa, certidao)
+                if not dados_cnd:
+                    if certidao in cidades_manuais:
+                        dados_cnd = {"validade": "", "status": "Coleta Manual", "observacao": "Pendente de coleta manual"}
+                    else:
+                        dados_cnd = {"validade": "", "status": "Pendente", "observacao": ""}
                 
-                val = dados_cnd["validade"]
-                stat = dados_cnd["status"]
-                obs = dados_cnd["observacao"]
+                val = dados_cnd.get("validade", "")
+                stat = dados_cnd.get("status", "")
+                obs = dados_cnd.get("observacao", "")
                 
                 # Regras de Cor
                 tag = "pendente"
-                if "Falha" in stat or "Bloqueio" in obs or "Vencida" in stat:
+                if "Falha" in stat or "Bloqueio" in obs or "Vencida" in stat or "Sem Automação" in stat:
                     tag = "erro"
                 elif "Efeito" in stat:
                     tag = "atencao"
@@ -1171,6 +1236,8 @@ class InterfaceAutomacao:
                     tag = "erro"
                 elif "Negativa" in stat:
                     tag = "negativa"
+                elif "Manual" in stat:
+                    tag = "manual"
                     
                 self.tabela_conferencia.insert(
                     "", "end", 
@@ -2707,17 +2774,26 @@ class InterfaceAutomacao:
                 fill_vermelho = PatternFill(start_color="F87171", end_color="F87171", fill_type="solid")
                 fill_verde = PatternFill(start_color="86EFAC", end_color="86EFAC", fill_type="solid")
                 fill_amarelo = PatternFill(start_color="FEF08A", end_color="FEF08A", fill_type="solid")
+                fill_azul = PatternFill(start_color="BAE6FD", end_color="BAE6FD", fill_type="solid")
+                fill_cinza = PatternFill(start_color="F8FAFC", end_color="F8FAFC", fill_type="solid")
                 
-                # Pinta as linhas no Excel baseado na coluna 'Status Original'
+                # Pinta as linhas no Excel baseado na coluna 'Status Original' e 'Observações'
                 for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=1, max_col=5):
                     status = str(row[3].value).lower()
+                    obs = str(row[4].value).lower()
                     
-                    if "positiva" in status and "efeito" not in status:
+                    if "falha" in status or "bloqueio" in obs or "vencida" in status or "sem automação" in status:
                         fill_color = fill_vermelho
+                    elif "positiva" in status and "efeito" not in status:
+                        fill_color = fill_vermelho
+                    elif "efeito" in status:
+                        fill_color = fill_amarelo
                     elif "negativa" in status:
                         fill_color = fill_verde
+                    elif "manual" in status:
+                        fill_color = fill_azul
                     else:
-                        fill_color = fill_amarelo # Efeito de negativa
+                        fill_color = fill_cinza # Pendente / Cabeçalho
                         
                     for cell in row:
                         cell.fill = fill_color

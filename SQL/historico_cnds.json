@@ -764,5 +764,227 @@
             "status": "Positiva com Efeito Negativo",
             "observacao": ""
         }
+    },
+    "37857810000179": {
+        "Valparaiso": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "24.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "23.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "22.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "06.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "15.03.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "51226163000128": {
+        "Águas Lindas": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "51565236000106": {
+        "Águas": {
+            "validade": "25.10.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Águas Lindas": {
+            "validade": "25.10.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "53710866000152": {
+        "Formosa": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "CNPJ não cadastrado ou sem débitos encontrados."
+        },
+        "Estadual DF": {
+            "validade": "24.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "53711038000139": {
+        "Formosa": {
+            "validade": "24.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "08310501000186": {
+        "Cidade Ocidental": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
+        },
+        "Novo Gama": {
+            "validade": "25.10.26",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Luziania": {
+            "validade": "25.10.26",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Águas Lindas": {
+            "validade": "25.10.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "25.10.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
     }
 }

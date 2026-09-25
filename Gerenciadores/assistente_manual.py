@@ -4,6 +4,7 @@ import webbrowser
 import pyperclip
 import tkinter as tk
 from tkinter import filedialog, simpledialog, messagebox
+import pyautogui
 
 def solicitar_acao_manual(cnpj, site, pasta_download, nome_orgao="Órgão"):
     """
@@ -48,6 +49,7 @@ def solicitar_acao_manual(cnpj, site, pasta_download, nome_orgao="Órgão"):
                 
                 resultado["sucesso"] = True
                 resultado["mensagem"] = ""
+                pyautogui.hotkey('ctrl', 'w')
                 janela.destroy()
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao anexar arquivo: {e}")
@@ -61,6 +63,7 @@ def solicitar_acao_manual(cnpj, site, pasta_download, nome_orgao="Órgão"):
         if motivo:
             resultado["sucesso"] = False
             resultado["mensagem"] = f"Aviso do Portal: {motivo.strip()}"
+            pyautogui.hotkey('ctrl', 'w')
             janela.destroy()
 
     frame_botoes = tk.Frame(janela, bg="#f8fafc")
