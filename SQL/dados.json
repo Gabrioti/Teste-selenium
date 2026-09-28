@@ -1114,6 +1114,13 @@
                 "url": "",
                 "automatizado": true
             }
+        ],
+        "35833258000234": [
+            {
+                "cidade": "Águas Lindas",
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte",
+                "automatizado": true
+            }
         ]
     },
     "mapa_matriz": {
@@ -1122,7 +1129,8 @@
         "16530021000230": "16530021000159",
         "16991176000869": "16991176000192",
         "19758842001298": "19758842000135",
-        "12644689003353": "12644689000176"
+        "12644689003353": "12644689000176",
+        "35833258000234": "35833258000153"
     },
     "nomes_empreendimentos": {
         "12655348000104": "7 LM EMPREENDIMENTOS",
@@ -1239,6 +1247,7 @@
         "19758842001298": "LCM",
         "48802897000101": "PORTO BELVEDERTE 1",
         "50343795000109": "PORTO BOUGAINVILLE 1",
-        "43400608000116": "PORTO ARARAS I"
+        "43400608000116": "PORTO ARARAS I",
+        "35833258000234": "KOEX ENGENHARIA LTDA FILIAL"
     }
 }

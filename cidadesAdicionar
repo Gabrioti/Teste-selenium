@@ -81,8 +81,8 @@
 81	 Doverlândia	https://doverlandia.megasoftservicos.com.br/cidadao/autent-certidao-negat	
 82	 Edealina	https://edealina.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
 83	 Edéia	https://edeia.centi.com.br/servicos/certidaonegativa	
-84	 Estrela do Norte	não achou	
-85	 Faina	não achou	
+84	 Estrela do Norte	https://estreladonorte.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+85	 Faina	https://faina.centi.com.br/servicos/certidaonegativa	
 86	 Fazenda Nova	https://fazendanova.centi.com.br/servicos/certidaonegativa	
 87	 Firminópolis	https://firminopolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
 88	 Flores de Goiás	ok	
@@ -94,110 +94,110 @@
 94	 Goianésia	ok	
 95	 Goiânia	ok	
 96	 Goianira	https://goianira.sigep.com.br/portal/person/search-certificate-debit.jsf	
-97	 Goiás	não achou	
+97	 Goiás	https://goias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
 98	 Goiatuba	https://goiatuba.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
 99	 Gouvelândia	https://gouvelandia.centi.com.br/servicos/certidaonegativa	
-100	 Guapó	não achou	
-101	 Guaraíta	não achou	
-102	 Guarani de Goiás	não achou	
-103	 Guarinos	não achou	
-104	 Heitoraí	não achou	
+100	 Guapó	https://guapo.centi.com.br/servicos/certidaonegativa	
+101	 Guaraíta	https://guaraita.centi.com.br/servicos/certidaonegativa	
+102	 Guarani de Goiás	https://guaranidegoias.centi.com.br/servicos/certidaonegativa	
+103	 Guarinos	https://guarinos.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+104	 Heitoraí	https://heitorai.go.gov.br/transparencia/certidao-negativa.html	
 105	 Hidrolândia	http://hidrolandia.bsit-br.com.br/portal/person/search-debit.jsf	
-106	 Hidrolina	não achou	
-107	 Iaciara	não achou	
-108	 Inaciolândia	não achou	
-109	 Indiara	não achou	
+106	 Hidrolina	https://hidrolina.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+107	 Iaciara	https://iaciara.centi.com.br/servicos/certidaonegativa	
+108	 Inaciolândia	https://inaciolandia.centi.com.br/servicos/certidaonegativa	
+109	 Indiara	http://gestaopublica.indiara.bsit-br.com.br/portal/person/search-certificate-debit.jsf	
 110	 Inhumas	https://inhumas.centi.com.br/servicos/certidaonegativa	
-111	 Ipameri	não achou	
-112	 Ipiranga de Goiás	não achou	
+111	 Ipameri	https://ipameri.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
+112	 Ipiranga de Goiás	https://ipirangadegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
 113	 Iporá	https://ipora.centi.com.br/servicos/certidaonegativa	
-114	 Israelândia	não achou	
-115	 Itaberaí	não achou	
-116	 Itaguari	não achou	
-117	 Itaguaru	não achou	
-118	 Itajá	não achou	
-119	 Itapaci	não achou	
-120	 Itapirapuã	não achou	
-121	 Itapuranga	não achou	
-122	 Itarumã	não achou	
-123	 Itauçu	não achou	
-124	 Itumbiara	não achou	
-125	 Ivolândia	não achou	
-126	 Jandaia	não achou	
-127	 Jaraguá	não achou	
-128	 Jataí	não achou	
-129	 Jaupaci	não achou	
-130	 Jesúpolis	não achou	
-131	 Joviânia	não achou	
-132	 Jussara	não achou	
-133	 Lagoa Santa	não achou	
-134	 Leopoldo de Bulhões	não achou	
-135	 Luziânia	não achou	
-136	 Mairipotaba	não achou	
-137	 Mambaí	não achou	
-138	 Mara Rosa	não achou	
-139	 Marzagão	não achou	
-140	 Matrinchã	não achou	
-141	 Maurilândia	não achou	
-142	 Mimoso de Goiás	não achou	
+114	 Israelândia	https://israelandia.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+115	 Itaberaí	https://itaberai.centi.com.br/servicos/certidaonegativa	
+116	 Itaguari	https://itaguari.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+117	 Itaguaru	https://itaguaru.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+118	 Itajá	https://itaja.centi.com.br/servicos/certidaonegativa	
+119	 Itapaci	https://itapaci.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+120	 Itapirapuã	https://itapirapua.centi.com.br/servicos/certidaonegativa	
+121	 Itapuranga	https://itapuranga.centi.com.br/servicos/certidaonegativa	
+122	 Itarumã	https://itaruma.centi.com.br/servicos/certidaonegativa	
+123	 Itauçu	https://itaucu.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+124	 Itumbiara	https://itumbiara.centi.com.br/servicos/certidaonegativa	
+125	 Ivolândia	https://ivolandia.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+126	 Jandaia	https://jandaia.sigep.com.br/portal/person/search-certificate-debit.jsf	
+127	 Jaraguá	https://jaragua.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+128	 Jataí	https://jatai.sigep.com.br/portal/person/search-certificate-debit.jsf	
+129	 Jaupaci	https://jaupaci.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+130	 Jesúpolis	https://jesupolis.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+131	 Joviânia	https://joviania.centi.com.br/servicos/certidaonegativa	
+132	 Jussara	https://jussara.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+133	 Lagoa Santa	https://lagoasanta.centi.com.br/servicos/certidaonegativa	
+134	 Leopoldo de Bulhões	https://leopoldodebulhoes.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+135	 Luziânia	ok	
+136	 Mairipotaba	https://mairipotaba.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+137	 Mambaí	https://mambai.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+138	 Mara Rosa	ok	
+139	 Marzagão	https://marzagao.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+140	 Matrinchã	https://matrincha.centi.com.br/servicos/certidaonegativa	
+141	 Maurilândia	https://maurilandia.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+142	 Mimoso de Goiás	https://mimosodegoias.megasoftservicos.com.br/cidadao/autent-certidao-negat	
 143	 Minaçu	não achou	
-144	 Mineiros	não achou	
-145	 Moiporá	não achou	
-146	 Monte Alegre de Goiás	não achou	
-147	 Montes Claros de Goiás	não achou	
+144	 Mineiros	https://mineiros.gdc.net.br/sig/app.html#/servicosonline/debito-contribuinte	
+145	 Moiporá	https://moipora.sigep.com.br/portal/company/search-certificate-debit.jsf	
+146	 Monte Alegre de Goiás	https://montealegre.centi.com.br/servicos/certidaonegativa	
+147	 Montes Claros de Goiás	https://montesclarosdegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
 148	 Montividiu	não achou	
-149	 Montividiu do Norte	não achou	
-150	 Morrinhos	não achou	
-151	 Morro Agudo de Goiás	não achou	
-152	 Mossâmedes	não achou	
-153	 Mozarlândia	não achou	
-154	 Mundo Novo	não achou	
-155	 Mutunópolis	não achou	
-156	 Nazário	não achou	
-157	 Nerópolis	não achou	
-158	 Niquelândia	não achou	
-159	 Nova América	não achou	
-160	 Nova Aurora	não achou	
-161	 Nova Crixás	não achou	
-162	 Nova Glória	não achou	
-163	 Nova Iguaçu de Goiás	não achou	
-164	 Nova Roma	não achou	
-165	 Nova Veneza	não achou	
-166	 Novo Brasil	não achou	
-167	 Novo Gama	não achou	
-168	 Novo Planalto	não achou	
-169	 Orizona	não achou	
-170	 Ouro Verde de Goiás	não achou	
-171	 Ouvidor	não achou	
-172	 Padre Bernardo	não achou	
-173	 Palestina de Goiás	não achou	
-174	 Palmeiras de Goiás	não achou	
-175	 Palmelo	não achou	
-176	 Palminópolis	não achou	
-177	 Panamá	não achou	
-178	 Paranaiguara	não achou	
-179	 Paraúna	não achou	
-180	 Perolândia	não achou	
-181	 Petrolina de Goiás	não achou	
-182	 Pilar de Goiás	não achou	
-183	 Piracanjuba	não achou	
-184	 Piranhas	não achou	
-185	 Pirenópolis	não achou	
-186	 Pires do Rio	não achou	
-187	 Planaltina	não achou	
-188	 Pontalina	não achou	
-189	 Porangatu	não achou	
-190	 Porteirão	não achou	
-191	 Portelândia	não achou	
-192	 Posse	não achou	
-193	 Professor Jamil	não achou	
-194	 Quirinópolis	não achou	
-195	 Rialma	não achou	
-196	 Rianápolis	não achou	
-197	 Rio Quente	não achou	
-198	 Rio Verde	não achou	
-199	 Rubiataba	não achou	
-200	 Sanclerlândia	não achou	
+149	 Montividiu do Norte	https://montividiudonorte.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+150	 Morrinhos	https://morrinhos.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
+151	 Morro Agudo de Goiás	https://morroagudodegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+152	 Mossâmedes	https://mossamedes.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+153	 Mozarlândia	https://mozarlandia.centi.com.br/servicos/certidaonegativa	
+154	 Mundo Novo	https://mundonovo.centi.com.br/servicos/certidaonegativa	
+155	 Mutunópolis	https://mutunopolis.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+156	 Nazário	https://nazario.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+157	 Nerópolis	ok	
+158	 Niquelândia	https://niquelandia.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
+159	 Nova América	https://novaamerica.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+160	 Nova Aurora	https://novaaurora.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+161	 Nova Crixás	https://novacrixas.centi.com.br/servicos/certidaonegativa	
+162	 Nova Glória	https://novagloria.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+163	 Nova Iguaçu de Goiás	https://novaiguacudegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+164	 Nova Roma	https://novaroma.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+165	 Nova Veneza	ok	
+166	 Novo Brasil	https://novobrasil.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+167	 Novo Gama	ok	
+168	 Novo Planalto	https://novoplanalto.megasoftservicos.com.br/cidadao/emissao-certidao-negat
+169	 Orizona	https://orizona.centi.com.br/servicos/certidaonegativa	
+170	 Ouro Verde de Goiás	https://ouroverdedegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat
+171	 Ouvidor	https://ouvidor.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+172	 Padre Bernardo	https://padrebernardo.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+173	 Palestina de Goiás	https://palestinadegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+174	 Palmeiras de Goiás	https://palmeiras.portalservicos.app.br/certidao-regularidade-fiscal?menu=8	
+175	 Palmelo	https://palmelo.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+176	 Palminópolis	https://palminopolis.sigep.com.br/portal/person/search-certificate-debit.jsf	
+177	 Panamá	https://panama.centi.com.br/servicos/certidaonegativa	
+178	 Paranaiguara	https://paranaiguara.centi.com.br/servicos/certidaonegativa	
+179	 Paraúna	https://parauna.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+180	 Perolândia	https://perolandia.centi.com.br/servicos/certidaonegativa	
+181	 Petrolina de Goiás	https://petrolinadegoias.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+182	 Pilar de Goiás	https://pilardegoias.centi.com.br/servicos/certidaonegativa	
+183	 Piracanjuba	https://piracanjuba.centi.com.br/servicos/certidaonegativa	
+184	 Piranhas	https://piranhas.centi.com.br/servicos/certidaonegativa	
+185	 Pirenópolis	https://pirenopolis.centi.com.br/servicos/certidaonegativa	
+186	 Pires do Rio	https://piresdorio.centi.com.br/servicos/certidaonegativa	
+187	 Planaltina	ok	
+188	 Pontalina	https://pontalina.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+189	 Porangatu	ok	
+190	 Porteirão	https://porteirao.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
+191	 Portelândia	https://portelandia.centi.com.br/servicos/certidaonegativa	
+192	 Posse	https://posse.centi.com.br/servicos/certidaonegativa	
+193	 Professor Jamil	https://professorjamil.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+194	 Quirinópolis	https://quirinopolis.centi.com.br/servicos/certidaonegativa	
+195	 Rialma	https://rialma.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+196	 Rianápolis	https://rianapolis.megasoftservicos.com.br/cidadao/autent-certidao-negat	
+197	 Rio Quente	https://rioquente.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+198	 Rio Verde	https://servicos.rioverde.go.gov.br/servicos/certidaonegativa	
+199	 Rubiataba	https://rubiataba.megasoftservicos.com.br/cidadao/emissao-certidao-negat	
+200	 Sanclerlândia	https://sanclerlandia.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte	
 201	 Santa Bárbara de Goiás	não achou	
 202	 Santa Cruz de Goiás	não achou	
 203	 Santa Fé de Goiás	não achou	

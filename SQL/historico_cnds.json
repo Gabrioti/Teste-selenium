@@ -986,5 +986,276 @@
             "status": "Positiva com Efeito Negativo",
             "observacao": ""
         }
+    },
+    "16530021000230": {
+        "Cidade Ocidental": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "23.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "16530021000159": {
+        "Federal": {
+            "validade": "02.01.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "12887263000143": {
+        "Iporá": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Erro crítico: recolher() missing 1 required positional argument: 'pasta_download'"
+        },
+        "Paraúna": {
+            "validade": "03.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "25.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "23.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "07.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "25.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "63244973000196": {
+        "Formosa": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Campo de CNPJ não encontrado no site."
+        },
+        "Estadual": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "27.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "04.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "27.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "20514671000188": {
+        "Cidade Ocidental": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "27.03.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "04.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "05.11.26",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "35833258000234": {
+        "Federal": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: A certidão deve ser emitida para o CNPJ da matriz – 35.833.258/0001-53"
+        },
+        "FGTS": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso CAIXA: Não foi possível verificar a regularidade junto à CAIXA. Solicitamos tentar mais tarde. Caso persista solicitamos comparecer a uma das Agências da CAIXA para obter esclarecimentos adicionais."
+        },
+        "Águas Lindas": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "27.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "35833258000153": {
+        "Federal": {
+            "validade": "28.02.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: O site pede para entrar com o Gov e não recolhe a cnd no cnpj certo"
+        },
+        "Estadual": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "27.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "10.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "46659143000100": {
+        "Estadual": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "27.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "26.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "12.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "27.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "28.02.27",
+            "status": "Positiva com Efeito Negativo",
+            "observacao": ""
+        }
     }
 }

@@ -539,6 +539,36 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
             for pasta in pastas_encontradas:
                 print(f"   - {pasta}")
 
+        # REGRA DE DESEMPATE BLINDADA: Limpa formatações e prioriza a pasta da filial
+        pasta_destino = pastas_encontradas[0]
+        if len(pastas_encontradas) > 1:
+            vinculos = gerenciador_cnpj.obter_todos_vinculos_matriz()
+            
+            # 1. Padroniza os dicionários e listas para conter APENAS números
+            vinculos_limpos = {
+                "".join(filter(str.isdigit, str(filial))): "".join(filter(str.isdigit, str(matriz))) 
+                for filial, matriz in vinculos.items() if matriz
+            }
+            cnpjs_pdf_limpos = {"".join(filter(str.isdigit, str(c))) for c in cnpjs_do_pdf}
+
+            for pasta in pastas_encontradas:
+                cnpjs_desta_pasta = extrair_cnpjs_do_nome(os.path.basename(pasta))
+                
+                encontrou_filial = False
+                for cnpj_pasta in cnpjs_desta_pasta:
+                    cnpj_pasta_limpo = "".join(filter(str.isdigit, str(cnpj_pasta)))
+                    
+                    # 2. Verifica se a matriz desta filial está dentro do nome do PDF
+                    matriz_deste_cnpj = vinculos_limpos.get(cnpj_pasta_limpo)
+                    if matriz_deste_cnpj and matriz_deste_cnpj in cnpjs_pdf_limpos:
+                        pasta_destino = pasta
+                        encontrou_filial = True
+                        break
+                
+                # Se achou a filial correta, quebra o loop das pastas também
+                if encontrou_filial:
+                    break
+
         pasta_destino = pastas_encontradas[0]
         cnpjs_da_pasta = extrair_cnpjs_do_nome(os.path.basename(pasta_destino))
         print(f"\n📁 CNPJ {cnpj} -> Analisando pasta: {os.path.basename(pasta_destino)}")
@@ -1223,25 +1253,50 @@ class InterfaceAutomacao:
                         dados_cnd = {"validade": "", "status": "Pendente", "observacao": ""}
                 
                 val = dados_cnd.get("validade", "")
-                stat = dados_cnd.get("status", "")
+                status = dados_cnd.get("status", "")
                 obs = dados_cnd.get("observacao", "")
                 
+                # Troca os pontos por barras
+                val = val.replace(".", "/")
+                
+                # Verifica dinamicamente o vencimento e a proximidade
+                if val and "Falha" not in status and "Pendente" not in status:
+                    try:
+                        from datetime import datetime
+                        
+                        formato = "%d/%m/%Y" if len(val) >= 10 else "%d/%m/%y"
+                        data_validade = datetime.strptime(val, formato)
+                        hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                        
+                        # Calcula a diferença exata de dias entre hoje e a validade
+                        dias_para_vencer = (data_validade - hoje).days
+                        
+                        if dias_para_vencer < 0:
+                            status = "Vencida"
+                            obs = "A validade desta certidão expirou."
+                        elif 0 <= dias_para_vencer <= 10: 
+                            status = f"Vence em {dias_para_vencer} dias"
+                            obs = "Fique atento, a certidão vencerá em breve."
+                            
+                    except ValueError:
+                        pass 
+
                 # Regras de Cor
                 tag = "pendente"
-                if "Falha" in stat or "Bloqueio" in obs or "Vencida" in stat or "Sem Automação" in stat:
-                    tag = "erro"
-                elif "Efeito" in stat:
-                    tag = "atencao"
-                elif "Positiva" in stat:
-                    tag = "erro"
-                elif "Negativa" in stat:
-                    tag = "negativa"
-                elif "Manual" in stat:
-                    tag = "manual"
+                if "Falha" in status or "Bloqueio" in obs or "Vencida" in status or "Sem Automação" in status:
+                    tag = "erro" # Vermelho
+                elif "Vence" in status: 
+                    tag = "atencao" # Amarelo (Agora APENAS para os avisos de vencimento próximo)
+                elif "Efeito" in status or "Negativa" in status:
+                    tag = "negativa" # Verde (A Positiva com Efeito agora fica verde junto com a Negativa)
+                elif "Positiva" in status:
+                    tag = "erro" # Vermelho (Se for estritamente Positiva)
+                elif "Manual" in status:
+                    tag = "manual" # Azul
                     
                 self.tabela_conferencia.insert(
                     "", "end", 
-                    values=("", certidao, val, stat, obs), 
+                    values=("", certidao, val, status, obs), 
                     tags=(tag,)
                 )
 
@@ -2750,58 +2805,76 @@ class InterfaceAutomacao:
         self.painel_captcha.pack_forget()
     
     def exportar_excel(self):
-        # 1. Coleta os dados que estão aparecendo no Treeview
-        dados_tabela = []
-        for child in self.tabela_conferencia.get_children():
-            dados_tabela.append(self.tabela_conferencia.item(child)["values"])
+            import pandas as pd
+            # NOVO: Importamos também o Border e o Side para desenhar a grade
+            from openpyxl.styles import PatternFill, Border, Side
             
-        if not dados_tabela:
-            messagebox.showwarning("Vazio", "Não há dados no painel para exportar.", parent=self.janela)
-            return
+            # 1. Coleta os dados que estão aparecendo no Treeview
+            dados_tabela = []
+            for child in self.tabela_conferencia.get_children():
+                dados_tabela.append(self.tabela_conferencia.item(child)["values"])
+                
+            if not dados_tabela:
+                messagebox.showwarning("Vazio", "Não há dados no painel para exportar.", parent=self.janela)
+                return
+                
+            # 2. Converte para uma estrutura de dados do Pandas
+            df = pd.DataFrame(dados_tabela, columns=["Empresa", "Certidão", "Data Validade", "Status Original", "Observações"])
             
-        # 2. Converte para uma estrutura de dados do Pandas
-        df = pd.DataFrame(dados_tabela, columns=["Empresa", "Certidão", "Data Validade", "Status Original", "Observações"])
-        
-        # 3. Salva no Excel usando openpyxl para podermos pintar as células
-        caminho_excel = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Relatorio_CNDs_Global.xlsx")
-        
-        try:
-            with pd.ExcelWriter(caminho_excel, engine='openpyxl') as writer:
-                df.to_excel(writer, index=False, sheet_name="Painel Geral")
-                worksheet = writer.sheets["Painel Geral"]
-                
-                # Prepara as cores em Hexadecimal
-                fill_vermelho = PatternFill(start_color="F87171", end_color="F87171", fill_type="solid")
-                fill_verde = PatternFill(start_color="86EFAC", end_color="86EFAC", fill_type="solid")
-                fill_amarelo = PatternFill(start_color="FEF08A", end_color="FEF08A", fill_type="solid")
-                fill_azul = PatternFill(start_color="BAE6FD", end_color="BAE6FD", fill_type="solid")
-                fill_cinza = PatternFill(start_color="F8FAFC", end_color="F8FAFC", fill_type="solid")
-                
-                # Pinta as linhas no Excel baseado na coluna 'Status Original' e 'Observações'
-                for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=1, max_col=5):
-                    status = str(row[3].value).lower()
-                    obs = str(row[4].value).lower()
+            caminho_excel = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Relatorio_CNDs_Global.xlsx")
+            
+            try:
+                with pd.ExcelWriter(caminho_excel, engine='openpyxl') as writer:
+                    df.to_excel(writer, index=False, sheet_name="Painel Geral")
+                    worksheet = writer.sheets["Painel Geral"]
                     
-                    if "falha" in status or "bloqueio" in obs or "vencida" in status or "sem automação" in status:
-                        fill_color = fill_vermelho
-                    elif "positiva" in status and "efeito" not in status:
-                        fill_color = fill_vermelho
-                    elif "efeito" in status:
-                        fill_color = fill_amarelo
-                    elif "negativa" in status:
-                        fill_color = fill_verde
-                    elif "manual" in status:
-                        fill_color = fill_azul
-                    else:
-                        fill_color = fill_cinza # Pendente / Cabeçalho
+                    # --- NOVO: Configurando a Grade (Bordas) ---
+                    borda_fina = Border(
+                        left=Side(style='thin', color='000000'),
+                        right=Side(style='thin', color='000000'),
+                        top=Side(style='thin', color='000000'),
+                        bottom=Side(style='thin', color='000000')
+                    )
+                    
+                    # Prepara as cores em Hexadecimal
+                    fill_vermelho = PatternFill(start_color="F87171", end_color="F87171", fill_type="solid")
+                    fill_verde = PatternFill(start_color="86EFAC", end_color="86EFAC", fill_type="solid")
+                    fill_amarelo = PatternFill(start_color="FEF08A", end_color="FEF08A", fill_type="solid")
+                    fill_azul = PatternFill(start_color="BAE6FD", end_color="BAE6FD", fill_type="solid")
+                    fill_cinza = PatternFill(start_color="F8FAFC", end_color="F8FAFC", fill_type="solid")
+                    
+                    # Pinta as linhas e DESENHA A GRADE
+                    for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=1, max_col=5):
+                        status = str(row[3].value).lower()
+                        obs = str(row[4].value).lower()
                         
-                    for cell in row:
-                        cell.fill = fill_color
+                        if "falha" in status or "bloqueio" in obs or "vencida" in status or "sem automação" in status:
+                            fill_color = fill_vermelho
+                        elif "aviso:" in status:
+                            fill_color = fill_amarelo
+                        elif "efeito" in status or "negativa" in status:
+                            fill_color = fill_verde 
+                        elif "positiva" in status:
+                            fill_color = fill_vermelho
+                        elif "manual" in status:
+                            fill_color = fill_azul
+                        else:
+                            fill_color = fill_cinza 
+                            
+                        for cell in row:
+                            cell.fill = fill_color
+                            cell.border = borda_fina # Aplica a linha de grade na célula
+                    
+                    # --- NOVO: Ajusta a largura das colunas (Margens) ---
+                    worksheet.column_dimensions['A'].width = 55 # Empresa (Larga)
+                    worksheet.column_dimensions['B'].width = 20 # Certidão
+                    worksheet.column_dimensions['C'].width = 15 # Validade
+                    worksheet.column_dimensions['D'].width = 25 # Status
+                    worksheet.column_dimensions['E'].width = 70 # Observações (Super larga)
 
-            messagebox.showinfo("Sucesso", f"Planilha gerada com sucesso em:\n{caminho_excel}", parent=self.janela)
-        except PermissionError:
-            messagebox.showerror("Erro", "Feche a planilha Excel antes de exportar novamente!", parent=self.janela)
-
+                messagebox.showinfo("Sucesso", f"Planilha gerada com sucesso em:\n{caminho_excel}", parent=self.janela)
+            except PermissionError:
+                messagebox.showerror("Erro", "Feche a planilha Excel antes de exportar novamente!", parent=self.janela)
 
     def fechar(self):
         if self.thread_automacao and self.thread_automacao.is_alive():
