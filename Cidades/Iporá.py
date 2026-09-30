@@ -7,6 +7,7 @@ import sys
 # Ajuste o import abaixo dependendo da pasta onde você salvou o assistente_manual.py
 from Gerenciadores.assistente_manual import solicitar_acao_manual
 
+siteCadastro = "https://ipora.centi.com.br/servicos/certidaonegativa"
 
 def recolher(nome_cidade, site, CNPJ, pasta_download):
 

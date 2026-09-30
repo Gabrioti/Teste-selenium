@@ -7,6 +7,7 @@ import sys
 # Ajuste o import abaixo dependendo da pasta onde você salvou o assistente_manual.py
 from Gerenciadores.assistente_manual import solicitar_acao_manual
 
+siteCadastro = "https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp"
 
 def recolher(CNPJ, site, pasta_download):
     nome_cidade = "Goiânia"

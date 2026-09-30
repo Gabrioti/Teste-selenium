@@ -40,6 +40,12 @@ mapa_municipal = dados.get("mapa_municipal", {})
 mapa_matriz = dados.get("mapa_matriz", {})
 
 CNPJ = ["21370540000137"]
+PASTA_RELATORIOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "relatorios")
+
+COR_MUNICIPAL = "\033[38;2;255;204;102m"
+COR_ERRO = "\033[31m"
+COR_RESET = "\033[0m"
+COR_TEXTO = "\033[94m"
 
 from config import Usuario
 
@@ -292,6 +298,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             nav_estadual.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_estadual)
             rodar_coleta(teste_ESTADUAL.recolher_estadual, "Estadual", cnpj, site[0], nav_estadual, pasta_download)
+            nav_estadual.quit()
             
         if "FGTS" in tipos_cnd_norm and not flag_cancelamento:
             nav_fgts = criar_navegador_configurado()
@@ -299,6 +306,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             nav_fgts.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_fgts)
             rodar_coleta(teste_FGTS.recolher_FGTS, "FGTS", cnpj, site[2], nav_fgts, pasta_download)
+            nav_fgts.quit()
             
         if "AGEHAB" in tipos_cnd_norm and not flag_cancelamento:
             nav_agehab = criar_navegador_configurado()
@@ -306,6 +314,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             nav_agehab.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_agehab)
             rodar_coleta(teste_AGEHAB.recolher_agehab, "AGEHAB", cnpj, site[3], nav_agehab, usuario=Usuario.AGEHAB_USUARIO, senha=Usuario.AGEHAB_SENHA)
+            nav_agehab.quit()
 
         if "COMPRASNET" in tipos_cnd_norm and not flag_cancelamento:
             nav_comprasnet = criar_navegador_configurado()
@@ -313,6 +322,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             nav_comprasnet.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_comprasnet)
             rodar_coleta(teste_COMPRASNET.recolher, "Comprasnet", cnpj, site[4], nav_comprasnet, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
+            nav_comprasnet.quit()
 
         if "TRABALHISTA" in tipos_cnd_norm and not flag_cancelamento:
             nav_trabalhista = criar_navegador_configurado()
@@ -320,6 +330,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             nav_trabalhista.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_trabalhista)
             rodar_coleta(teste_TRABALISTA.recolher, "Trabalhista", cnpj, site[5], nav_trabalhista, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
+            nav_trabalhista.quit()
 
 
         # ---------------------------------------------------------
@@ -434,15 +445,9 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             except:
                 pass
 
-        # Fechar navegadores fixos
-        for nav in navegadores_fixos:
-            nav.quit()
-            
         for nav in navegadores_municipais:
             nav.quit()
         
-        
-
         # LIMPEZA DE ARQUIVOS INDESEJADOS 
 
         # 1. Busca qualquer arquivo que termine com .htm ou .html na pasta
@@ -509,7 +514,7 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
         nome_cnd = partes_novo[1]                       # "CND Formosa"
         status_novo = partes_novo[2].strip().lower()    # Pega o status e joga pra minúsculo (ex: "positiva")
         data_str_nova = partes_novo[3]                  # 14.05.27
-        cnpj = partes_novo[4]                           # 12.655.348-0001-04
+        cnpj = partes_novo[-1]                           # 12.655.348-0001-04
         cnpjs_do_pdf = extrair_cnpjs_do_nome(nome_novo) #
         if not cnpjs_do_pdf:
             print(f"❌ Nenhum CNPJ válido foi encontrado no nome do PDF: {nome_novo}")
@@ -569,7 +574,6 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                 if encontrou_filial:
                     break
 
-        pasta_destino = pastas_encontradas[0]
         cnpjs_da_pasta = extrair_cnpjs_do_nome(os.path.basename(pasta_destino))
         print(f"\n📁 CNPJ {cnpj} -> Analisando pasta: {os.path.basename(pasta_destino)}")
         print(f"   CNPJs identificados na pasta: {', '.join(sorted(cnpjs_da_pasta))}")
@@ -620,22 +624,45 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                 
                 # --- FIM DO MOTOR DE REGRAS ---
 
+                # Remove o prefixo "CND " para o nome bater exatamente com o exigido no painel (ex: "CND Federal" -> "Federal")
+                nome_painel = nome_cnd.replace("CND ", "").strip()
+
                 # Executa a ação decidida pelo motor
                 if substituir:
-                    print(f"🔄 TROCA APROVADA: {motivo}")
-                    print(f"   PDF antigo que será apagado: {nome_antigo}")
-                    print(f"   PDF novo que será colocado: {nome_novo}")
-                    print(f"   Destino da troca: {pasta_destino}")
+                    print(f"{COR_MUNICIPAL}🔄 TROCA APROVADA: {motivo}{COR_RESET}")
+                    print(f"{COR_TEXTO}   PDF antigo que será apagado: {nome_antigo}{COR_RESET}")
+                    print(f"{COR_TEXTO}   PDF novo que será colocado: {nome_novo}{COR_RESET}")
+                    print(f"{COR_TEXTO}   Destino da troca: {pasta_destino}{COR_RESET}")
                     os.remove(caminho_antigo)
                     if os.path.exists(caminho_antigo):
                         raise OSError(f"O PDF antigo ainda existe após a remoção: {caminho_antigo}")
                     shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
                     print(f"✅ Troca concluída: {nome_antigo} -> {nome_novo}")
+                    
+                    # --- NOVO: Registra no histórico o PDF Vencedor (Novo) para atualizar a Filial ---
+                    gerenciador_historico.registrar_resultado(
+                        cnpj=cnpj,
+                        certidao=nome_painel,
+                        validade=data_str_nova,
+                        status=status_novo.title(),
+                        observacao=""
+                    )
+                    
                     if interface:
                         interface.janela.after(0, interface.atualizar_painel_conferencia)
                 else:
-                    print(f"ℹ️ TROCA RECUSADA: {motivo}")
+                    print(f"{COR_ERRO}ℹ️ TROCA RECUSADA: {motivo}{COR_RESET}")
                     os.remove(caminho_novo) # Apaga o download indesejado
+                    
+                    # --- NOVO: Mantém o status da antiga no painel mesmo se a nova for recusada ---
+                    status_antigo = partes_antigo[2].strip().title()
+                    gerenciador_historico.registrar_resultado(
+                        cnpj=cnpj,
+                        certidao=nome_painel,
+                        validade=data_str_antiga,
+                        status=status_antigo,
+                        observacao=""
+                    )
 
             else:
                 # Se o arquivo antigo tem um nome zoado que não podemos ler, substituímos por precaução
@@ -645,9 +672,17 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
         else:
             # REGRA 3: Não existe certidão antiga na pasta (salva direto)
             shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
-            print(f"✅ Primeira certidão desse tipo adicionada à pasta!")
-
-PASTA_RELATORIOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "relatorios")
+            print(f"{COR_MUNICIPAL}✅ Primeira certidão desse tipo adicionada à pasta!{COR_RESET}")
+            
+            # --- NOVO: Registra no histórico a primeira certidão ---
+            nome_painel = nome_cnd.replace("CND ", "").strip()
+            gerenciador_historico.registrar_resultado(
+                cnpj=cnpj,
+                certidao=nome_painel,
+                validade=data_str_nova,
+                status=status_novo.title(),
+                observacao=""
+            )
 
 def gerar_relatorio_txt(pasta_destino=None, lista_pendencias=None):
     if lista_pendencias is None:
@@ -2899,5 +2934,3 @@ if __name__ == "__main__":
         pasta_raiz_empresas = r"N:\16. CERTIDÕES\1. Empresas"
 
     InterfaceAutomacao().executar()
-
-

@@ -1121,6 +1121,25 @@
                 "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte",
                 "automatizado": true
             }
+        ],
+        "31461574000786": [
+            {
+                "cidade": "Águas Lindas",
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte",
+                "automatizado": true
+            }
+        ],
+        "52553529000136": [
+            {
+                "cidade": "Estadual DF",
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao",
+                "automatizado": true
+            },
+            {
+                "cidade": "Águas Lindas",
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte",
+                "automatizado": true
+            }
         ]
     },
     "mapa_matriz": {
@@ -1130,7 +1149,8 @@
         "16991176000869": "16991176000192",
         "19758842001298": "19758842000135",
         "12644689003353": "12644689000176",
-        "35833258000234": "35833258000153"
+        "35833258000234": "35833258000153",
+        "31461574000786": "31461574000190"
     },
     "nomes_empreendimentos": {
         "12655348000104": "7 LM EMPREENDIMENTOS",
@@ -1248,6 +1268,8 @@
         "48802897000101": "PORTO BELVEDERTE 1",
         "50343795000109": "PORTO BOUGAINVILLE 1",
         "43400608000116": "PORTO ARARAS I",
-        "35833258000234": "KOEX ENGENHARIA LTDA FILIAL"
+        "35833258000234": "KOEX ENGENHARIA LTDA FILIAL",
+        "31461574000786": "J CEZAR",
+        "52553529000136": "JC05"
     }
 }

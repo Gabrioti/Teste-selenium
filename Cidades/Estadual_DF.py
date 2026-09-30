@@ -3,6 +3,8 @@ import sys
 # Ajuste o import abaixo dependendo da pasta onde você salvou o assistente_manual.py
 from Gerenciadores.assistente_manual import solicitar_acao_manual
 
+siteCadastro = "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
+
 
 def recolher(CNPJ, site, pasta_download):
     nome_cidade = "Estadual DF"
@@ -25,7 +27,7 @@ if __name__ == "__main__":
     CNPJ_TESTE = "13798155001996" 
     SITE_TESTE = "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
     PASTA_TESTE = r"C:\Users\FAGabrioti\Desktop\Teste selenium\RenomearCNDs\CNDs"
-    NOME_CIDADE = "Goiânia"
+    NOME_CIDADE = "Estadual DF"
 
     print(f"\033[36m--- Teste Avulso: CND {NOME_CIDADE} ---\033[0m")
     sucesso, mensagem = recolher(CNPJ_TESTE,SITE_TESTE, PASTA_TESTE)
