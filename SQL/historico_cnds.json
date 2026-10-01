@@ -51,6 +51,11 @@
             "validade": "11.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "14290582000100": {
@@ -142,6 +147,11 @@
             "validade": "11.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "05469973000198": {
@@ -157,6 +167,11 @@
         },
         "FGTS": {
             "validade": "25.09.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -230,6 +245,11 @@
             "validade": "11.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "43234433000114": {
@@ -242,11 +262,21 @@
             "validade": "11.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "43400608000116": {
         "FGTS": {
             "validade": "11.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -256,11 +286,21 @@
             "validade": "13.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "07663389000102": {
         "Valparaiso": {
             "validade": "21.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -381,6 +421,11 @@
             "validade": "01.03.27",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "46868324000147": {
@@ -408,6 +453,11 @@
             "validade": "12.10.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "57066221000180": {
@@ -428,6 +478,11 @@
         },
         "Anápolis": {
             "validade": "22.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -985,6 +1040,11 @@
             "validade": "25.10.26",
             "status": "Positiva com Efeito Negativo",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "16530021000230": {
@@ -1435,12 +1495,22 @@
             "validade": "14.03.27",
             "status": "Positiva com Efeito Negativo",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "13798155001996": {
         "Federal": {
             "validade": "14.03.27",
             "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
             "observacao": ""
         }
     },
@@ -1449,11 +1519,21 @@
             "validade": "28.11.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "03662952000754": {
         "Federal": {
             "validade": "28.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }
@@ -1533,6 +1613,686 @@
         },
         "Planaltina": {
             "validade": "14.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "08225371000183": {
+        "Cidade Ocidental": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Luziania": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Águas Lindas": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "19.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "10.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "082253710001831": {
+        "FGTS": {
+            "validade": "19.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "00670588000190": {
+        "Estadual DF": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: Problema pedindo o login Gov"
+        },
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "06.01.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "21370540000137": {
+        "Comprasnet": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Falha ao emitir certidão após 3 tentativas."
+        },
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "28.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "30.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "20.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "29796800000142": {
+        "Comprasnet": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "10.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "30.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "08.02.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "11325535000159": {
+        "Águas Lindas": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Bloqueio: Não foi possível emitir a Certidão, por favor procure o setor de arrecadação"
+        },
+        "Formosa": {
+            "validade": "30.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "31.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "29.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "09.10.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "02.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "12218450000134": {
+        "Valparaiso": {
+            "validade": "31.10.26",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "02156313000169": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "03030662000100": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "05376495000171": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "05376495000414": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "06341708000192": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "07721416000148": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "10677952000106": {
+        "Trabalhista": {
+            "validade": "25.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "10983854000199": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "11379044000190": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "11454168000193": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "12367441000105": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "16991176000192": {
+        "Trabalhista": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "16991176000869": {
+        "Trabalhista": {
+            "validade": "22.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "17914170000184": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "17940416000192": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "19758842000135": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "19758842001298": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "23061020000178": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "23732109000119": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "23844675000112": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "24657951000104": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "26040933000104": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "26602020000126": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "27907624000143": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "28248100000150": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "34210394000124": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "34352790000196": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "36276239000136": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "37517912000145": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "37929293000104": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "39847300000146": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "39967396000186": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "40104579000157": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "41088225000129": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "41749986000184": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "41750124000171": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "42580195000136": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "43393674000106": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "44111101000105": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "45873266000187": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "48158886000122": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "48933613000108": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "49381226000179": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "49722869000139": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "49723420000195": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "49738654000106": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "50350365000114": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "50631643000101": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "52468415000198": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "52781783000191": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "53090677000124": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "53106256000144": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "54407318000110": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "54563863000104": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "54873571000160": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "55187497000190": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "55357878000251": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "57061667000111": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "57163621000103": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "57567629000135": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "58313657000199": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "58324395000168": {
+        "Trabalhista": {
+            "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "58740525000143": {
+        "Trabalhista": {
+            "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
         }

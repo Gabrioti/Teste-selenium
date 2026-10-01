@@ -107,9 +107,11 @@ def recolher(CNPJ, site, navegador, pasta_download):
             diagnosticar_download_falhou(navegador, pasta_download)
             return False, msg_erro
 
+        return True, ""
+
     except Exception as e:
         msg_erro = "Fluxo de emissão falhou devido a um erro inesperado."
-        print(f"\033[33m[Aragoiânia] Aviso: {msg_erro} CNPJ: {CNPJ}. Detalhe: {e}\033[0m")
+        print(f"\033[33m[Nova Veneza] Aviso: {msg_erro} CNPJ: {CNPJ}. Detalhe: {e}\033[0m")
         # MODIFICADO AQUI: Retorna False e a exceção genérica.
         return False, msg_erro
 

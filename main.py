@@ -46,6 +46,7 @@ COR_MUNICIPAL = "\033[38;2;255;204;102m"
 COR_ERRO = "\033[31m"
 COR_RESET = "\033[0m"
 COR_TEXTO = "\033[94m"
+COR_VERDE = "\033[38;2;102;204;102m"
 
 from config import Usuario
 
@@ -146,6 +147,153 @@ def buscar_dados_historico_tolerante(hist_empresa, nome_certidao):
             
     return None
 
+def verificar_cnd_precisa_coletar(dados_cnd, hoje=None):
+    """
+    Determina se uma CND precisa ser coletada com base em seu histórico e validade.
+    Retorna uma tupla: (precisa_coletar: bool, motivo: str).
+    Critérios para coleta:
+      - Sem registro no histórico ou dados vazios/inválidos
+      - Status com 'Falha' ou 'Pendente'
+      - Sem data de validade informada
+      - Data de validade anterior a hoje (expirada)
+    """
+    if not dados_cnd or not isinstance(dados_cnd, dict):
+        return True, "Sem registro no histórico"
+
+    status = str(dados_cnd.get("status", "")).strip()
+    obs = str(dados_cnd.get("observacao", "")).strip()
+    val = str(dados_cnd.get("validade", "")).strip()
+
+    if "Falha" in status:
+        return True, f"Falha anterior ({obs or status})"
+
+    if "Pendente" in status:
+        return True, "Pendente de coleta"
+
+    if "Sem Automação" in status:
+        return False, "Sem automação disponível"
+
+    if "Manual" in status:
+        if not val:
+            return True, "Pendente de coleta manual"
+
+    if not val:
+        return True, "Sem data de validade"
+
+    val_limpa = val.replace(".", "/")
+    try:
+        from datetime import datetime
+        if hoje is None:
+            hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        formato = "%d/%m/%Y" if len(val_limpa) >= 10 else "%d/%m/%y"
+        data_val = datetime.strptime(val_limpa, formato)
+        dias = (data_val - hoje).days
+        if dias < 0:
+            return True, f"Vencida ({val_limpa})"
+        return False, f"Válida até {val_limpa}"
+    except Exception:
+        return True, f"Data inválida ({val})"
+
+def obter_plano_coleta_em_massa(tipos_cnd_selecionados, apenas_vencidas=True, cnpjs_alvo=None, cidades_filtro=None):
+    """
+    Monta o plano de coleta em massa cruzando CNPJs com o histórico de CNDs e dados.json.
+    
+    Retorna (lista_cnpjs_executar, plano_coleta, resumo):
+      - lista_cnpjs_executar: list de CNPJs que possuem CNDs a serem coletadas
+      - plano_coleta: dict { cnpj: { 'tipos': set(['FEDERAL', ...]), 'cidades': set(['Goiânia', ...]) } }
+      - resumo: dict com contagens e detalhes para exibição
+    """
+    mapa_municipal = gerenciador_cnpj.obter_mapa_municipal()
+    historico = gerenciador_historico.carregar_historico()
+
+    if cnpjs_alvo is None:
+        cnpjs_para_analisar = sorted(list(mapa_municipal.keys()))
+    else:
+        cnpjs_para_analisar = [c for c in cnpjs_alvo if len(c) == 14 and (c in mapa_municipal or cnpjs_alvo)]
+
+    tipos_selecionados_norm = {t.upper() for t in tipos_cnd_selecionados}
+
+    cnds_padrao = {
+        "FEDERAL": "Federal",
+        "ESTADUAL": "Estadual",
+        "TRABALHISTA": "Trabalhista",
+        "FGTS": "FGTS",
+        "COMPRASNET": "Comprasnet",
+        "AGEHAB": "AGEHAB",
+    }
+
+    from datetime import datetime
+    hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+    lista_cnpjs_executar = []
+    plano_coleta = {}
+    resumo = {
+        "total_cnpjs_analisados": len(cnpjs_para_analisar),
+        "total_cnpjs_executar": 0,
+        "total_cnds_a_coletar": 0,
+        "por_tipo": {t: 0 for t in tipos_cnd_selecionados},
+        "detalhes": {}
+    }
+
+    for cnpj in cnpjs_para_analisar:
+        hist_empresa = historico.get(cnpj, {})
+        tipos_deste_cnpj = set()
+        cidades_deste_cnpj = set()
+        itens_deste_cnpj = []
+
+        # 1. CNDs Padrão
+        for tipo, nome_cnd in cnds_padrao.items():
+            if tipo not in tipos_selecionados_norm:
+                continue
+
+            dados_cnd = buscar_dados_historico_tolerante(hist_empresa, nome_cnd)
+            if apenas_vencidas:
+                precisa, motivo = verificar_cnd_precisa_coletar(dados_cnd, hoje)
+            else:
+                precisa = True
+                motivo = "Coleta forçada (Todas)"
+
+            if precisa:
+                tipos_deste_cnpj.add(tipo)
+                itens_deste_cnpj.append((nome_cnd, tipo, motivo))
+                resumo["por_tipo"][tipo] = resumo["por_tipo"].get(tipo, 0) + 1
+
+        # 2. CNDs Municipais
+        if "MUNICIPAL" in tipos_selecionados_norm:
+            cidades_config = mapa_municipal.get(cnpj, [])
+            for conf in cidades_config:
+                nome_cidade = conf.get("cidade")
+                if not nome_cidade:
+                    continue
+
+                if cidades_filtro and nome_cidade not in cidades_filtro:
+                    continue
+
+                dados_cnd = buscar_dados_historico_tolerante(hist_empresa, nome_cidade)
+                if apenas_vencidas:
+                    precisa, motivo = verificar_cnd_precisa_coletar(dados_cnd, hoje)
+                else:
+                    precisa = True
+                    motivo = "Coleta forçada (Todas)"
+
+                if precisa:
+                    tipos_deste_cnpj.add("MUNICIPAL")
+                    cidades_deste_cnpj.add(nome_cidade)
+                    itens_deste_cnpj.append((nome_cidade, "MUNICIPAL", motivo))
+                    resumo["por_tipo"]["MUNICIPAL"] = resumo["por_tipo"].get("MUNICIPAL", 0) + 1
+
+        if tipos_deste_cnpj:
+            lista_cnpjs_executar.append(cnpj)
+            plano_coleta[cnpj] = {
+                "tipos": tipos_deste_cnpj,
+                "cidades": cidades_deste_cnpj if "MUNICIPAL" in tipos_deste_cnpj else set()
+            }
+            resumo["detalhes"][cnpj] = itens_deste_cnpj
+            resumo["total_cnds_a_coletar"] += len(itens_deste_cnpj)
+
+    resumo["total_cnpjs_executar"] = len(lista_cnpjs_executar)
+    return lista_cnpjs_executar, plano_coleta, resumo
+
 def criar_navegador_configurado():
     
     """Função auxiliar para gerar navegadores idênticos e isolados"""
@@ -210,7 +358,7 @@ def criar_navegador_configurado():
     # IMPORTANTE: Removi o "detach: True" para que o código Python consiga fechar as janelas no final
     return webdriver.Chrome(service=servico, options=opcoes)
 
-def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
+def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, plano_coleta=None):
     global flag_cancelamento
     flag_cancelamento = False
     
@@ -221,21 +369,35 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             break
             
         print(f"\033[33m\n--- Coleta {cnpj_idx + 1}/{len(lista_cnpjs)}: CNPJ {cnpj} ---\033[0m")
-        print(f"Tipos de CND selecionados: {', '.join(tipos_cnd)}\n")
+
+        # Se houver um plano de coleta específico por CNPJ (ex: coleta em massa / apenas vencidas)
+        cidades_alvo_este_cnpj = None
+        if plano_coleta and cnpj in plano_coleta:
+            config_cnpj = plano_coleta[cnpj]
+            tipos_deste_cnpj = config_cnpj.get('tipos', set())
+            cidades_alvo_este_cnpj = config_cnpj.get('cidades', None)
+            if not tipos_deste_cnpj:
+                print(f"⏩ Nenhuma CND pendente/vencida para o CNPJ {cnpj}. Pulando...")
+                continue
+            tipos_cnd_norm = {t.upper() for t in tipos_deste_cnpj}
+        else:
+            tipos_cnd_norm = {t.upper() for t in tipos_cnd}
+
+        print(f"Tipos de CND selecionados: {', '.join(sorted(tipos_cnd_norm))}\n")
         CNPJ[:] = [cnpj]
-        
-        tipos_cnd_norm = {t.upper() for t in tipos_cnd}
 
         # 1. Criamos os navegadores fixos
         navegadores_fixos = []
         # Lista para guardar os navegadores municipais DINÂMICOS
         navegadores_municipais = []
         
-        # Busca o dicionário de cidades deste CNPJ
-        print("[MUNICIPAL] Coletando municípios!")
-        print(f"[MUNICIPAL] Procurando no dicionário o CNPJ: '{cnpj}'")
-        cidades_da_empresa = gerenciador_cnpj.obter_cidades_cnpj(cnpj)
-        print(f"[MUNICIPAL] Resultado da busca: Encontrou {len(cidades_da_empresa)} cidades.")
+        # Busca o dicionário de cidades deste CNPJ se Municipal estiver selecionado
+        cidades_da_empresa = []
+        if "MUNICIPAL" in tipos_cnd_norm:
+            print("[MUNICIPAL] Coletando municípios!")
+            print(f"[MUNICIPAL] Procurando no dicionário o CNPJ: '{cnpj}'")
+            cidades_da_empresa = gerenciador_cnpj.obter_cidades_cnpj(cnpj)
+            print(f"[MUNICIPAL] Resultado da busca: Encontrou {len(cidades_da_empresa)} cidades.")
 
         # =========================================================
         # 2. EXECUÇÃO SEQUENCIAL (Uma aba por vez)
@@ -342,7 +504,17 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                     break
 
                 nome_cidade = municipio["cidade"]
-                print(f"\n[{nome_cidade}] Iniciando verificação do município: {nome_cidade}")
+                
+                # --- TRAVA DO PLANO DE COLETA EM MASSA ---
+                if cidades_alvo_este_cnpj is not None and nome_cidade not in cidades_alvo_este_cnpj:
+                    print(f"\n[{nome_cidade}] Não necessária para este CNPJ no plano de coleta.")
+                    continue
+
+                # --- NOVA TRAVA DO FILTRO ---
+                if hasattr(interface, 'cidades_alvo_coleta') and interface.cidades_alvo_coleta and nome_cidade not in interface.cidades_alvo_coleta:
+                    print(f"\n[{nome_cidade}] Ignorada pelo filtro do usuário.")
+                    continue
+                # ----------------------------
                 
                 # Se for manual, anota na lista e pula
                 if not municipio["automatizado"]:
@@ -352,68 +524,15 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
 
                 site_da_cidade = municipio["url"]
                 
-                # Cria um navegador exclusivo pra ela e já aplica o CDP CMD
-                nav_mun = criar_navegador_configurado()
-                nav_mun.maximize_window()
-                nav_mun.execute_cdp_cmd('Page.setDownloadBehavior', {
-                    'behavior': 'allow', 
-                    'downloadPath': pasta_download
-                })
-                navegadores_municipais.append(nav_mun)
-                
-                # CHAMA A FUNÇÃO DIRETO (O código vai esperar ela terminar)
-                if nome_cidade in ("Águas Lindas", "Aguas Lindas"):
-                    rodar_coleta(Águas_Lindas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Cidade Ocidental":
-                    rodar_coleta(Cidade_Ocidental.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade in ("Valparaiso", "Valparaíso"):
-                    rodar_coleta(Valparaiso.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download, solicitar_captcha=solicitar_captcha)
-                elif nome_cidade == "Formosa":
-                    rodar_coleta(Formosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Catalão":
-                    rodar_coleta(Catalão.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Aparecida de Goiânia":
-                    rodar_coleta(Aparecida_de_Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade in ("Luziana", "Luziânia", "Luziania"):
-                    rodar_coleta(Luziana.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Goianésia":
-                    rodar_coleta(Goianésia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Novo Gama":
-                    rodar_coleta(Novo_Gama.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade in ("Aragoiania", "Aragoiânia"):
-                    rodar_coleta(Aragoiania.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Paraúna":
-                    rodar_coleta(Paraúna.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Abadiânia":
-                    rodar_coleta(Abadiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade in ("Santo Antônio", "Santo Antonio"):
-                    rodar_coleta(Santo_Antônio.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Mara Rosa":
-                    rodar_coleta(Mara_Rosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Terezópolis":
-                    rodar_coleta(Terezópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Nerópolis":
-                    rodar_coleta(Nerópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Flores":
-                    rodar_coleta(Flores.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Iporá":
-                    rodar_coleta(Iporá.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Porangatu":
-                    rodar_coleta(Porangatu.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Bom Jesus":
-                    rodar_coleta(Bom_Jesus.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade in ("Anápolis", "Ánapolis"):
+                # Cidades com Coleta Assistida (abrem navegador visível próprio via assistente manual)
+                if nome_cidade in ("Anápolis", "Ánapolis"):
                     rodar_coleta(Anápolis.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Goiânia":
                     rodar_coleta(Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Caldas Novas":
-                    rodar_coleta(Caldas_Novas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Campo Alegre":
-                    rodar_coleta(Campo_Alegre.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                elif nome_cidade == "Nova Veneza":
-                    rodar_coleta(Nova_Veneza.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                elif nome_cidade == "Iporá":
+                    rodar_coleta(Iporá.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Senador Canedo":
-                    rodar_coleta(Senador_Canedo.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    rodar_coleta(Senador_Canedo.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade == "Planaltina":
                     rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 elif nome_cidade in ("Itaberai", "Itaberaí"):
@@ -421,17 +540,72 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                 elif nome_cidade == "Estadual DF":
                     rodar_coleta(Estadual_DF.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                 else:
-                    print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}\033[0m")
-                    gerenciador_historico.registrar_resultado(
-                        cnpj=cnpj,
-                        certidao=nome_cidade,
-                        validade="",
-                        status="Sem Automação",
-                        observacao="Nenhuma automação vinculada para esta cidade no sistema."
-                    )
-                    houve_falha = True
-                    navegadores_municipais.remove(nav_mun)
-                    nav_mun.quit()
+                    # Cria um navegador exclusivo pra ela e já aplica o CDP CMD
+                    nav_mun = criar_navegador_configurado()
+                    nav_mun.maximize_window()
+                    nav_mun.execute_cdp_cmd('Page.setDownloadBehavior', {
+                        'behavior': 'allow', 
+                        'downloadPath': pasta_download
+                    })
+                    navegadores_municipais.append(nav_mun)
+                    
+                    # CHAMA A FUNÇÃO DIRETO (O código vai esperar ela terminar)
+                    if nome_cidade in ("Águas Lindas", "Aguas Lindas"):
+                        rodar_coleta(Águas_Lindas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Cidade Ocidental":
+                        rodar_coleta(Cidade_Ocidental.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade in ("Valparaiso", "Valparaíso"):
+                        rodar_coleta(Valparaiso.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download, solicitar_captcha=solicitar_captcha)
+                    elif nome_cidade == "Formosa":
+                        rodar_coleta(Formosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Catalão":
+                        rodar_coleta(Catalão.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Aparecida de Goiânia":
+                        rodar_coleta(Aparecida_de_Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade in ("Luziana", "Luziânia", "Luziania"):
+                        rodar_coleta(Luziana.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Goianésia":
+                        rodar_coleta(Goianésia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Novo Gama":
+                        rodar_coleta(Novo_Gama.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade in ("Aragoiania", "Aragoiânia"):
+                        rodar_coleta(Aragoiania.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Paraúna":
+                        rodar_coleta(Paraúna.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Abadiânia":
+                        rodar_coleta(Abadiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade in ("Santo Antônio", "Santo Antonio"):
+                        rodar_coleta(Santo_Antônio.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Mara Rosa":
+                        rodar_coleta(Mara_Rosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Terezópolis":
+                        rodar_coleta(Terezópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Nerópolis":
+                        rodar_coleta(Nerópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Flores":
+                        rodar_coleta(Flores.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Porangatu":
+                        rodar_coleta(Porangatu.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Bom Jesus":
+                        rodar_coleta(Bom_Jesus.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Caldas Novas":
+                        rodar_coleta(Caldas_Novas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Campo Alegre":
+                        rodar_coleta(Campo_Alegre.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    elif nome_cidade == "Nova Veneza":
+                        rodar_coleta(Nova_Veneza.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    else:
+                        print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}\033[0m")
+                        gerenciador_historico.registrar_resultado(
+                            cnpj=cnpj,
+                            certidao=nome_cidade,
+                            validade="",
+                            status="Sem Automação",
+                            observacao="Nenhuma automação vinculada para esta cidade no sistema."
+                        )
+                        houve_falha = True
+                        navegadores_municipais.remove(nav_mun)
+                        nav_mun.quit()
         else:
             print("[MUNICIPAL] Coleta de municípios desabilitada")
         
@@ -672,7 +846,7 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
         else:
             # REGRA 3: Não existe certidão antiga na pasta (salva direto)
             shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
-            print(f"{COR_MUNICIPAL}✅ Primeira certidão desse tipo adicionada à pasta!{COR_RESET}")
+            print(f"{COR_VERDE}✅ Primeira certidão desse tipo adicionada à pasta!{COR_RESET}")
             
             # --- NOVO: Registra no histórico a primeira certidão ---
             nome_painel = nome_cnd.replace("CND ", "").strip()
@@ -889,21 +1063,15 @@ class InterfaceAutomacao:
             fg="#e2e8f0"
         ).pack(anchor="w")
 
-        # Campo de CNPJs inicializado vazio conforme solicitado
-        self.campo_cnpjs = tk.Text(
+        # Campo de CNPJ inicializado vazio conforme solicitado
+        self.campo_cnpj_coleta = tk.Entry(
             painel_config,
-            height=4,
-            width=40,
-            font=("Consolas", 10),
-            bg="#073642",
-            fg="#f8fafc",
-            insertbackground="#38bdf8",
-            relief="flat",
-            highlightthickness=1,
-            highlightbackground="#0e4957",
-            highlightcolor="#38bdf8"
+            width=24,
+            font=("Consolas", 11),
+            bg="#073642", fg="#f8fafc", insertbackground="#38bdf8",
+            relief="flat", highlightthickness=1, highlightbackground="#0e4957"
         )
-        self.campo_cnpjs.pack(fill="x", pady=(4, 8))
+        self.campo_cnpj_coleta.pack(fill="x", pady=(4, 8))
 
         tk.Label(
             painel_config,
@@ -928,22 +1096,34 @@ class InterfaceAutomacao:
         painel_checkboxes = tk.Frame(painel_config, bg="#002b36")
         painel_checkboxes.pack(fill="x", pady=(2, 8))
 
-
         for tipo in self.tipos_cnd_opcoes:
             var = tk.BooleanVar(value=True)
             self.vars_cnd[tipo] = var
-            tk.Checkbutton(
-                painel_checkboxes,
-                text=tipo,
-                variable=var,
-                command=self.ao_alterar_check_cnd_individual,
-                bg="#002b36",
-                fg="#e2e8f0",
-                activebackground="#002b36",
-                activeforeground="#38bdf8",
-                selectcolor="#073642",
-                font=("Segoe UI", 9, "bold")
-            ).pack(side="left", padx=6)
+            
+            # Se for Municipal, cria a caixinha junto com o botão da engrenagem
+            if tipo == "MUNICIPAL":
+                frame_mun = tk.Frame(painel_checkboxes, bg="#002b36")
+                frame_mun.pack(side="left", padx=6)
+                
+                tk.Checkbutton(
+                    frame_mun, text=tipo, variable=var, command=self.ao_alterar_check_cnd_individual,
+                    bg="#002b36", fg="#e2e8f0", activebackground="#002b36", activeforeground="#38bdf8",
+                    selectcolor="#073642", font=("Segoe UI", 9, "bold")
+                ).pack(side="left")
+                
+                # Botão de engrenagem
+                tk.Button(
+                    frame_mun, text="⚙️", command=self.abrir_filtro_municipal,
+                    bg="#073642", fg="#38bdf8", relief="flat", cursor="hand2"
+                ).pack(side="left", padx=(4, 0))
+                
+            # Para todos os outros tipos (Federal, Estadual, etc), cria apenas a caixinha normal
+            else:
+                tk.Checkbutton(
+                    painel_checkboxes, text=tipo, variable=var, command=self.ao_alterar_check_cnd_individual,
+                    bg="#002b36", fg="#e2e8f0", activebackground="#002b36", activeforeground="#38bdf8",
+                    selectcolor="#073642", font=("Segoe UI", 9, "bold")
+                ).pack(side="left", padx=6)
 
         # Caixinha mais afastada para marcar ou desmarcar todas as opções
         self.var_marcar_todas = tk.BooleanVar(value=True)
@@ -980,6 +1160,22 @@ class InterfaceAutomacao:
         )
         self.botao_iniciar.pack(side="left", padx=(0, 8))
         
+        self.botao_coleta_massa = tk.Button(
+            painel_botoes,
+            text="🚀 Coleta em Massa (Todos os CNPJs)",
+            command=self.abrir_janela_coleta_massa,
+            bg="#0284c7",
+            fg="#ffffff",
+            activebackground="#0369a1",
+            activeforeground="#ffffff",
+            font=("Segoe UI", 9, "bold"),
+            relief="flat",
+            cursor="hand2",
+            padx=16,
+            pady=7,
+        )
+        self.botao_coleta_massa.pack(side="left", padx=(0, 8))
+
         self.botao_cancelar = tk.Button(
             painel_botoes,
             text="✖ Cancelar",
@@ -1110,6 +1306,22 @@ class InterfaceAutomacao:
         # Dispara a atualização assim que o usuário seleciona uma opção na lista
         self.campo_busca_conf.bind("<<ComboboxSelected>>", self.atualizar_painel_conferencia)
 
+        self.btn_coleta_vencidas_painel = tk.Button(
+            frame_busca_conf,
+            text="⚡ Coletar Vencidas do Painel",
+            command=self.ao_clicar_coletar_vencidas_painel,
+            bg="#f59e0b",
+            fg="#0f172a",
+            activebackground="#d97706",
+            activeforeground="#ffffff",
+            font=("Segoe UI", 9, "bold"),
+            relief="flat",
+            cursor="hand2",
+            padx=12,
+            pady=3,
+        )
+        self.btn_coleta_vencidas_painel.pack(side="left", padx=10)
+
         # --- NOVO: Contêiner exclusivo para agrupar a Tabela e a Barra ---
         frame_tabela = tk.Frame(self.aba_conferencia, bg="#002b36")
         frame_tabela.pack(fill="both", expand=True, padx=10, pady=10)
@@ -1123,6 +1335,8 @@ class InterfaceAutomacao:
             self.tabela_conferencia.heading(col, text=col)
             self.tabela_conferencia.column(col, width=150, anchor="center")
         self.tabela_conferencia.column("Observações", width=350, anchor="w")
+        self.tabela_conferencia.column("Empresa", width=300, anchor="w")
+
 
         # Barra de rolagem clássica (tk) apontando para o frame_tabela
         scroll_tabela = tk.Scrollbar(frame_tabela, orient="vertical", command=self.tabela_conferencia.yview)
@@ -1162,6 +1376,74 @@ class InterfaceAutomacao:
 
         # Inicia loop de atualização do terminal
         self.janela.after(100, self.atualizar_interface)
+
+    def abrir_filtro_municipal(self):
+        cnpj_cru = self.campo_cnpj_coleta.get().strip()
+        cnpj = "".join(re.findall(r'\d+', cnpj_cru))
+        
+        if len(cnpj) != 14:
+            messagebox.showwarning("Aviso", "Digite um CNPJ válido de 14 dígitos primeiro para ver as cidades.", parent=self.janela)
+            return
+            
+        cidades_vinculadas = gerenciador_cnpj.obter_cidades_cnpj(cnpj)
+        if not cidades_vinculadas:
+            messagebox.showinfo("Aviso", "Este CNPJ não possui cidades vinculadas no cadastro.", parent=self.janela)
+            return
+
+        # Cria a janela flutuante
+        pop = tk.Toplevel(self.janela)
+        pop.title("Filtrar Cidades")
+        
+        # --- NOVO: LÓGICA DE CENTRALIZAÇÃO NO MESMO MONITOR ---
+        # 1. Atualiza as informações da janela principal para evitar medidas desatualizadas
+        self.janela.update_idletasks() 
+        
+        # 2. Define o tamanho do pop-up
+        largura_pop = 300
+        altura_pop = 400
+        
+        # 3. Calcula o centro exato da janela principal onde quer que ela esteja
+        x_janela = self.janela.winfo_x()
+        y_janela = self.janela.winfo_y()
+        largura_janela = self.janela.winfo_width()
+        altura_janela = self.janela.winfo_height()
+        
+        pos_x = x_janela + (largura_janela // 2) - (largura_pop // 2)
+        pos_y = y_janela + (altura_janela // 2) - (altura_pop // 2)
+        
+        # 4. Aplica o tamanho e a coordenada (x, y) no monitor atual
+        pop.geometry(f"{largura_pop}x{altura_pop}+{pos_x}+{pos_y}")
+        # --------------------------------------------------------
+        
+        pop.configure(bg="#002b36")
+        pop.transient(self.janela) # Mantém a janela sempre à frente da principal
+        pop.grab_set() # Bloqueia a janela de trás até fechar esta
+        
+        tk.Label(pop, text="Quais cidades coletar agora?", font=("Segoe UI", 10, "bold"), bg="#002b36", fg="#38bdf8").pack(pady=10)
+        
+        # Inicia a lista de selecionadas se não existir
+        if not hasattr(self, 'cidades_alvo_coleta'):
+            self.cidades_alvo_coleta = [c["cidade"] for c in cidades_vinculadas]
+
+        frame_cidades = tk.Frame(pop, bg="#002b36")
+        frame_cidades.pack(fill="both", expand=True, padx=20)
+        
+        vars_cidades = {}
+        for cid in cidades_vinculadas:
+            nome = cid["cidade"]
+            var = tk.BooleanVar(value=(nome in self.cidades_alvo_coleta))
+            vars_cidades[nome] = var
+            
+            tk.Checkbutton(
+                frame_cidades, text=nome, variable=var,
+                bg="#002b36", fg="#e2e8f0", selectcolor="#073642", font=("Segoe UI", 9)
+            ).pack(anchor="w", pady=2)
+            
+        def salvar_filtro():
+            self.cidades_alvo_coleta = [nome for nome, var in vars_cidades.items() if var.get()]
+            pop.destroy()
+            
+        tk.Button(pop, text="✔ Salvar Filtro", command=salvar_filtro, bg="#10b981", fg="white", font=("Segoe UI", 9, "bold")).pack(pady=15)
 
     def copiar_texto_celula(self, event):
         """Identifica qual célula recebeu o duplo clique e envia o texto (ou o CNPJ isolado) para a área de transferência."""
@@ -2029,12 +2311,12 @@ class InterfaceAutomacao:
                 mapa_municipal = gerenciador_cnpj.obter_mapa_municipal()
 
                 # Adiciona o novo CNPJ na lista da tela de coleta
-                texto_atual = self.campo_cnpjs.get("1.0", "end").strip()
+                texto_atual = self.campo_cnpj_coleta.get("1.0", "end").strip()
                 if texto_atual:
                     if cnpj_numeros not in texto_atual:
-                        self.campo_cnpjs.insert("end", f"\n{cnpj_numeros}")
+                        self.campo_cnpj_coleta.insert("end", f"\n{cnpj_numeros}")
                 else:
-                    self.campo_cnpjs.insert("1.0", cnpj_numeros)
+                    self.campo_cnpj_coleta.insert("1.0", cnpj_numeros)
 
                 nome_pasta_final = os.path.basename(caminho_pasta)
                 self.fila_terminal.put(f"\n\033[32m[PASTAS] Pasta criada na rede: {nome_pasta_final}\033[0m")
@@ -2695,8 +2977,427 @@ class InterfaceAutomacao:
 
         self.janela.after(100, self.atualizar_interface)
 
+    def obter_cnpjs_construtora(self, construtora_nome):
+        """Retorna a lista de CNPJs (strings de 14 dígitos) cadastrados para a construtora selecionada."""
+        mapa = gerenciador_cnpj.obter_mapa_municipal()
+        if not construtora_nome or construtora_nome == "Todas as Construtoras":
+            return sorted(list(mapa.keys()))
+
+        cnpjs_encontrados = set()
+        try:
+            empreendimentos = gerenciador_pastas.listar_empreendimentos(construtora_nome)
+            for emp in empreendimentos:
+                numeros = re.findall(r'\d{14}', emp)
+                if numeros:
+                    cnpjs_encontrados.add(numeros[0])
+        except Exception as e:
+            print(f"Erro ao listar empreendimentos da construtora {construtora_nome}: {e}")
+
+        # Filtra apenas os CNPJs que estão presentes no mapa_municipal do dados.json
+        resultado = [c for c in sorted(list(cnpjs_encontrados)) if c in mapa]
+        return resultado
+
+    def abrir_janela_coleta_massa(self):
+        """Abre a janela modal de Coleta em Massa com filtros avançados e prévia dinâmica."""
+        janela_massa = tk.Toplevel(self.janela)
+        janela_massa.title("Coleta em Massa de Certidões")
+        janela_massa.geometry("640x590")
+        janela_massa.configure(bg="#002b36")
+        janela_massa.transient(self.janela)
+        janela_massa.grab_set()
+        janela_massa.resizable(False, False)
+
+        try:
+            janela_massa.update_idletasks()
+            largura_m = 640
+            altura_m = 590
+            pos_x = self.janela.winfo_x() + (self.janela.winfo_width() - largura_m) // 2
+            pos_y = self.janela.winfo_y() + (self.janela.winfo_height() - altura_m) // 2
+            janela_massa.geometry(f"{largura_m}x{altura_m}+{max(0, pos_x)}+{max(0, pos_y)}")
+        except Exception:
+            pass
+
+        # 1. Cabeçalho
+        frame_cabecalho = tk.Frame(janela_massa, bg="#073642", padx=16, pady=12)
+        frame_cabecalho.pack(fill="x", padx=14, pady=(14, 10))
+
+        tk.Label(
+            frame_cabecalho,
+            text="🚀 Coleta em Massa de Certidões",
+            font=("Segoe UI", 13, "bold"),
+            bg="#073642",
+            fg="#38bdf8"
+        ).pack(anchor="w")
+
+        tk.Label(
+            frame_cabecalho,
+            text="Execute a coleta automatizada para múltiplos CNPJs com filtros inteligentes.",
+            font=("Segoe UI", 9),
+            bg="#073642",
+            fg="#94a3b8"
+        ).pack(anchor="w", pady=(2, 0))
+
+        # 2. Container de Configurações
+        frame_corpo = tk.Frame(janela_massa, bg="#002b36", padx=14)
+        frame_corpo.pack(fill="both", expand=True)
+
+        # --- Filtro por Construtora ---
+        tk.Label(
+            frame_corpo,
+            text="🏢 Filtrar por Construtora:",
+            font=("Segoe UI", 9, "bold"),
+            bg="#002b36",
+            fg="#e2e8f0"
+        ).pack(anchor="w", pady=(4, 2))
+
+        try:
+            construtoras_disp = ["Todas as Construtoras"] + sorted(gerenciador_pastas.listar_construtoras())
+        except Exception:
+            construtoras_disp = ["Todas as Construtoras"]
+
+        combo_construtora = ttk.Combobox(
+            frame_corpo,
+            values=construtoras_disp,
+            state="readonly",
+            font=("Segoe UI", 10)
+        )
+        combo_construtora.current(0)
+        combo_construtora.pack(fill="x", pady=(0, 10))
+
+        # --- Escopo da Coleta (Vencidas vs Todas) ---
+        tk.Label(
+            frame_corpo,
+            text="🎯 Escopo da Coleta:",
+            font=("Segoe UI", 9, "bold"),
+            bg="#002b36",
+            fg="#e2e8f0"
+        ).pack(anchor="w", pady=(4, 2))
+
+        var_escopo = tk.StringVar(value="vencidas")
+        frame_escopo = tk.Frame(frame_corpo, bg="#073642", padx=10, pady=8, highlightthickness=1, highlightbackground="#0e4957")
+        frame_escopo.pack(fill="x", pady=(0, 10))
+
+        rb_vencidas = tk.Radiobutton(
+            frame_escopo,
+            text="⚡ Apenas Vencidas / Pendentes / Com Falha (Recomendado)",
+            variable=var_escopo,
+            value="vencidas",
+            bg="#073642", fg="#f8fafc", activebackground="#073642", activeforeground="#38bdf8",
+            selectcolor="#002b36", font=("Segoe UI", 9, "bold")
+        )
+        rb_vencidas.pack(anchor="w")
+
+        rb_todas = tk.Radiobutton(
+            frame_escopo,
+            text="🔄 Todas as CNDs (Recoletar mesmo que estejam válidas)",
+            variable=var_escopo,
+            value="todas",
+            bg="#073642", fg="#94a3b8", activebackground="#073642", activeforeground="#38bdf8",
+            selectcolor="#002b36", font=("Segoe UI", 9)
+        )
+        rb_todas.pack(anchor="w", pady=(4, 0))
+
+        # --- Tipos de CND ---
+        frame_cnds_top = tk.Frame(frame_corpo, bg="#002b36")
+        frame_cnds_top.pack(fill="x", pady=(4, 2))
+
+        tk.Label(
+            frame_cnds_top,
+            text="📑 Tipos de CND a incluir:",
+            font=("Segoe UI", 9, "bold"),
+            bg="#002b36",
+            fg="#e2e8f0"
+        ).pack(side="left")
+
+        vars_cnd_massa = {}
+        frame_checks = tk.Frame(frame_corpo, bg="#073642", padx=10, pady=8, highlightthickness=1, highlightbackground="#0e4957")
+        frame_checks.pack(fill="x", pady=(0, 10))
+
+        var_todas_cnds = tk.BooleanVar(value=True)
+
+        def alternar_todas():
+            val = var_todas_cnds.get()
+            for v in vars_cnd_massa.values():
+                v.set(val)
+            atualizar_previa()
+
+        chk_todas = tk.Checkbutton(
+            frame_cnds_top,
+            text="MARCAR TODAS",
+            variable=var_todas_cnds,
+            command=alternar_todas,
+            bg="#002b36", fg="#38bdf8", activebackground="#002b36", activeforeground="#ffffff",
+            selectcolor="#073642", font=("Segoe UI", 8, "bold")
+        )
+        chk_todas.pack(side="right")
+
+        frame_grade_checks = tk.Frame(frame_checks, bg="#073642")
+        frame_grade_checks.pack(fill="x")
+
+        def ao_mudar_check_individual():
+            if not all(v.get() for v in vars_cnd_massa.values()):
+                var_todas_cnds.set(False)
+            elif all(v.get() for v in vars_cnd_massa.values()):
+                var_todas_cnds.set(True)
+            atualizar_previa()
+
+        col = 0
+        row = 0
+        for tipo in self.tipos_cnd_opcoes:
+            v = tk.BooleanVar(value=True)
+            vars_cnd_massa[tipo] = v
+            chk = tk.Checkbutton(
+                frame_grade_checks,
+                text=tipo,
+                variable=v,
+                command=ao_mudar_check_individual,
+                bg="#073642", fg="#e2e8f0", activebackground="#073642", activeforeground="#38bdf8",
+                selectcolor="#002b36", font=("Segoe UI", 9, "bold")
+            )
+            chk.grid(row=row, column=col, sticky="w", padx=6, pady=2)
+            col += 1
+            if col > 3:
+                col = 0
+                row += 1
+
+        # --- Painel de Prévia / Resumo Dinâmico ---
+        frame_previa = tk.Frame(frame_corpo, bg="#001e26", padx=12, pady=10, highlightthickness=1, highlightbackground="#0e4957")
+        frame_previa.pack(fill="x", pady=(2, 10))
+
+        lbl_previa_titulo = tk.Label(
+            frame_previa,
+            text="📊 Prévia da Coleta: Calculando...",
+            font=("Segoe UI", 10, "bold"),
+            bg="#001e26",
+            fg="#38bdf8"
+        )
+        lbl_previa_titulo.pack(anchor="w")
+
+        lbl_previa_detalhes = tk.Label(
+            frame_previa,
+            text="",
+            font=("Segoe UI", 8),
+            bg="#001e26",
+            fg="#94a3b8"
+        )
+        lbl_previa_detalhes.pack(anchor="w", pady=(2, 0))
+
+        dados_plano_atual = {"cnpjs": [], "plano": {}, "resumo": {}, "tipos": []}
+
+        def atualizar_previa(*args):
+            construtora_sel = combo_construtora.get()
+            cnpjs_alvo = self.obter_cnpjs_construtora(construtora_sel)
+            apenas_venc = (var_escopo.get() == "vencidas")
+            tipos_sel = [t for t, v in vars_cnd_massa.items() if v.get()]
+
+            if not tipos_sel:
+                lbl_previa_titulo.configure(text="⚠️ Selecione pelo menos um tipo de CND.", fg="#f59e0b")
+                lbl_previa_detalhes.configure(text="")
+                btn_executar.configure(state="disabled")
+                dados_plano_atual["cnpjs"] = []
+                dados_plano_atual["plano"] = {}
+                dados_plano_atual["resumo"] = {}
+                dados_plano_atual["tipos"] = []
+                return
+
+            cnpjs_exec, plano, resumo = obter_plano_coleta_em_massa(
+                tipos_cnd_selecionados=tipos_sel,
+                apenas_vencidas=apenas_venc,
+                cnpjs_alvo=cnpjs_alvo
+            )
+
+            dados_plano_atual["cnpjs"] = cnpjs_exec
+            dados_plano_atual["plano"] = plano
+            dados_plano_atual["resumo"] = resumo
+            dados_plano_atual["tipos"] = tipos_sel
+
+            total_cnds = resumo["total_cnds_a_coletar"]
+            total_empresas = len(cnpjs_exec)
+
+            if total_cnds == 0:
+                lbl_previa_titulo.configure(
+                    text="✅ Nenhuma CND pendente ou vencida encontrada!",
+                    fg="#10b981"
+                )
+                lbl_previa_detalhes.configure(text=f"Critérios analisados em {resumo['total_cnpjs_analisados']} empresa(s). Tudo em dia.")
+                btn_executar.configure(state="disabled")
+            else:
+                lbl_previa_titulo.configure(
+                    text=f"🎯 {total_cnds} CND(s) a coletar em {total_empresas} empresa(s)",
+                    fg="#38bdf8"
+                )
+                partes = []
+                for t, qtd in resumo["por_tipo"].items():
+                    if qtd > 0:
+                        partes.append(f"{t}: {qtd}")
+                lbl_previa_detalhes.configure(text=" | ".join(partes))
+                btn_executar.configure(state="normal")
+
+        combo_construtora.bind("<<ComboboxSelected>>", atualizar_previa)
+        rb_vencidas.configure(command=atualizar_previa)
+        rb_todas.configure(command=atualizar_previa)
+
+        # 3. Botões de Ação
+        frame_botoes = tk.Frame(janela_massa, bg="#002b36", padx=14, pady=12)
+        frame_botoes.pack(fill="x", side="bottom")
+
+        def iniciar_execucao():
+            if not dados_plano_atual["cnpjs"] or dados_plano_atual["resumo"].get("total_cnds_a_coletar", 0) == 0:
+                messagebox.showwarning("Aviso", "Nenhuma CND a coletar com os filtros atuais.", parent=janela_massa)
+                return
+
+            total_cnds = dados_plano_atual["resumo"]["total_cnds_a_coletar"]
+            total_emp = len(dados_plano_atual["cnpjs"])
+            construtora_sel = combo_construtora.get()
+            escopo_txt = "Apenas Vencidas/Pendentes" if var_escopo.get() == "vencidas" else "Todas as CNDs"
+
+            confirmar = messagebox.askyesno(
+                "Confirmar Coleta em Massa",
+                f"Deseja iniciar a coleta de {total_cnds} CND(s) para {total_emp} empresa(s)?\n\n"
+                f"• Construtora: {construtora_sel}\n"
+                f"• Escopo: {escopo_txt}\n\n"
+                f"O processo será executado em segundo plano.",
+                parent=janela_massa
+            )
+            if not confirmar:
+                return
+
+            janela_massa.destroy()
+
+            # Transfere execução para a tela principal
+            self.notebook.select(self.aba_coleta)
+
+            global flag_cancelamento
+            flag_cancelamento = False
+            self.coleta_foi_cancelada = False
+
+            self.botao_iniciar.configure(state="disabled")
+            if hasattr(self, 'botao_coleta_massa'):
+                self.botao_coleta_massa.configure(state="disabled")
+            if hasattr(self, 'btn_coleta_vencidas_painel'):
+                self.btn_coleta_vencidas_painel.configure(state="disabled")
+            self.botao_cancelar.configure(state="normal")
+            self.campo_cnpj_coleta.configure(state="disabled")
+
+            banner = (
+                f"\n{'=' * 60}\n"
+                f"🚀 INICIANDO COLETA EM MASSA\n"
+                f"Filtro: {construtora_sel}\n"
+                f"Escopo: {escopo_txt}\n"
+                f"Empresas a processar: {total_emp}\n"
+                f"Total de CNDs previstas: {total_cnds}\n"
+                f"{'=' * 60}\n\n"
+            )
+            self.escrever_terminal(banner)
+            sys.stdout = EscritorTerminal(self.fila_terminal)
+
+            self.thread_automacao = threading.Thread(
+                target=self.executar_automacao,
+                args=(dados_plano_atual["cnpjs"], dados_plano_atual["tipos"]),
+                kwargs={"plano_coleta": dados_plano_atual["plano"]},
+                daemon=True,
+            )
+            self.thread_automacao.start()
+
+        btn_executar = tk.Button(
+            frame_botoes,
+            text="▶ Iniciar Coleta em Massa",
+            command=iniciar_execucao,
+            bg="#10b981", fg="#ffffff",
+            activebackground="#059669", activeforeground="#ffffff",
+            font=("Segoe UI", 10, "bold"),
+            relief="flat", cursor="hand2", padx=16, pady=8
+        )
+        btn_executar.pack(side="right", padx=(8, 0))
+
+        btn_fechar = tk.Button(
+            frame_botoes,
+            text="Fechar",
+            command=janela_massa.destroy,
+            bg="#475569", fg="#ffffff",
+            activebackground="#334155", activeforeground="#ffffff",
+            font=("Segoe UI", 10),
+            relief="flat", cursor="hand2", padx=14, pady=8
+        )
+        btn_fechar.pack(side="right")
+
+        # Inicializa a prévia
+        atualizar_previa()
+
+    def ao_clicar_coletar_vencidas_painel(self):
+        """Dispara a coleta rápida de CNDs vencidas diretamente pelo Painel de Conferência."""
+        try:
+            construtora_sel = self.campo_busca_conf.get()
+        except AttributeError:
+            construtora_sel = "Todas as Construtoras"
+
+        if not construtora_sel:
+            construtora_sel = "Todas as Construtoras"
+
+        cnpjs_alvo = self.obter_cnpjs_construtora(construtora_sel)
+
+        cnpjs_exec, plano, resumo = obter_plano_coleta_em_massa(
+            tipos_cnd_selecionados=self.tipos_cnd_opcoes,
+            apenas_vencidas=True,
+            cnpjs_alvo=cnpjs_alvo
+        )
+
+        total_cnds = resumo["total_cnds_a_coletar"]
+        total_emp = len(cnpjs_exec)
+
+        if total_cnds == 0:
+            messagebox.showinfo(
+                "Tudo em Dia",
+                f"Parabéns! Não há certidões vencidas ou pendentes para {construtora_sel}.",
+                parent=self.janela
+            )
+            return
+
+        confirmar = messagebox.askyesno(
+            "Coletar Vencidas do Painel",
+            f"Foram identificadas {total_cnds} CND(s) vencidas/pendentes em {total_emp} empresa(s) ({construtora_sel}).\n\n"
+            f"Deseja iniciar a coleta automática agora?",
+            parent=self.janela
+        )
+        if not confirmar:
+            return
+
+        # Alterna para a aba de coleta e inicia
+        self.notebook.select(self.aba_coleta)
+
+        global flag_cancelamento
+        flag_cancelamento = False
+        self.coleta_foi_cancelada = False
+
+        self.botao_iniciar.configure(state="disabled")
+        if hasattr(self, 'botao_coleta_massa'):
+            self.botao_coleta_massa.configure(state="disabled")
+        if hasattr(self, 'btn_coleta_vencidas_painel'):
+            self.btn_coleta_vencidas_painel.configure(state="disabled")
+        self.botao_cancelar.configure(state="normal")
+        self.campo_cnpj_coleta.configure(state="disabled")
+
+        banner = (
+            f"\n{'=' * 60}\n"
+            f"⚡ COLETA RÁPIDA DE VENCIDAS (PAINEL DE CONFERÊNCIA)\n"
+            f"Filtro: {construtora_sel}\n"
+            f"Empresas com pendências: {total_emp}\n"
+            f"Total de CNDs previstas: {total_cnds}\n"
+            f"{'=' * 60}\n\n"
+        )
+        self.escrever_terminal(banner)
+        sys.stdout = EscritorTerminal(self.fila_terminal)
+
+        self.thread_automacao = threading.Thread(
+            target=self.executar_automacao,
+            args=(cnpjs_exec, self.tipos_cnd_opcoes),
+            kwargs={"plano_coleta": plano},
+            daemon=True,
+        )
+        self.thread_automacao.start()
+
     def iniciar_coleta(self):
-        texto_cnpjs = self.campo_cnpjs.get("1.0", "end").strip()
+        texto_cnpjs = self.campo_cnpj_coleta.get().strip()
         if not texto_cnpjs:
             messagebox.showerror("Sem CNPJs", "Informe pelo menos um CNPJ.", parent=self.janela)
             return
@@ -2746,8 +3447,12 @@ class InterfaceAutomacao:
         self.coleta_foi_cancelada = False
         
         self.botao_iniciar.configure(state="disabled")
+        if hasattr(self, 'botao_coleta_massa'):
+            self.botao_coleta_massa.configure(state="disabled")
+        if hasattr(self, 'btn_coleta_vencidas_painel'):
+            self.btn_coleta_vencidas_painel.configure(state="disabled")
         self.botao_cancelar.configure(state="normal")
-        self.campo_cnpjs.configure(state="disabled")
+        self.campo_cnpj_coleta.configure(state="disabled")
         
         self.escrever_terminal(f"Iniciando coleta de {len(cnpjs_validos)} CNPJ(s)...\n")
         sys.stdout = EscritorTerminal(self.fila_terminal)
@@ -2758,9 +3463,9 @@ class InterfaceAutomacao:
         )
         self.thread_automacao.start()
 
-    def executar_automacao(self, cnpjs, tipos_cnd):
+    def executar_automacao(self, cnpjs, tipos_cnd, plano_coleta=None):
         try:
-            principal(cnpjs, tipos_cnd, solicitar_captcha=self.solicitar_captcha, interface=self)
+            principal(cnpjs, tipos_cnd, solicitar_captcha=self.solicitar_captcha, interface=self, plano_coleta=plano_coleta)
         except Exception as erro:
             print(f"Erro na automacao: {erro}")
         finally:
@@ -2774,11 +3479,21 @@ class InterfaceAutomacao:
 
     def confirmar_organizacao(self):
         self.botao_cancelar.configure(state="disabled")
-        self.campo_cnpjs.configure(state="normal")
+        self.campo_cnpj_coleta.configure(state="normal")
+        self.botao_iniciar.configure(state="normal")
+        if hasattr(self, 'botao_coleta_massa'):
+            self.botao_coleta_massa.configure(state="normal")
+        if hasattr(self, 'btn_coleta_vencidas_painel'):
+            self.btn_coleta_vencidas_painel.configure(state="normal")
+
+        # Atualiza a tabela de conferência em tempo real com os novos dados
+        try:
+            self.atualizar_painel_conferencia()
+        except Exception as e:
+            print(f"Erro ao atualizar painel de conferência: {e}")
         
         if self.coleta_foi_cancelada:
             self.escrever_terminal("\033[31mColeta cancelada. PDFs não serão organizados.\033[0m\n")
-            self.botao_iniciar.configure(state="normal")
             return
         
         organizar = messagebox.askyesno(
@@ -2796,7 +3511,6 @@ class InterfaceAutomacao:
         else:
             self.escrever_terminal("Organizacao dos PDFs cancelada pelo usuario.\n")
             self.escrever_terminal("\033[32mTudo acabou.\033[0m\n")
-            self.botao_iniciar.configure(state="normal")
 
     def executar_organizacao(self):
         try:
@@ -2810,6 +3524,10 @@ class InterfaceAutomacao:
         finally:
             self.fila_terminal.put("\n\033[32mTudo acabou.\033[0m\n")
             self.janela.after(0, lambda: self.botao_iniciar.configure(state="normal"))
+            if hasattr(self, 'botao_coleta_massa'):
+                self.janela.after(0, lambda: self.botao_coleta_massa.configure(state="normal"))
+            if hasattr(self, 'btn_coleta_vencidas_painel'):
+                self.janela.after(0, lambda: self.btn_coleta_vencidas_painel.configure(state="normal"))
 
     def solicitar_captcha(self):
         resposta = {"evento": threading.Event(), "codigo": ""}
