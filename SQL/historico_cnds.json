@@ -1536,6 +1536,16 @@
             "validade": "30.03.27",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: Site pede para logar com o Gov"
+        },
+        "Valparaiso": {
+            "validade": "01.11.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "11490163000116": {
@@ -2167,6 +2177,11 @@
     "49723420000195": {
         "Trabalhista": {
             "validade": "30.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Valparaiso": {
+            "validade": "01.11.26",
             "status": "Negativa",
             "observacao": ""
         }

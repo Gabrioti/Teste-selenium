@@ -162,22 +162,26 @@ def remover_cnpj_de_dados(cnpj):
 
 def listar_cidades_manuais_ou_pendentes():
     """
-    Retorna uma lista de todas as cidades onde automatizado é False, None ou não definido.
+    Retorna uma lista de todas as cidades onde a tecnologia é "centi", "manual" ou não definida.
     """
     db = carregar_banco_dados()
     pendentes = []
-    for cnpj, lista_cidades in db["mapa_municipal"].items():
+    for cnpj, lista_cidades in db.get("mapa_municipal", {}).items():
         if not isinstance(lista_cidades, list):
             continue
         for c in lista_cidades:
             if not isinstance(c, dict):
                 continue
-            aut = c.get("automatizado")
-            if aut is False or aut is None or aut == "":
+            
+            # Pega a chave tecnologia (se não existir, usa 'manual' como padrão seguro)
+            tech = str(c.get("tecnologia", c.get("automatizado", "manual"))).lower()
+            
+            # Se for 'centi', 'manual' ou tiver valor em branco
+            if tech in ["centi", "manual", "false", "none", ""]:
                 pendentes.append({
                     "cnpj": cnpj,
                     "cidade": c.get("cidade", "Desconhecida"),
-                    "automatizado": aut,
+                    "tecnologia": tech,
                     "url": c.get("url", "")
                 })
     return pendentes

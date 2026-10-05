@@ -11,6 +11,7 @@ from tkinter import messagebox, scrolledtext, ttk, simpledialog # Essas bibliote
 from datetime import datetime # Essa biblioteca permite que você trabalhe com datas e horas.
 import subprocess # Essa biblioteca permite que você execute comandos do sistema operacional.
 import unicodedata
+import importlib
 
 from selenium import webdriver # Essa biblioteca permite que você automatize ações no navegador.
 from webdriver_manager.chrome import ChromeDriverManager # Essa biblioteca permite que você gerencie o driver do Chrome.
@@ -18,7 +19,6 @@ from selenium.webdriver.chrome.service import Service # Essa biblioteca permite 
 from selenium.webdriver.chrome.options import Options # Essa biblioteca permite que você configure o Chrome.
 
 from Processos import teste_FEDERAL, teste_ESTADUAL, teste_TRABALISTA,teste_COMPRASNET, teste_FGTS, teste_AGEHAB
-from Cidades import Anápolis, Águas_Lindas, Cidade_Ocidental, Formosa, Catalão, Aparecida_de_Goiânia, Luziana, Goianésia, Novo_Gama, Aragoiania, Paraúna, Abadiânia, Santo_Antônio, Mara_Rosa, Nerópolis, Terezópolis, Porangatu, Flores, Iporá, Bom_Jesus, Valparaiso, Goiânia, Caldas_Novas, Campo_Alegre, Nova_Veneza, Senador_Canedo, Planaltina, Itaberai, Estadual_DF
 
 import pandas as pd
 from openpyxl.styles import PatternFill
@@ -295,6 +295,7 @@ def obter_plano_coleta_em_massa(tipos_cnd_selecionados, apenas_vencidas=True, cn
     return lista_cnpjs_executar, plano_coleta, resumo
 
 def criar_navegador_configurado():
+    #pasta_download = r"N:\19. FERRAMENTAS\Teste selenium\RenomearCNDs\CNDs"
     
     """Função auxiliar para gerar navegadores idênticos e isolados"""
     opcoes = Options()
@@ -496,7 +497,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
 
 
         # ---------------------------------------------------------
-        # B. ROTEADOR MUNICIPAL
+        # B. ROTEADOR MUNICIPAL DINÂMICO
         # ---------------------------------------------------------
         if "MUNICIPAL" in tipos_cnd_norm:
             for municipio in cidades_da_empresa:
@@ -504,43 +505,49 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
                     break
 
                 nome_cidade = municipio["cidade"]
+                tecnologia = municipio.get("tecnologia", "selenium").lower()
+                site_da_cidade = municipio.get("url", "")
                 
                 # --- TRAVA DO PLANO DE COLETA EM MASSA ---
                 if cidades_alvo_este_cnpj is not None and nome_cidade not in cidades_alvo_este_cnpj:
                     print(f"\n[{nome_cidade}] Não necessária para este CNPJ no plano de coleta.")
                     continue
 
-                # --- NOVA TRAVA DO FILTRO ---
+                # --- TRAVA DO FILTRO INDIVIDUAL DA INTERFACE ---
                 if hasattr(interface, 'cidades_alvo_coleta') and interface.cidades_alvo_coleta and nome_cidade not in interface.cidades_alvo_coleta:
                     print(f"\n[{nome_cidade}] Ignorada pelo filtro do usuário.")
                     continue
-                # ----------------------------
-                
-                # Se for manual, anota na lista e pula
-                if not municipio["automatizado"]:
-                    lista_cnds_manuais.append(f"{cnpj} - {nome_cidade}")
-                    print(f"\033[31m⚠️ {nome_cidade} separada para coleta manual.\033[0m")
-                    continue
+                # -----------------------------------------------
 
-                site_da_cidade = municipio["url"]
-                
-                # Cidades com Coleta Assistida (abrem navegador visível próprio via assistente manual)
-                if nome_cidade in ("Anápolis", "Ánapolis"):
-                    rodar_coleta(Anápolis.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Goiânia":
-                    rodar_coleta(Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Iporá":
-                    rodar_coleta(Iporá.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Senador Canedo":
-                    rodar_coleta(Senador_Canedo.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Planaltina":
-                    rodar_coleta(Planaltina.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade in ("Itaberai", "Itaberaí"):
-                    rodar_coleta(Itaberai.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
-                elif nome_cidade == "Estadual DF":
-                    rodar_coleta(Estadual_DF.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
+                nome_modulo = municipio.get("arquivo") or nome_cidade.replace(" ", "_")
+
+                # 1. FLUXO ASSISTIDO (Navegador próprio visível, sem nav_mun extra)
+                if tecnologia == "assistido":
+                    try:
+                        modulo_cidade = importlib.import_module(f"Cidades.{nome_modulo}")
+                        rodar_coleta(modulo_cidade.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
+                    except Exception as e:
+                        print(f"\033[33m⚠️ Erro ao executar módulo assistido para {nome_cidade}: {e}\033[0m")
+                        gerenciador_historico.registrar_resultado(
+                            cnpj=cnpj,
+                            certidao=nome_cidade,
+                            validade="",
+                            status="Sem Automação",
+                            observacao=f"Erro no módulo assistido: {e}"
+                        )
+                        houve_falha = True
+
+                # 2. FLUXO CENTI / MANUAL
+                elif tecnologia == "centi" or ".centi.com.br/" in site_da_cidade.lower():
+                    try:
+                        modulo_cidade = importlib.import_module(f"Cidades.{nome_modulo}")
+                        rodar_coleta(modulo_cidade.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
+                    except Exception as e:
+                        lista_cnds_manuais.append(f"{cnpj} - {nome_cidade}")
+                        print(f"\033[31m⚠️ {nome_cidade} separada para coleta manual/Centi.\033[0m")
+
+                # 3. FLUXO SELENIUM PADRÃO (Navegador oculto/configurado repassado via nav_mun)
                 else:
-                    # Cria um navegador exclusivo pra ela e já aplica o CDP CMD
                     nav_mun = criar_navegador_configurado()
                     nav_mun.maximize_window()
                     nav_mun.execute_cdp_cmd('Page.setDownloadBehavior', {
@@ -549,63 +556,22 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
                     })
                     navegadores_municipais.append(nav_mun)
                     
-                    # CHAMA A FUNÇÃO DIRETO (O código vai esperar ela terminar)
-                    if nome_cidade in ("Águas Lindas", "Aguas Lindas"):
-                        rodar_coleta(Águas_Lindas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Cidade Ocidental":
-                        rodar_coleta(Cidade_Ocidental.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade in ("Valparaiso", "Valparaíso"):
-                        rodar_coleta(Valparaiso.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download, solicitar_captcha=solicitar_captcha)
-                    elif nome_cidade == "Formosa":
-                        rodar_coleta(Formosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Catalão":
-                        rodar_coleta(Catalão.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Aparecida de Goiânia":
-                        rodar_coleta(Aparecida_de_Goiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade in ("Luziana", "Luziânia", "Luziania"):
-                        rodar_coleta(Luziana.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Goianésia":
-                        rodar_coleta(Goianésia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Novo Gama":
-                        rodar_coleta(Novo_Gama.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade in ("Aragoiania", "Aragoiânia"):
-                        rodar_coleta(Aragoiania.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Paraúna":
-                        rodar_coleta(Paraúna.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Abadiânia":
-                        rodar_coleta(Abadiânia.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade in ("Santo Antônio", "Santo Antonio"):
-                        rodar_coleta(Santo_Antônio.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Mara Rosa":
-                        rodar_coleta(Mara_Rosa.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Terezópolis":
-                        rodar_coleta(Terezópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Nerópolis":
-                        rodar_coleta(Nerópolis.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Flores":
-                        rodar_coleta(Flores.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Porangatu":
-                        rodar_coleta(Porangatu.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Bom Jesus":
-                        rodar_coleta(Bom_Jesus.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Caldas Novas":
-                        rodar_coleta(Caldas_Novas.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Campo Alegre":
-                        rodar_coleta(Campo_Alegre.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    elif nome_cidade == "Nova Veneza":
-                        rodar_coleta(Nova_Veneza.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
-                    else:
-                        print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}\033[0m")
+                    try:
+                        modulo_cidade = importlib.import_module(f"Cidades.{nome_modulo}")
+                        rodar_coleta(modulo_cidade.recolher, nome_cidade, cnpj, site_da_cidade, nav_mun, pasta_download)
+                    except (ImportError, AttributeError) as e:
+                        print(f"\033[33m⚠️ Nenhuma automação vinculada para a cidade: {nome_cidade}. Detalhe: {e}\033[0m")
                         gerenciador_historico.registrar_resultado(
                             cnpj=cnpj,
                             certidao=nome_cidade,
                             validade="",
                             status="Sem Automação",
-                            observacao="Nenhuma automação vinculada para esta cidade no sistema."
+                            observacao=f"Nenhuma automação vinculada no sistema: {e}"
                         )
                         houve_falha = True
                         navegadores_municipais.remove(nav_mun)
                         nav_mun.quit()
+
         else:
             print("[MUNICIPAL] Coleta de municípios desabilitada")
         
@@ -2302,7 +2268,7 @@ class InterfaceAutomacao:
                 cidades_config.append({
                     "cidade": cidade_nome,
                     "url": cidade_info.get("url", ""),
-                    "automatizado": cidade_info.get("automatizado", False)
+                    "tecnologia": cidade_info.get("tecnologia", "selenium") # Nova chave
                 })
 
             # 3. Salva no banco de dados (dados.json)
@@ -2371,7 +2337,7 @@ class InterfaceAutomacao:
 
         tk.Label(
             conteiner,
-            text="Gerencie as cidades e status de automação dos CNPJs, audite cidades manuais/pendentes e consulte o último relatório.",
+            text="Gerencie as cidades e a tecnologia de automação dos CNPJs, audite pendências e consulte o último relatório.",
             font=("Segoe UI", 9),
             bg="#002b36",
             fg="#839496"
@@ -2424,11 +2390,11 @@ class InterfaceAutomacao:
         )
         self.lbl_status_cnpj_atualizar.pack(side="left")
 
-        # Corpo com 2 Colunas (Esquerda: Edição do CNPJ | Direita: Auditoria + Relatório)
+        # Corpo em 2 Colunas
         frame_corpo = tk.Frame(conteiner, bg="#002b36")
         frame_corpo.pack(fill="both", expand=True)
 
-        # === COLUNA ESQUERDA (Edição de Cidades do CNPJ) ===
+        # === COLUNA ESQUERDA ===
         col_esquerda = tk.Frame(frame_corpo, bg="#002b36")
         col_esquerda.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
@@ -2444,7 +2410,7 @@ class InterfaceAutomacao:
         frame_listbox.pack(fill="both", expand=True, pady=(0, 6))
 
         scroll_edicao = tk.Scrollbar(frame_listbox)
-        scroll_edicao.pack(side="right",fill="y")
+        scroll_edicao.pack(side="right", fill="y")
 
         self.listbox_cidades_edicao = tk.Listbox(
             frame_listbox,
@@ -2462,24 +2428,23 @@ class InterfaceAutomacao:
         self.listbox_cidades_edicao.pack(side="left", fill="both", expand=True, padx=4, pady=4)
         scroll_edicao.config(command=self.listbox_cidades_edicao.yview)
 
-        # --- NOVO BLOCO: ÁREA DO CNPJ DA MATRIZ ---
-
+        # Botões da lista + Vínculo de Matriz na mesma linha
         frame_botoes_lista = tk.Frame(col_esquerda, bg="#002b36")
         frame_botoes_lista.pack(fill="x", pady=(0, 8))
 
         btn_alternar_status = tk.Button(
-        frame_botoes_lista,
-        text="⚡ Alternar Status",
-        command=self.alternar_status_cidade_selecionada,
-        bg="#073642",
-        fg="#38bdf8",
-        activebackground="#0e4957",
-        activeforeground="#ffffff",
-        font=("Segoe UI", 8, "bold"),
-        relief="flat",
-        cursor="hand2",
-        padx=10,
-        pady=4
+            frame_botoes_lista,
+            text="⚡ Alternar Modo",
+            command=self.alternar_status_cidade_selecionada,
+            bg="#073642",
+            fg="#38bdf8",
+            activebackground="#0e4957",
+            activeforeground="#ffffff",
+            font=("Segoe UI", 8, "bold"),
+            relief="flat",
+            cursor="hand2",
+            padx=10,
+            pady=4
         )
         btn_alternar_status.pack(side="left", padx=(0, 6))
 
@@ -2497,10 +2462,8 @@ class InterfaceAutomacao:
             padx=10,
             pady=4
         )
-        # Adicionamos um padding maior (padx=20) na direita para separar os botões da cidade dos controles da Matriz
         btn_remover_cidade.pack(side="left", padx=(0, 20))
 
-        # --- CONTROLES DA MATRIZ EMBUTIDOS ---
         tk.Label(
             frame_botoes_lista,
             text="Matriz:",
@@ -2533,16 +2496,7 @@ class InterfaceAutomacao:
         )
         btn_vincular_matriz.pack(side="left")
 
-        # ------------------------------------------
-
-        # Botões de Ação na Lista de Cidades (Alternar Status e Remover)
-        # [O restante do código de frame_botoes_lista segue idêntico aqui para baixo...]
-
-        # Botões de Ação na Lista de Cidades (Alternar Status e Remover)
-        frame_botoes_lista = tk.Frame(col_esquerda, bg="#002b36")
-        frame_botoes_lista.pack(fill="x", pady=(0, 8))
-
-        # Seção para Adicionar Nova Cidade a este CNPJ
+        # Seção para Incluir Cidade
         frame_add_cidade = tk.Frame(col_esquerda, bg="#073642", highlightthickness=1, highlightbackground="#0e4957", padx=8, pady=6)
         frame_add_cidade.pack(fill="x", pady=(0, 8))
 
@@ -2558,23 +2512,29 @@ class InterfaceAutomacao:
         self.combo_add_cidade = ttk.Combobox(
             frame_add_cidade,
             values=cidades_nomes,
-            width=20,
+            width=18,
             font=("Segoe UI", 9)
         )
         self.combo_add_cidade.pack(side="left", padx=(0, 6))
 
-        self.var_add_aut = tk.BooleanVar(value=True)
-        tk.Checkbutton(
+        # Seleção de tecnologia para a nova cidade
+        tk.Label(
             frame_add_cidade,
-            text="Automatizado?",
-            variable=self.var_add_aut,
+            text="Modo:",
+            font=("Segoe UI", 8, "bold"),
             bg="#073642",
-            fg="#e2e8f0",
-            activebackground="#073642",
-            activeforeground="#38bdf8",
-            selectcolor="#002b36",
+            fg="#e2e8f0"
+        ).pack(side="left", padx=(2, 2))
+
+        self.combo_add_tecnologia = ttk.Combobox(
+            frame_add_cidade,
+            values=["selenium", "assistido", "centi", "manual"],
+            width=10,
+            state="readonly",
             font=("Segoe UI", 8)
-        ).pack(side="left", padx=(0, 6))
+        )
+        self.combo_add_tecnologia.set("selenium")
+        self.combo_add_tecnologia.pack(side="left", padx=(0, 6))
 
         btn_adicionar = tk.Button(
             frame_add_cidade,
@@ -2619,17 +2579,16 @@ class InterfaceAutomacao:
         )
         self.lbl_feedback_edicao.pack(side="left")
 
-        # === COLUNA DIREITA (Auditoria de Cidades Manuais/False + Último Relatório) ===
+        # === COLUNA DIREITA ===
         col_direita = tk.Frame(frame_corpo, bg="#002b36")
         col_direita.pack(side="right", fill="both", expand=True, padx=(10, 0))
 
-        # 1. Auditoria: Cidades Manuais / False / Em Branco
         frame_header_manuais = tk.Frame(col_direita, bg="#002b36")
         frame_header_manuais.pack(fill="x", pady=(0, 4))
 
         self.lbl_titulo_manuais = tk.Label(
             frame_header_manuais,
-            text="Cidades com Status False / Em Branco:",
+            text="Cidades em Modo Manual / Centi:",
             font=("Segoe UI", 10, "bold"),
             bg="#002b36",
             fg="#facc15"
@@ -2663,7 +2622,6 @@ class InterfaceAutomacao:
         )
         self.txt_cidades_manuais.pack(fill="both", expand=True, pady=(0, 8))
 
-        # 2. Último Relatório Gerado (pasta relatorios/)
         frame_header_relatorio = tk.Frame(col_direita, bg="#002b36")
         frame_header_relatorio.pack(fill="x", pady=(0, 4))
 
@@ -2703,7 +2661,6 @@ class InterfaceAutomacao:
         )
         self.txt_ultimo_relatorio.pack(fill="both", expand=True)
 
-        # Popula displays iniciais
         self.atualizar_display_cidades_manuais()
         self.atualizar_display_ultimo_relatorio()
 
@@ -2743,24 +2700,46 @@ class InterfaceAutomacao:
     def atualizar_listbox_edicao(self):
         self.listbox_cidades_edicao.delete(0, "end")
         for c in self.cidades_em_edicao:
-            status = "SIM (Auto)" if c.get("automatizado") else "NÃO (Manual)"
+            # Pega o valor da tecnologia ou converte o booleano antigo
+            if "tecnologia" in c:
+                tech = str(c["tecnologia"]).upper()
+            else:
+                tech = "SELENIUM" if c.get("automatizado", True) else "MANUAL"
+                
             nome = c.get("cidade", "")
-            texto = f"[{status:<12}] {nome}"
+            texto = f"[{tech:<10}] {nome}"
             self.listbox_cidades_edicao.insert("end", texto)
 
     def alternar_status_cidade_selecionada(self):
         sel = self.listbox_cidades_edicao.curselection()
         if not sel:
-            self.lbl_feedback_edicao.config(text="⚠️ Selecione uma cidade na lista para alternar.", fg="#facc15")
+            self.lbl_feedback_edicao.config(text="⚠️ Selecione uma cidade na lista para alternar o modo.", fg="#facc15")
             return
+            
         idx = sel[0]
-        atual = bool(self.cidades_em_edicao[idx].get("automatizado", False))
-        self.cidades_em_edicao[idx]["automatizado"] = not atual
+        cidade_obj = self.cidades_em_edicao[idx]
+        
+        # Lê a tecnologia atual (com fallback para 'automatizado' antigo)
+        tech_atual = str(cidade_obj.get("tecnologia", "selenium")).lower()
+        if tech_atual not in ["selenium", "assistido", "centi", "manual"]:
+            tech_atual = "selenium"
+
+        # Ciclo de transição de modos
+        proximo_modo = {
+            "selenium": "assistido",
+            "assistido": "centi",
+            "centi": "manual",
+            "manual": "selenium"
+        }
+        
+        nova_tech = proximo_modo[tech_atual]
+        self.cidades_em_edicao[idx]["tecnologia"] = nova_tech
+        
         self.atualizar_listbox_edicao()
         self.listbox_cidades_edicao.selection_set(idx)
-        novo_status = "AUTOMATIZADO" if not atual else "MANUAL"
+        
         self.lbl_feedback_edicao.config(
-            text=f"Status alterado para {novo_status}. Clique em 'Salvar Alterações'.",
+            text=f"Modo alterado para [{nova_tech.upper()}]. Clique em 'Salvar Alterações'.",
             fg="#38bdf8"
         )
 
@@ -2781,6 +2760,7 @@ class InterfaceAutomacao:
         if not hasattr(self, 'cnpj_atual_em_edicao') or not self.cnpj_atual_em_edicao:
             self.lbl_feedback_edicao.config(text="⚠️ Carregue um CNPJ primeiro antes de adicionar cidades.", fg="#facc15")
             return
+            
         cidade_nome = self.combo_add_cidade.get().strip()
         if not cidade_nome:
             self.lbl_feedback_edicao.config(text="⚠️ Selecione uma cidade para adicionar.", fg="#facc15")
@@ -2792,16 +2772,19 @@ class InterfaceAutomacao:
         
         todas_cidades = self.cidades_disponiveis if hasattr(self, 'cidades_disponiveis') and self.cidades_disponiveis else gerenciador_cnpj.listar_cidades_disponiveis()
         url = todas_cidades.get(cidade_nome, {}).get("url", "")
-        automatizado = self.var_add_aut.get()
+        
+        # Pega a tecnologia selecionada na Combobox
+        tecnologia_sel = self.combo_add_tecnologia.get().strip().lower()
 
         self.cidades_em_edicao.append({
             "cidade": cidade_nome,
-            "automatizado": automatizado,
+            "tecnologia": tecnologia_sel,
             "url": url
         })
+        
         self.atualizar_listbox_edicao()
         self.lbl_feedback_edicao.config(
-            text=f"Cidade '{cidade_nome}' incluída! Clique em 'Salvar Alterações'.",
+            text=f"Cidade '{cidade_nome}' [{tecnologia_sel.upper()}] incluída! Clique em 'Salvar Alterações'.",
             fg="#38bdf8"
         )
 
@@ -2832,18 +2815,18 @@ class InterfaceAutomacao:
 
     def atualizar_display_cidades_manuais(self):
         pendentes = gerenciador_cnpj.listar_cidades_manuais_ou_pendentes()
-        self.lbl_titulo_manuais.config(text=f"Cidades com Status False / Em Branco ({len(pendentes)}):")
+        self.lbl_titulo_manuais.config(text=f"Cidades com Coleta Manual / Centi / Pendente ({len(pendentes)}):")
         self.txt_cidades_manuais.configure(state="normal")
         self.txt_cidades_manuais.delete("1.0", "end")
         if not pendentes:
-            self.txt_cidades_manuais.insert("end", "🎉 Nenhuma cidade com status False ou em branco no sistema!\nTodas as cidades estão 100% automatizadas.")
+            self.txt_cidades_manuais.insert("end", "🎉 Nenhuma cidade pendente ou manual no sistema!")
         else:
             self.txt_cidades_manuais.insert("end", f"Total de cidades manuais/pendentes: {len(pendentes)}\n")
             self.txt_cidades_manuais.insert("end", "=" * 55 + "\n\n")
             for p in pendentes:
-                aut_txt = "False" if p["automatizado"] is False else "Em branco"
+                tech_txt = p["tecnologia"].upper()
                 cid_txt = p["cidade"] if p["cidade"] else "(Sem nome)"
-                self.txt_cidades_manuais.insert("end", f"• CNPJ: {p['cnpj']} | Cidade: {cid_txt:<16} | Status: [{aut_txt}]\n")
+                self.txt_cidades_manuais.insert("end", f"• CNPJ: {p['cnpj']} | Cidade: {cid_txt:<16} | Modo: [{tech_txt}]\n")
         self.txt_cidades_manuais.configure(state="disabled")
 
     def atualizar_display_ultimo_relatorio(self):
