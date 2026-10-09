@@ -235,8 +235,26 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
             
             if "AGEHAB" in tipos_cnd_norm and not flag_cancelamento:
                 idx_agehab = 2 if ("ESTADUAL" in tipos_cnd_norm and "FGTS" in tipos_cnd_norm) else (1 if "ESTADUAL" in tipos_cnd_norm or "FGTS" in tipos_cnd_norm else 0)
-                # 1. Cria a tarefa da AGEHAB
-                futuro_agehab = executor.submit(teste_AGEHAB.recolher_agehab, cnpj, site[3], navegadores_fixos[idx_agehab] if len(navegadores_fixos) > idx_agehab else None, usuario=Usuario.AGEHAB_USUARIO, senha=Usuario.AGEHAB_SENHA)
+                try:
+                    usuario_agehab, senha_agehab = Usuario.obter_credenciais_agehab()
+                except (
+                    Usuario.ErroAutenticacao,
+                    Usuario.CredenciaisAGEHABAusentesError,
+                    OSError,
+                ) as erro:
+                    mensagem_erro = str(erro)
+                    futuro_agehab = executor.submit(
+                        lambda mensagem=mensagem_erro: (False, mensagem)
+                    )
+                else:
+                    futuro_agehab = executor.submit(
+                        teste_AGEHAB.recolher_agehab,
+                        cnpj,
+                        site[3],
+                        navegadores_fixos[idx_agehab] if len(navegadores_fixos) > idx_agehab else None,
+                        usuario=usuario_agehab,
+                        senha=senha_agehab,
+                    )
                 # 2. Põe na lista de espera
                 tarefas.append(futuro_agehab)
                 
@@ -2701,5 +2719,3 @@ if __name__ == "__main__":
         pasta_raiz_empresas = r"N:\16. CERTIDÕES\1. Empresas"
 
     InterfaceAutomacao().executar()
-
-

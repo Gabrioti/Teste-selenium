@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 
 from CadastroDiagnostico.diagnostico_download import esperar_download, _arquivos_validos
+from Gerenciadores.gerenciador_caminhos import obter_pasta_dados_usuario
 
 try:
     import ddddocr
@@ -47,12 +48,15 @@ def extrair_codigo_captcha(navegador):
         else:
             raw_bytes = img_el.screenshot_as_png
 
-        # Cria a pasta se não existir
-        if not os.path.exists("dataset_captchas"):
-            os.makedirs("dataset_captchas")
-
-        # Salva a imagem com um timestamp para não sobrescrever
-        nome_arquivo = f"dataset_captchas/img_{int(time.time())}.png"
+        pasta_dataset = os.path.join(
+            obter_pasta_dados_usuario(),
+            "dataset_captchas",
+        )
+        os.makedirs(pasta_dataset, exist_ok=True)
+        nome_arquivo = os.path.join(
+            pasta_dataset,
+            f"img_{int(time.time())}.png",
+        )
         with open(nome_arquivo, "wb") as f:
             f.write(raw_bytes)
 

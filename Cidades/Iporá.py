@@ -9,7 +9,8 @@ from Gerenciadores.assistente_manual import solicitar_acao_manual
 
 siteCadastro = "https://ipora.centi.com.br/servicos/certidaonegativa"
 
-def recolher(nome_cidade, site, CNPJ, pasta_download):
+def recolher(CNPJ, site, pasta_download):
+    nome_cidade = "Iporá"
 
     print(f"[{nome_cidade}] Iniciando coleta assistida para o CNPJ: {CNPJ}...")
     

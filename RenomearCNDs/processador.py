@@ -343,7 +343,8 @@ def processar_todas_cnds(pasta_trabalho, modo_debug=False):
                 certidao=nome_origem,      # Ex: "Federal" ou "Águas Lindas"
                 validade=data_atualizacao, # A data limpa que o seu robô já encontrou
                 status=status,             # Ex: "Negativa", "Positiva"
-                observacao=""              # Deixa vazio, pois o PDF deu certo!
+                observacao="",             # Deixa vazio, pois o PDF deu certo!
+                registrar_mudanca=True,
             )
             # =========================================================
 

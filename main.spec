@@ -10,6 +10,8 @@ project_root = os.path.dirname(os.path.abspath(SPEC))
 # Coleta completa de todos os módulos, dados e binários do Selenium e webdriver_manager
 datas_selenium, binaries_selenium, hidden_selenium = collect_all('selenium')
 datas_wdm, binaries_wdm, hidden_wdm = collect_all('webdriver_manager')
+datas_ddddocr, binaries_ddddocr, hidden_ddddocr = collect_all('ddddocr')
+datas_onnxruntime, binaries_onnxruntime, hidden_onnxruntime = collect_all('onnxruntime')
 
 # Coleta todos os módulos das cidades automaticamente
 cidades_hiddenimports = [
@@ -20,27 +22,30 @@ cidades_hiddenimports = [
 
 a = Analysis(
     ['main.py'],
-    pathex=[project_root],
-    binaries=binaries_selenium + binaries_wdm,
+    pathex=[project_root, os.path.join(project_root, 'RenomearCNDs')],
+    binaries=(
+        binaries_selenium
+        + binaries_wdm
+        + binaries_ddddocr
+        + binaries_onnxruntime
+    ),
     datas=[
-        # Inclui a pasta inteira de Cidades como pacote Python
-        (os.path.join(project_root, 'Cidades'), 'Cidades'),
-        # Inclui o robô de CNDs (será chamado via subprocess)
-        (os.path.join(project_root, 'RenomearCNDs'), 'RenomearCNDs'),
-        # Inclui pasta de imagens
-        (os.path.join(project_root, 'ImagensFederal'), 'ImagensFederal'),
-        # Inclui pasta de tratamento de imagem
-        (os.path.join(project_root, 'TratamentoImagem'), 'TratamentoImagem'),
+        # Recursos OCR; o código correspondente é empacotado como módulos Python.
+        (
+            os.path.join(project_root, 'RenomearCNDs', 'Motores'),
+            os.path.join('RenomearCNDs', 'Motores'),
+        ),
         # Inclui arquivo dados.json base como modelo inicial para o executável
         (os.path.join(project_root, 'SQL', 'dados.json'), 'SQL'),
         # Inclui arquivo historico_cnds.json base como modelo inicial para o executável
         (os.path.join(project_root, 'SQL', 'historico_cnds.json'), 'SQL'),
-    ] + datas_selenium + datas_wdm,
+    ] + datas_selenium + datas_wdm + datas_ddddocr + datas_onnxruntime,
     hiddenimports=[
         # Módulos dentro da pasta Gerenciadores
         'Gerenciadores.gerenciador_cnpj',
         'Gerenciadores.gerenciador_pastas',
         'Gerenciadores.gerenciador_historico',
+        'Gerenciadores.gerenciador_caminhos',
 
         # Módulos dentro da pasta Processos
         'Processos.teste_FEDERAL',
@@ -49,6 +54,10 @@ a = Analysis(
         'Processos.teste_COMPRASNET',
         'Processos.teste_FGTS',
         'Processos.teste_AGEHAB',
+        'central',
+        'processador',
+        'regras',
+        'leitor_ocr',
 
         # Módulos das Cidades (gerados dinamicamente acima)
         *cidades_hiddenimports,
@@ -58,7 +67,7 @@ a = Analysis(
         'tkinter.scrolledtext',
         'tkinter.ttk',
         'tkinter.simpledialog',
-    ] + hidden_selenium + hidden_wdm,
+    ] + hidden_selenium + hidden_wdm + hidden_ddddocr + hidden_onnxruntime,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -71,9 +80,8 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
     [],
+    exclude_binaries=True,
     name='CND_Automatico',
     debug=False,
     bootloader_ignore_signals=False,
@@ -87,4 +95,14 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='CND_Automatico_Test',
 )

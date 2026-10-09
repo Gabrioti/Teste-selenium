@@ -1,4 +1,7 @@
+import base64
+import os
 import time
+from datetime import datetime
 from urllib.parse import urlparse, quote
 
 from selenium.webdriver.common.by import By
@@ -17,9 +20,9 @@ def montar_url_com_autenticacao(site, usuario, senha):
         nova_url += f"#{partes.fragment}"
     return nova_url
 
-def recolher_agehab(CNPJ, site, navegador, usuario="FAGabrioti", senha="Lara@285428"):
+def recolher_agehab(CNPJ, site, navegador, usuario, senha, pasta_download):
     url_com_login = montar_url_com_autenticacao(site, usuario, senha)
-    print(f"[AGEHAB] Acessando o Palladium Gerencial com autenticação por URL: {url_com_login}")
+    print(f"[AGEHAB] Acessando o Palladium Gerencial: {site}")
     navegador.get(url_com_login)
     navegador.maximize_window()
 
@@ -89,27 +92,40 @@ def recolher_agehab(CNPJ, site, navegador, usuario="FAGabrioti", senha="Lara@285
         return False, msg
 
     time.sleep(1)
-
-    # --- MUDANDO DE ABA ---
-    abas_abertas = navegador.window_handles
     try:
+        abas_abertas = navegador.window_handles
         if len(abas_abertas) > 1:
             navegador.switch_to.window(abas_abertas[-1])
-    except:
-        msg = "Não foi possível focar na nova aba da certidão."
-        print(f"[AGEHAB] {msg}")
-        return False, msg
-    
-    time.sleep(1)
-    
-    try:
-        navegador.execute_script("window.print();")
+        WebDriverWait(navegador, 20).until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
+        time.sleep(1)
+
+        resultado_pdf = navegador.execute_cdp_cmd(
+            "Page.printToPDF",
+            {
+                "printBackground": True,
+                "preferCSSPageSize": True,
+            },
+        )
+        dados_pdf = base64.b64decode(resultado_pdf["data"], validate=True)
+        if not dados_pdf.startswith(b"%PDF-"):
+            raise ValueError("O Chrome não retornou um documento PDF válido.")
+
+        os.makedirs(pasta_download, exist_ok=True)
+        cnpj_limpo = "".join(digito for digito in str(CNPJ) if digito.isdigit())
+        nome_pdf = (
+            f"AGEHAB_{cnpj_limpo}_"
+            f"{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.pdf"
+        )
+        caminho_pdf = os.path.join(pasta_download, nome_pdf)
+        with open(caminho_pdf, "wb") as arquivo_pdf:
+            arquivo_pdf.write(dados_pdf)
+
+        print(f"[AGEHAB] PDF salvo em: {caminho_pdf}")
         print("[AGEHAB] Certidão recolhida com sucesso!")
-        
-        # MODIFICADO AQUI: Tudo certo, retorna True
         return True, ""
-        
     except Exception as e:
-        msg = f"Erro de JavaScript ao tentar iniciar a impressão: {e}"
+        msg = f"Não foi possível gerar e salvar o PDF da certidão: {e}"
         print(f"[AGEHAB] {msg}")
         return False, msg

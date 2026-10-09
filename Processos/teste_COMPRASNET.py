@@ -139,6 +139,11 @@ def recolher(CNPJ, site, navegador, pasta_download=None, solicitar_captcha=None)
             # 7. Aguarda o download do PDF com tempo estendido para resposta do servidor estadual
             try:
                 arquivo = esperar_download(navegador, pasta_download, timeout=45, arquivos_antes=arquivos_antes)
+                nome, extensao = os.path.splitext(arquivo)
+                arquivo_com_cnpj = f"{nome}_{CNPJ}{extensao}"
+                os.replace(arquivo, arquivo_com_cnpj)
+                arquivo = arquivo_com_cnpj
+
                 print(f"{COR_COMPRASNET}[COMPRASNET] CND recolhida com sucesso para o CNPJ: {CNPJ}{COR_RESET}")
                 print(f"{COR_COMPRASNET}Arquivo baixado: {arquivo}{COR_RESET}")
                 

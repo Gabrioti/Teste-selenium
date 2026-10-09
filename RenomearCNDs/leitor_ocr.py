@@ -1,10 +1,10 @@
 # leitor_ocr.py
 
-import sys
 import os
 import pytesseract
 from pdf2image import convert_from_path
 
+from Gerenciadores.gerenciador_caminhos import obter_pasta_recursos
 
 
 def extrair_texto_com_ocr(caminho_pdf):
@@ -14,24 +14,19 @@ def extrair_texto_com_ocr(caminho_pdf):
     # ==========================================
     # LÓGICA INTELIGENTE DE CAMINHOS
     # ==========================================
-    if getattr(sys, 'frozen', False):
-        # 1. Se estiver rodando como .EXE:
-        pasta_exe = os.path.dirname(sys.executable) # Pasta dist/ onde o main.exe está
-
-        # Agora TUDO (Poppler e Tesseract) é pego da pasta Motores ao lado do .exe
-        caminho_poppler = os.path.join(pasta_exe, 'Motores', 'poppler-25.12.0', 'Library', 'bin')
-        
-        caminho_tesseract = os.path.join(pasta_exe, 'Motores', 'tesseract.exe')
-        pasta_tessdata = os.path.join(pasta_exe, 'Motores', 'tessdata')
-
-    else:
-        # 2. Se estiver rodando solto no VS Code:
-        # Volta uma pasta (de Codigos para PROG_CND) para achar a Motores
-        pasta_atual = os.path.dirname(os.path.abspath(__file__))
-
-        caminho_poppler = os.path.join(pasta_atual, 'Motores', 'poppler-25.12.0', 'Library', 'bin')
-        caminho_tesseract = os.path.join(pasta_atual, 'Motores', 'tesseract.exe')
-        pasta_tessdata = os.path.join(pasta_atual, 'Motores', 'tessdata')
+    pasta_motores = os.path.join(
+        obter_pasta_recursos(),
+        "RenomearCNDs",
+        "Motores",
+    )
+    caminho_poppler = os.path.join(
+        pasta_motores,
+        "poppler-25.12.0",
+        "Library",
+        "bin",
+    )
+    caminho_tesseract = os.path.join(pasta_motores, "tesseract.exe")
+    pasta_tessdata = os.path.join(pasta_motores, "tessdata")
 
     # ==========================================
     # CONFIGURAÇÃO E EXECUÇÃO DO OCR

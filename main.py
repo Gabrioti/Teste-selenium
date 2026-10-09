@@ -12,38 +12,23 @@ from datetime import datetime # Essa biblioteca permite que você trabalhe com d
 import subprocess # Essa biblioteca permite que você execute comandos do sistema operacional.
 import unicodedata
 import importlib
-
-import requests
-from validate_docbr import CNPJ as ValidadorCNPJ
-
-from selenium import webdriver # Essa biblioteca permite que você automatize ações no navegador.
-from webdriver_manager.chrome import ChromeDriverManager # Essa biblioteca permite que você gerencie o driver do Chrome.
-from selenium.webdriver.chrome.service import Service # Essa biblioteca permite que você configure o driver do Chrome.
-from selenium.webdriver.chrome.options import Options # Essa biblioteca permite que você configure o Chrome.
-
-from Processos import teste_FEDERAL, teste_ESTADUAL, teste_TRABALISTA,teste_COMPRASNET, teste_FGTS, teste_AGEHAB
-
-import pandas as pd
-from openpyxl.styles import PatternFill
+import sqlite3
 
 from Gerenciadores import gerenciador_cnpj
 from Gerenciadores import gerenciador_pastas
 from Gerenciadores import gerenciador_historico # Ajuste o caminho se necessário
+from Gerenciadores.gerenciador_caminhos import (
+    obter_pasta_dados_usuario,
+    obter_pasta_downloads,
+    obter_pasta_recursos,
+    obter_pasta_relatorios,
+)
 
-# 1. Pega o caminho absoluto da pasta onde o main.py está e entra na pasta SQL
-pasta_atual = os.path.dirname(os.path.abspath(__file__))
-caminho_banco = os.path.join(pasta_atual, 'SQL', 'dados.json')
-
-# 2. Abre o arquivo JSON e carrega os dados para um dicionário Python
-with open(caminho_banco, 'r', encoding='utf-8') as arquivo_json:
-    dados = json.load(arquivo_json)
-
-# 3. Puxa as chaves específicas do JSON para as suas variáveis
-mapa_municipal = dados.get("mapa_municipal", {})
-mapa_matriz = dados.get("mapa_matriz", {})
+mapa_municipal = {}
+mapa_matriz = {}
 
 CNPJ = ["21370540000137"]
-PASTA_RELATORIOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "relatorios")
+PASTA_RELATORIOS = obter_pasta_relatorios()
 
 COR_MUNICIPAL = "\033[38;2;255;204;102m"
 COR_ERRO = "\033[31m"
@@ -51,7 +36,7 @@ COR_RESET = "\033[0m"
 COR_TEXTO = "\033[94m"
 COR_VERDE = "\033[38;2;102;204;102m"
 
-from config import Usuario
+
 
 site = [
         "https://www.sefaz.go.gov.br/Certidao/Emissao/",                                        #ESTADUAL
@@ -62,8 +47,8 @@ site = [
         "https://cndt-certidao.tst.jus.br/gerarCertidao"                                        # TRABALHISTA
 ]
 
-lista_cnds_manuais = []
 flag_cancelamento = False
+HEADLESS_POR_PADRAO = False
 
 def validar_cnpj_completo(cnpj_texto):
     """
@@ -71,6 +56,9 @@ def validar_cnpj_completo(cnpj_texto):
     1. Validação Matemática (Dígitos verificadores via validate-docbr)
     2. Validação de Existência na Receita Federal (via BrasilAPI com tratamento para limite 429)
     """
+    import requests
+    from validate_docbr import CNPJ as ValidadorCNPJ
+
     cnpj_limpo = "".join(filter(str.isdigit, str(cnpj_texto)))
     
     # -------------------------------------------------------------
@@ -137,18 +125,22 @@ def injetar_cnpj_filial_no_nome(pasta, mapa_vinculos):
 
 def acionar_robo_cnd():
     print("Iniciando a etapa de renomear os PDFs...")
-    
-    # 1. Descobre onde a sua aplicação principal está rodando agora
-    pasta_app_principal = os.path.dirname(os.path.abspath(__file__))
-    
-    # 2. Monta o caminho exato até o central.py do robô de CNDs
-    caminho_robo_cnd = os.path.join(pasta_app_principal, "RenomearCNDs", "central.py")
-    
-    # 3. Executa o robô de forma segura e espera ele terminar!
+
     try:
-        # sys.executable garante que o robô use o MESMO ambiente virtual da sua aplicação, 
-        # evitando aquele erro de "No module named pdfplumber" que você já conhece!
-        subprocess.run([sys.executable, caminho_robo_cnd], check=True)
+        if getattr(sys, "frozen", False):
+            comando = [sys.executable, "--processar-cnds", pasta_download]
+        else:
+            comando = [
+                sys.executable,
+                os.path.abspath(__file__),
+                "--processar-cnds",
+                pasta_download,
+            ]
+        subprocess.run(
+            comando,
+            check=True,
+            cwd=obter_pasta_recursos(),
+        )
         print("Robô de CNDs finalizou o trabalho com sucesso!")
         return True
         
@@ -344,16 +336,25 @@ def obter_plano_coleta_em_massa(tipos_cnd_selecionados, apenas_vencidas=True, cn
     resumo["total_cnpjs_executar"] = len(lista_cnpjs_executar)
     return lista_cnpjs_executar, plano_coleta, resumo
 
-def criar_navegador_configurado():
-    #pasta_download = r"N:\19. FERRAMENTAS\Teste selenium\RenomearCNDs\CNDs"
+def criar_navegador_configurado(headless=None):
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service
+    from selenium.webdriver.chrome.options import Options
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    pasta_download = obter_pasta_downloads()
     
     """Função auxiliar para gerar navegadores idênticos e isolados"""
     opcoes = Options()
+    if headless is None:
+        headless = HEADLESS_POR_PADRAO
+    if headless:
+        opcoes.add_argument("--headless=new")
+        opcoes.add_argument("--window-size=1920,1080")
 
     # Argumentos originais de segurança
     opcoes.add_argument('--safebrowsing-disable-download-protection')
     opcoes.add_argument('--safebrowsing-disable-extension-blacklist')
-    opcoes.add_argument('--ignore-certificate-errors')
     opcoes.add_argument('--disable-features=InsecureDownloadWarnings')
 
     # NOVO: Argumento que força o Chrome a "clicar" em imprimir automaticamente sem mostrar a tela
@@ -390,8 +391,6 @@ def criar_navegador_configurado():
     }
 
     opcoes.add_experimental_option("prefs", preferencias)
-    opcoes.add_experimental_option("detach", True)
-
     # NOVO: Limpeza automática de travas (locks) do webdriver-manager
     caminho_wdm = os.path.join(os.path.expanduser("~"), ".wdm")
     # Busca por qualquer arquivo de lock que tenha ficado travado
@@ -409,9 +408,28 @@ def criar_navegador_configurado():
     # IMPORTANTE: Removi o "detach: True" para que o código Python consiga fechar as janelas no final
     return webdriver.Chrome(service=servico, options=opcoes)
 
-def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, plano_coleta=None):
+def principal(
+    lista_cnpjs,
+    tipos_cnd,
+    solicitar_captcha=None,
+    interface=None,
+    plano_coleta=None,
+    headless=None,
+    usuario_agehab="",
+    senha_agehab="",
+):
+    from Processos import (
+        teste_FEDERAL,
+        teste_ESTADUAL,
+        teste_TRABALISTA,
+        teste_COMPRASNET,
+        teste_FGTS,
+        teste_AGEHAB,
+    )
+
     global flag_cancelamento
     flag_cancelamento = False
+    usar_headless = HEADLESS_POR_PADRAO if headless is None else headless
     
     # Loop passando por cada CNPJ
     for cnpj_idx, cnpj in enumerate(lista_cnpjs):
@@ -506,40 +524,63 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
         # A. COLETAS FIXAS
         # ---------------------------------------------------------
         if "ESTADUAL" in tipos_cnd_norm and not flag_cancelamento:
-            nav_estadual = criar_navegador_configurado()
-            nav_estadual.maximize_window()
+            nav_estadual = criar_navegador_configurado(headless=usar_headless)
+            if not usar_headless:
+                nav_estadual.maximize_window()
             nav_estadual.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_estadual)
             rodar_coleta(teste_ESTADUAL.recolher_estadual, "Estadual", cnpj, site[0], nav_estadual, pasta_download)
             nav_estadual.quit()
             
         if "FGTS" in tipos_cnd_norm and not flag_cancelamento:
-            nav_fgts = criar_navegador_configurado()
-            nav_fgts.maximize_window()
+            nav_fgts = criar_navegador_configurado(headless=usar_headless)
+            if not usar_headless:
+                nav_fgts.maximize_window()
             nav_fgts.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_fgts)
             rodar_coleta(teste_FGTS.recolher_FGTS, "FGTS", cnpj, site[2], nav_fgts, pasta_download)
             nav_fgts.quit()
             
         if "AGEHAB" in tipos_cnd_norm and not flag_cancelamento:
-            nav_agehab = criar_navegador_configurado()
-            nav_agehab.maximize_window()
-            nav_agehab.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
-            navegadores_fixos.append(nav_agehab)
-            rodar_coleta(teste_AGEHAB.recolher_agehab, "AGEHAB", cnpj, site[3], nav_agehab, usuario=Usuario.AGEHAB_USUARIO, senha=Usuario.AGEHAB_SENHA)
-            nav_agehab.quit()
+            if not usuario_agehab or not senha_agehab:
+                rodar_coleta(
+                    lambda: (
+                        False,
+                        "Informe o usuário e a senha da AGEHAB na tela inicial.",
+                    ),
+                    "AGEHAB",
+                )
+            else:
+                nav_agehab = criar_navegador_configurado(headless=True)
+                if not usar_headless:
+                    nav_agehab.maximize_window()
+                nav_agehab.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
+                navegadores_fixos.append(nav_agehab)
+                rodar_coleta(
+                    teste_AGEHAB.recolher_agehab,
+                    "AGEHAB",
+                    cnpj,
+                    site[3],
+                    nav_agehab,
+                    usuario=usuario_agehab,
+                    senha=senha_agehab,
+                    pasta_download=pasta_download,
+                )
+                nav_agehab.quit()
 
         if "COMPRASNET" in tipos_cnd_norm and not flag_cancelamento:
-            nav_comprasnet = criar_navegador_configurado()
-            nav_comprasnet.maximize_window()
+            nav_comprasnet = criar_navegador_configurado(headless=usar_headless)
+            if not usar_headless:
+                nav_comprasnet.maximize_window()
             nav_comprasnet.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_comprasnet)
             rodar_coleta(teste_COMPRASNET.recolher, "Comprasnet", cnpj, site[4], nav_comprasnet, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
             nav_comprasnet.quit()
 
         if "TRABALHISTA" in tipos_cnd_norm and not flag_cancelamento:
-            nav_trabalhista = criar_navegador_configurado()
-            nav_trabalhista.maximize_window()
+            nav_trabalhista = criar_navegador_configurado(headless=usar_headless)
+            if not usar_headless:
+                nav_trabalhista.maximize_window()
             nav_trabalhista.execute_cdp_cmd('Page.setDownloadBehavior', {'behavior': 'allow', 'downloadPath': pasta_download})
             navegadores_fixos.append(nav_trabalhista)
             rodar_coleta(teste_TRABALISTA.recolher, "Trabalhista", cnpj, site[5], nav_trabalhista, pasta_download=pasta_download, solicitar_captcha=solicitar_captcha)
@@ -593,13 +634,13 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
                         modulo_cidade = importlib.import_module(f"Cidades.{nome_modulo}")
                         rodar_coleta(modulo_cidade.recolher, nome_cidade, cnpj, site_da_cidade, pasta_download)
                     except Exception as e:
-                        lista_cnds_manuais.append(f"{cnpj} - {nome_cidade}")
-                        print(f"\033[31m⚠️ {nome_cidade} separada para coleta manual/Centi.\033[0m")
+                        print(f"\033[31m⚠️ Falha ao iniciar coleta da cidade {nome_cidade}: {e}\033[0m")
 
                 # 3. FLUXO SELENIUM PADRÃO (Navegador oculto/configurado repassado via nav_mun)
                 else:
-                    nav_mun = criar_navegador_configurado()
-                    nav_mun.maximize_window()
+                    nav_mun = criar_navegador_configurado(headless=True)
+                    if not usar_headless:
+                        nav_mun.maximize_window()
                     nav_mun.execute_cdp_cmd('Page.setDownloadBehavior', {
                         'behavior': 'allow', 
                         'downloadPath': pasta_download
@@ -652,9 +693,6 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None, pl
                 print(f"\033[33m Não foi possível apagar o arquivo {lixo}: {e}\033[0m")
 
         print(f"\033[33mColetas finalizadas para o CNPJ {CNPJ}!\033[0m\n")
-
-        pasta_relatorios = os.path.join(os.path.dirname(os.path.abspath(__file__)), "relatorios")
-        gerar_relatorio_txt(pasta_relatorios, lista_cnds_manuais)
 
 def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=None):
     """
@@ -835,7 +873,8 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                         certidao=nome_painel,
                         validade=data_str_nova,
                         status=status_novo.title(),
-                        observacao=""
+                        observacao="",
+                        registrar_mudanca=True,
                     )
                     
                     if interface:
@@ -859,6 +898,15 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                 os.remove(caminho_antigo)
                 shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
                 print(f"✅ Arquivo antigo fora de padrão substituído pela nova certidão.")
+                nome_painel = nome_cnd.replace("CND ", "").strip()
+                gerenciador_historico.registrar_resultado(
+                    cnpj=cnpj,
+                    certidao=nome_painel,
+                    validade=data_str_nova,
+                    status=status_novo.title(),
+                    observacao="",
+                    registrar_mudanca=True,
+                )
         else:
             # REGRA 3: Não existe certidão antiga na pasta (salva direto)
             shutil.move(caminho_novo, os.path.join(pasta_destino, nome_novo))
@@ -871,62 +919,9 @@ def organizar_certidoes_por_cnpj(pasta_download, pasta_raiz_empresas, interface=
                 certidao=nome_painel,
                 validade=data_str_nova,
                 status=status_novo.title(),
-                observacao=""
+                observacao="",
+                registrar_mudanca=True,
             )
-
-def gerar_relatorio_txt(pasta_destino=None, lista_pendencias=None):
-    if lista_pendencias is None:
-        lista_pendencias = []
-    if pasta_destino is None:
-        pasta_destino = PASTA_RELATORIOS
-
-    os.makedirs(pasta_destino, exist_ok=True)
-    # Se a lista estiver vazia, significa que o robô fez 100% de tudo sozinho!
-    if not lista_pendencias:
-        print("\n🎉 Nenhuma CND manual pendente hoje! Relatório não gerado.")
-        return None
-
-    # Pega a data atual formatada (Ex: 13-08-2026)
-    data_hoje = datetime.now().strftime("%d-%m-%Y")
-    
-    # Define o nome e o caminho do arquivo de texto
-    nome_arquivo = f"Relatorio_CNDs_Manuais_{data_hoje}.txt"
-    caminho_completo = os.path.join(pasta_destino, nome_arquivo)
-
-    with open(caminho_completo, "w", encoding="utf-8") as arquivo:
-        arquivo.write(f"--- RELATÓRIO DE CNDs MANUAIS PENDENTES ({data_hoje}) ---\n\n")
-        arquivo.write("As seguintes certidões não possuem automação e devem ser emitidas pela equipe:\n\n")
-
-        # Escreve item por item da lista no arquivo de texto
-        for pendencia in lista_pendencias:
-            arquivo.write(f"- {pendencia}\n")
-
-        arquivo.write("\n--- FIM DO RELATÓRIO ---")
-
-    print(f"\n📄 Relatório de pendências gerado com sucesso em:\n   {caminho_completo}")
-    return caminho_completo
-
-def obter_ultimo_relatorio(pasta_destino=None):
-    """
-    Retorna (nome_arquivo, conteudo) do relatório de texto mais recente na pasta relatorios/.
-    """
-    if pasta_destino is None:
-        pasta_destino = PASTA_RELATORIOS
-    if not os.path.exists(pasta_destino):
-        return None, "Pasta de relatórios não encontrada."
-    
-    arquivos = glob.glob(os.path.join(pasta_destino, "*.txt"))
-    if not arquivos:
-        return None, "Nenhum relatório encontrado na pasta relatorios/."
-    
-    ultimo = max(arquivos, key=os.path.getmtime)
-    nome = os.path.basename(ultimo)
-    try:
-        with open(ultimo, "r", encoding="utf-8", errors="replace") as f:
-            conteudo = f.read()
-        return nome, conteudo
-    except Exception as e:
-        return nome, f"Erro ao ler relatório {nome}: {e}"
 
 class EscritorTerminal:
     def __init__(self, fila):
@@ -940,6 +935,25 @@ class EscritorTerminal:
         pass
 
 class InterfaceAutomacao:
+    def entrar_no_programa(self):
+        usuario_agehab = self.campo_login_usuario_agehab.get().strip()
+        senha_agehab = self.campo_login_senha_agehab.get()
+        if not usuario_agehab or not senha_agehab:
+            messagebox.showwarning(
+                "Credenciais necessárias",
+                "Informe o usuário e a senha da AGEHAB para continuar.",
+                parent=self.janela,
+            )
+            return
+
+        self.usuario_agehab = usuario_agehab
+        self.senha_agehab = senha_agehab
+        self.campo_login_usuario_agehab.delete(0, tk.END)
+        self.campo_login_senha_agehab.delete(0, tk.END)
+        for aba in self.abas_protegidas:
+            self.notebook.tab(aba, state="normal")
+        self.notebook.select(self.aba_coleta)
+
     def ao_clicar_vincular_matriz(self):
         if not hasattr(self, 'cnpj_atual_em_edicao') or not self.cnpj_atual_em_edicao:
             self.lbl_feedback_edicao.config(text="⚠️ Carregue um CNPJ primeiro antes de vincular a matriz.", fg="#facc15")
@@ -994,6 +1008,9 @@ class InterfaceAutomacao:
         self.saida_original = sys.stdout
         self.resposta_captcha_atual = None
         self.coleta_foi_cancelada = False
+        self.usuario_agehab = ""
+        self.senha_agehab = ""
+        self.abas_protegidas = []
         self.tag_cnd_ativa = "normal"
         self.tags_configuradas = set()
 
@@ -1032,8 +1049,45 @@ class InterfaceAutomacao:
         # Força o Windows a renderizar a janela imediatamente para o usuário
         self.janela.update()
 
-        # Constrói a interface completa em seguida
-        self.janela.after(60, self.construir_interface)
+        self.fila_inicializacao = queue.Queue()
+        threading.Thread(
+            target=self.preparar_dados_iniciais,
+            daemon=True,
+        ).start()
+        self.janela.after(100, self.verificar_inicializacao)
+
+    def preparar_dados_iniciais(self):
+        try:
+            gerenciador_cnpj.migrar_dados_locais()
+            gerenciador_historico.migrar_historico_local()
+            dados = gerenciador_cnpj.carregar_banco_dados()
+        except Exception as erro:
+            self.fila_inicializacao.put((None, erro))
+        else:
+            self.fila_inicializacao.put((dados, None))
+
+    def verificar_inicializacao(self):
+        try:
+            dados, erro = self.fila_inicializacao.get_nowait()
+        except queue.Empty:
+            self.janela.after(100, self.verificar_inicializacao)
+            return
+
+        if erro is not None:
+            messagebox.showerror(
+                "Erro nos dados compartilhados",
+                "Não foi possível preparar os dados compartilhados. "
+                "Verifique a conexão e as permissões da pasta da rede.\n\n"
+                f"Detalhes: {erro}",
+                parent=self.janela,
+            )
+            self.janela.destroy()
+            return
+
+        global mapa_municipal, mapa_matriz
+        mapa_municipal = dados.get("mapa_municipal", {})
+        mapa_matriz = dados.get("mapa_matriz", {})
+        self.construir_interface()
 
     def construir_interface(self):
         # Estilo moderno escuro das abas (Solarized Dark)
@@ -1062,11 +1116,16 @@ class InterfaceAutomacao:
         self.notebook = ttk.Notebook(self.janela)
         self.notebook.pack(fill="both", expand=True)
 
+        self.aba_login = tk.Frame(self.notebook, bg="#002b36")
+        self.notebook.add(self.aba_login, text="  🔐 Credenciais AGEHAB  ")
+        self.construir_aba_login()
+
         # -------------------------------------------------------------
         # ABA 1: COLETA DE CERTIDÕES
         # -------------------------------------------------------------
         self.aba_coleta = tk.Frame(self.notebook, bg="#002b36")
         self.notebook.add(self.aba_coleta, text="  📥 Coleta de Certidões  ")
+        self.abas_protegidas.append(self.aba_coleta)
 
         painel_config = tk.Frame(self.aba_coleta, bg="#002b36")
         painel_config.pack(fill="x", padx=14, pady=10)
@@ -1285,6 +1344,7 @@ class InterfaceAutomacao:
         # -------------------------------------------------------------
         self.aba_cadastro = tk.Frame(self.notebook, bg="#002b36")
         self.notebook.add(self.aba_cadastro, text="  ➕ Cadastrar Novo CNPJ  ")
+        self.abas_protegidas.append(self.aba_cadastro)
 
         self.construir_aba_cadastro()
 
@@ -1297,6 +1357,7 @@ class InterfaceAutomacao:
         # -------------------------------------------------------------
         self.aba_atualizar = tk.Frame(self.notebook, bg="#002b36")
         self.notebook.add(self.aba_atualizar, text="  🔄 Atualizar Cadastro  ")
+        self.abas_protegidas.append(self.aba_atualizar)
 
         self.construir_aba_atualizar()
         # -------------------------------------------------------------
@@ -1304,6 +1365,7 @@ class InterfaceAutomacao:
         # -------------------------------------------------------------
         self.aba_conferencia = tk.Frame(self.notebook, bg="#002b36")
         self.notebook.add(self.aba_conferencia, text="  📊 Painel de Conferência  ")
+        self.abas_protegidas.append(self.aba_conferencia)
 
         # --- NOVA BARRA DE BUSCA ---
         frame_busca_conf = tk.Frame(self.aba_conferencia, bg="#002b36")
@@ -1363,15 +1425,6 @@ class InterfaceAutomacao:
         scroll_tabela.pack(side="right", fill="y")
         self.tabela_conferencia.pack(side="left", fill="both", expand=True)
 
-        # Botão para exportar para Excel
-        btn_exportar = tk.Button(
-            self.aba_conferencia,
-            text="📥 Exportar Painel para Excel",
-            command=self.exportar_excel,
-            bg="#10b981", fg="#ffffff", font=("Segoe UI", 10, "bold"), padx=15, pady=5, cursor="hand2"
-        )
-        btn_exportar.pack(side="bottom", pady=10)
-        
         # Cores das linhas para bater com o padrão da sua imagem
         # Configurando as tags de cores da tabela
         self.tabela_conferencia.tag_configure('cabecalho', background='#d1d5db', foreground='#0f172a', font=("Segoe UI", 9, "bold"))
@@ -1384,6 +1437,10 @@ class InterfaceAutomacao:
         # NOVO: Ativa a cópia por duplo clique na tabela
         self.tabela_conferencia.bind("<Double-1>", self.copiar_texto_celula)
 
+        for aba in self.abas_protegidas:
+            self.notebook.tab(aba, state="disabled")
+        self.notebook.select(self.aba_login)
+
         # Remove tela de carregamento suavemente
         self.tela_splash.destroy()
 
@@ -1392,6 +1449,74 @@ class InterfaceAutomacao:
 
         # Inicia loop de atualização do terminal
         self.janela.after(100, self.atualizar_interface)
+
+    def construir_aba_login(self):
+        painel = tk.Frame(self.aba_login, bg="#002b36")
+        painel.place(relx=0.5, rely=0.5, anchor="center", width=540)
+
+        tk.Label(
+            painel,
+            text="Coleta de Certidões",
+            font=("Segoe UI", 24, "bold"),
+            bg="#002b36",
+            fg="#38bdf8",
+        ).pack(pady=(0, 6))
+        tk.Label(
+            painel,
+            text="Informe suas credenciais AGEHAB para acessar o sistema.",
+            font=("Segoe UI", 10),
+            bg="#002b36",
+            fg="#cbd5e1",
+        ).pack(pady=(0, 18))
+
+        frame_login = tk.LabelFrame(
+            painel,
+            text="Credenciais AGEHAB",
+            bg="#002b36",
+            fg="#e2e8f0",
+            font=("Segoe UI", 10, "bold"),
+            padx=16,
+            pady=12,
+        )
+        frame_login.pack(fill="x", pady=(0, 14))
+        tk.Label(
+            frame_login,
+            text="Usuário AGEHAB:",
+            bg="#002b36",
+            fg="#e2e8f0",
+        ).grid(row=0, column=0, sticky="w", pady=5)
+        self.campo_login_usuario_agehab = ttk.Entry(frame_login, width=38)
+        self.campo_login_usuario_agehab.grid(row=0, column=1, sticky="ew", pady=5)
+        tk.Label(
+            frame_login,
+            text="Senha AGEHAB:",
+            bg="#002b36",
+            fg="#e2e8f0",
+        ).grid(row=1, column=0, sticky="w", pady=5)
+        self.campo_login_senha_agehab = ttk.Entry(frame_login, width=38, show="*")
+        self.campo_login_senha_agehab.grid(row=1, column=1, sticky="ew", pady=5)
+        frame_login.columnconfigure(1, weight=1)
+
+        tk.Label(
+            frame_login,
+            text="As credenciais são usadas apenas enquanto o programa estiver aberto.",
+            bg="#002b36",
+            fg="#94a3b8",
+            font=("Segoe UI", 8),
+        ).grid(row=2, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        tk.Button(
+            frame_login,
+            text="Entrar",
+            command=self.entrar_no_programa,
+            bg="#10b981",
+            fg="#ffffff",
+            activebackground="#059669",
+            font=("Segoe UI", 10, "bold"),
+            relief="flat",
+            cursor="hand2",
+            padx=20,
+            pady=7,
+        ).grid(row=3, column=0, columnspan=2, pady=(10, 0))
 
     def abrir_filtro_municipal(self):
         cnpj_cru = self.campo_cnpj_coleta.get().strip()
@@ -2361,9 +2486,6 @@ class InterfaceAutomacao:
                 if hasattr(self, 'combo_atualizar_cnpj'):
                     self.cnpjs_cadastrados = gerenciador_cnpj.listar_cnpjs_cadastrados()
                     self.combo_atualizar_cnpj['values'] = self.cnpjs_cadastrados
-                if hasattr(self, 'atualizar_display_cidades_manuais'):
-                    self.atualizar_display_cidades_manuais()
-
                 self.janela.after(1800, self.ir_para_coleta)
             else:
                 self.lbl_status_cadastro.config(
@@ -2397,7 +2519,7 @@ class InterfaceAutomacao:
 
         tk.Label(
             conteiner,
-            text="Gerencie as cidades e a tecnologia de automação dos CNPJs, audite pendências e consulte o último relatório.",
+            text="Gerencie as cidades e a tecnologia de automação dos CNPJs e consulte o histórico de alterações das CNDs.",
             font=("Segoe UI", 9),
             bg="#002b36",
             fg="#839496"
@@ -2643,61 +2765,35 @@ class InterfaceAutomacao:
         col_direita = tk.Frame(frame_corpo, bg="#002b36")
         col_direita.pack(side="right", fill="both", expand=True, padx=(10, 0))
 
-        frame_header_manuais = tk.Frame(col_direita, bg="#002b36")
-        frame_header_manuais.pack(fill="x", pady=(0, 4))
+        frame_header_historico = tk.Frame(col_direita, bg="#002b36")
+        frame_header_historico.pack(fill="x", pady=(0, 4))
 
-        self.lbl_titulo_manuais = tk.Label(
-            frame_header_manuais,
-            text="Cidades em Modo Manual / Centi:",
-            font=("Segoe UI", 10, "bold"),
-            bg="#002b36",
-            fg="#facc15"
-        )
-        self.lbl_titulo_manuais.pack(side="left")
-
-        btn_recarregar_manuais = tk.Button(
-            frame_header_manuais,
-            text="🔄 Atualizar",
-            command=self.atualizar_display_cidades_manuais,
-            bg="#073642",
-            fg="#e2e8f0",
-            activebackground="#0e4957",
-            font=("Segoe UI", 8),
-            relief="flat",
-            cursor="hand2",
-            padx=8,
-            pady=1
-        )
-        btn_recarregar_manuais.pack(side="right")
-
-        self.txt_cidades_manuais = scrolledtext.ScrolledText(
-            col_direita,
-            height=7,
-            bg="#001e26",
-            fg="#e2e8f0",
-            font=("Consolas", 9),
-            relief="flat",
-            highlightthickness=1,
-            highlightbackground="#0e4957"
-        )
-        self.txt_cidades_manuais.pack(fill="both", expand=True, pady=(0, 8))
-
-        frame_header_relatorio = tk.Frame(col_direita, bg="#002b36")
-        frame_header_relatorio.pack(fill="x", pady=(0, 4))
-
-        self.lbl_titulo_relatorio = tk.Label(
-            frame_header_relatorio,
-            text="Último Relatório Gerado (relatorios/):",
+        tk.Label(
+            frame_header_historico,
+            text="Histórico de alterações das CNDs",
             font=("Segoe UI", 10, "bold"),
             bg="#002b36",
             fg="#38bdf8"
-        )
-        self.lbl_titulo_relatorio.pack(side="left")
+        ).pack(side="left")
 
-        btn_recarregar_rel = tk.Button(
-            frame_header_relatorio,
-            text="📄 Recarregar",
-            command=self.atualizar_display_ultimo_relatorio,
+        tk.Button(
+            frame_header_historico,
+            text="📥 Exportar Excel",
+            command=self.exportar_excel,
+            bg="#10b981",
+            fg="#ffffff",
+            activebackground="#059669",
+            font=("Segoe UI", 8, "bold"),
+            relief="flat",
+            cursor="hand2",
+            padx=8,
+            pady=2
+        ).pack(side="right", padx=(6, 0))
+
+        tk.Button(
+            frame_header_historico,
+            text="🔄 Atualizar",
+            command=self.atualizar_display_historico_cnds,
             bg="#073642",
             fg="#e2e8f0",
             activebackground="#0e4957",
@@ -2705,24 +2801,49 @@ class InterfaceAutomacao:
             relief="flat",
             cursor="hand2",
             padx=8,
-            pady=1
-        )
-        btn_recarregar_rel.pack(side="right")
+            pady=2
+        ).pack(side="right")
 
-        self.txt_ultimo_relatorio = scrolledtext.ScrolledText(
-            col_direita,
-            height=7,
-            bg="#001e26",
-            fg="#e2e8f0",
-            font=("Consolas", 9),
-            relief="flat",
-            highlightthickness=1,
-            highlightbackground="#0e4957"
+        frame_tabela_historico = tk.Frame(col_direita, bg="#002b36")
+        frame_tabela_historico.pack(fill="both", expand=True)
+        colunas_historico = ("data_hora", "cnpj", "certidao", "anterior", "atual")
+        self.tabela_historico_cnds = ttk.Treeview(
+            frame_tabela_historico,
+            columns=colunas_historico,
+            show="headings"
         )
-        self.txt_ultimo_relatorio.pack(fill="both", expand=True)
+        cabecalhos = {
+            "data_hora": ("Data/Hora", 135),
+            "cnpj": ("CNPJ", 120),
+            "certidao": ("Certidão", 105),
+            "anterior": ("Estado anterior", 155),
+            "atual": ("Estado atual", 155),
+        }
+        for coluna, (titulo, largura) in cabecalhos.items():
+            self.tabela_historico_cnds.heading(coluna, text=titulo)
+            self.tabela_historico_cnds.column(coluna, width=largura, minwidth=80, anchor="w")
 
-        self.atualizar_display_cidades_manuais()
-        self.atualizar_display_ultimo_relatorio()
+        scroll_historico_y = ttk.Scrollbar(
+            frame_tabela_historico,
+            orient="vertical",
+            command=self.tabela_historico_cnds.yview
+        )
+        scroll_historico_x = ttk.Scrollbar(
+            frame_tabela_historico,
+            orient="horizontal",
+            command=self.tabela_historico_cnds.xview
+        )
+        self.tabela_historico_cnds.configure(
+            yscrollcommand=scroll_historico_y.set,
+            xscrollcommand=scroll_historico_x.set
+        )
+        self.tabela_historico_cnds.grid(row=0, column=0, sticky="nsew")
+        scroll_historico_y.grid(row=0, column=1, sticky="ns")
+        scroll_historico_x.grid(row=1, column=0, sticky="ew")
+        frame_tabela_historico.grid_rowconfigure(0, weight=1)
+        frame_tabela_historico.grid_columnconfigure(0, weight=1)
+
+        self.atualizar_display_historico_cnds()
 
     def carregar_cnpj_para_atualizacao(self, event=None):
         cnpj = self.combo_atualizar_cnpj.get().strip()
@@ -2866,40 +2987,50 @@ class InterfaceAutomacao:
                 text=f"✔ Cadastro do CNPJ {cnpj} atualizado com sucesso!",
                 fg="#10b981"
             )
-            self.atualizar_display_cidades_manuais()
         else:
             self.lbl_feedback_edicao.config(
                 text=f"❌ Erro ao gravar dados do CNPJ {cnpj} no banco de dados.",
                 fg="#ef4444"
             )
 
-    def atualizar_display_cidades_manuais(self):
-        pendentes = gerenciador_cnpj.listar_cidades_manuais_ou_pendentes()
-        self.lbl_titulo_manuais.config(text=f"Cidades com Coleta Manual / Centi / Pendente ({len(pendentes)}):")
-        self.txt_cidades_manuais.configure(state="normal")
-        self.txt_cidades_manuais.delete("1.0", "end")
-        if not pendentes:
-            self.txt_cidades_manuais.insert("end", "🎉 Nenhuma cidade pendente ou manual no sistema!")
-        else:
-            self.txt_cidades_manuais.insert("end", f"Total de cidades manuais/pendentes: {len(pendentes)}\n")
-            self.txt_cidades_manuais.insert("end", "=" * 55 + "\n\n")
-            for p in pendentes:
-                tech_txt = p["tecnologia"].upper()
-                cid_txt = p["cidade"] if p["cidade"] else "(Sem nome)"
-                self.txt_cidades_manuais.insert("end", f"• CNPJ: {p['cnpj']} | Cidade: {cid_txt:<16} | Modo: [{tech_txt}]\n")
-        self.txt_cidades_manuais.configure(state="disabled")
+    def atualizar_display_historico_cnds(self):
+        for item in self.tabela_historico_cnds.get_children():
+            self.tabela_historico_cnds.delete(item)
 
-    def atualizar_display_ultimo_relatorio(self):
-        pasta_rel = os.path.join(os.path.dirname(os.path.abspath(__file__)), "relatorios")
-        nome, conteudo = obter_ultimo_relatorio(pasta_rel)
-        if nome:
-            self.lbl_titulo_relatorio.config(text=f"Último Relatório: {nome}")
-        else:
-            self.lbl_titulo_relatorio.config(text="Último Relatório (pasta relatorios/):")
-        self.txt_ultimo_relatorio.configure(state="normal")
-        self.txt_ultimo_relatorio.delete("1.0", "end")
-        self.txt_ultimo_relatorio.insert("end", conteudo)
-        self.txt_ultimo_relatorio.configure(state="disabled")
+        try:
+            alteracoes = gerenciador_historico.listar_alteracoes(limite=500)
+        except sqlite3.Error as erro:
+            messagebox.showerror(
+                "Erro no histórico",
+                f"Não foi possível carregar o histórico de alterações:\n{erro}",
+                parent=self.janela
+            )
+            return
+        for alteracao in alteracoes:
+            anterior = " | ".join(
+                valor for valor in (
+                    alteracao["status_anterior"],
+                    f"Validade: {alteracao['validade_anterior']}" if alteracao["validade_anterior"] else ""
+                ) if valor
+            )
+            atual = " | ".join(
+                valor for valor in (
+                    alteracao["status_atual"],
+                    f"Validade: {alteracao['validade_atual']}" if alteracao["validade_atual"] else ""
+                ) if valor
+            )
+            data_hora = datetime.fromisoformat(alteracao["data_hora"]).strftime("%d/%m/%Y %H:%M:%S")
+            self.tabela_historico_cnds.insert(
+                "",
+                "end",
+                values=(
+                    data_hora,
+                    alteracao["cnpj"],
+                    alteracao["certidao"],
+                    anterior,
+                    atual,
+                )
+            )
 
     def detectar_cnd_linha(self, linha):
         up = linha.upper()
@@ -3499,7 +3630,15 @@ class InterfaceAutomacao:
 
     def executar_automacao(self, cnpjs, tipos_cnd, plano_coleta=None):
         try:
-            principal(cnpjs, tipos_cnd, solicitar_captcha=self.solicitar_captcha, interface=self, plano_coleta=plano_coleta)
+            principal(
+                cnpjs,
+                tipos_cnd,
+                solicitar_captcha=self.solicitar_captcha,
+                interface=self,
+                plano_coleta=plano_coleta,
+                usuario_agehab=self.usuario_agehab,
+                senha_agehab=self.senha_agehab,
+            )
         except Exception as erro:
             print(f"Erro na automacao: {erro}")
         finally:
@@ -3557,6 +3696,7 @@ class InterfaceAutomacao:
             print(f"Erro ao organizar os PDFs: {erro}")
         finally:
             self.fila_terminal.put("\n\033[32mTudo acabou.\033[0m\n")
+            self.janela.after(0, self.atualizar_display_historico_cnds)
             self.janela.after(0, lambda: self.botao_iniciar.configure(state="normal"))
             if hasattr(self, 'botao_coleta_massa'):
                 self.janela.after(0, lambda: self.botao_coleta_massa.configure(state="normal"))
@@ -3592,76 +3732,75 @@ class InterfaceAutomacao:
         self.painel_captcha.pack_forget()
     
     def exportar_excel(self):
-            import pandas as pd
-            # NOVO: Importamos também o Border e o Side para desenhar a grade
-            from openpyxl.styles import PatternFill, Border, Side
-            
-            # 1. Coleta os dados que estão aparecendo no Treeview
-            dados_tabela = []
-            for child in self.tabela_conferencia.get_children():
-                dados_tabela.append(self.tabela_conferencia.item(child)["values"])
-                
-            if not dados_tabela:
-                messagebox.showwarning("Vazio", "Não há dados no painel para exportar.", parent=self.janela)
-                return
-                
-            # 2. Converte para uma estrutura de dados do Pandas
-            df = pd.DataFrame(dados_tabela, columns=["Empresa", "Certidão", "Data Validade", "Status Original", "Observações"])
-            
-            caminho_excel = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Relatorio_CNDs_Global.xlsx")
-            
-            try:
-                with pd.ExcelWriter(caminho_excel, engine='openpyxl') as writer:
-                    df.to_excel(writer, index=False, sheet_name="Painel Geral")
-                    worksheet = writer.sheets["Painel Geral"]
-                    
-                    # --- NOVO: Configurando a Grade (Bordas) ---
-                    borda_fina = Border(
-                        left=Side(style='thin', color='000000'),
-                        right=Side(style='thin', color='000000'),
-                        top=Side(style='thin', color='000000'),
-                        bottom=Side(style='thin', color='000000')
-                    )
-                    
-                    # Prepara as cores em Hexadecimal
-                    fill_vermelho = PatternFill(start_color="F87171", end_color="F87171", fill_type="solid")
-                    fill_verde = PatternFill(start_color="86EFAC", end_color="86EFAC", fill_type="solid")
-                    fill_amarelo = PatternFill(start_color="FEF08A", end_color="FEF08A", fill_type="solid")
-                    fill_azul = PatternFill(start_color="BAE6FD", end_color="BAE6FD", fill_type="solid")
-                    fill_cinza = PatternFill(start_color="F8FAFC", end_color="F8FAFC", fill_type="solid")
-                    
-                    # Pinta as linhas e DESENHA A GRADE
-                    for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=1, max_col=5):
-                        status = str(row[3].value).lower()
-                        obs = str(row[4].value).lower()
-                        
-                        if "falha" in status or "bloqueio" in obs or "vencida" in status or "sem automação" in status:
-                            fill_color = fill_vermelho
-                        elif "aviso:" in status:
-                            fill_color = fill_amarelo
-                        elif "efeito" in status or "negativa" in status:
-                            fill_color = fill_verde 
-                        elif "positiva" in status:
-                            fill_color = fill_vermelho
-                        elif "manual" in status:
-                            fill_color = fill_azul
-                        else:
-                            fill_color = fill_cinza 
-                            
-                        for cell in row:
-                            cell.fill = fill_color
-                            cell.border = borda_fina # Aplica a linha de grade na célula
-                    
-                    # --- NOVO: Ajusta a largura das colunas (Margens) ---
-                    worksheet.column_dimensions['A'].width = 55 # Empresa (Larga)
-                    worksheet.column_dimensions['B'].width = 20 # Certidão
-                    worksheet.column_dimensions['C'].width = 15 # Validade
-                    worksheet.column_dimensions['D'].width = 25 # Status
-                    worksheet.column_dimensions['E'].width = 70 # Observações (Super larga)
+        import pandas as pd
+        from openpyxl.styles import Border, PatternFill, Side
 
-                messagebox.showinfo("Sucesso", f"Planilha gerada com sucesso em:\n{caminho_excel}", parent=self.janela)
-            except PermissionError:
-                messagebox.showerror("Erro", "Feche a planilha Excel antes de exportar novamente!", parent=self.janela)
+        try:
+            alteracoes = gerenciador_historico.listar_alteracoes()
+        except sqlite3.Error as erro:
+            messagebox.showerror(
+                "Erro no histórico",
+                f"Não foi possível ler o histórico de alterações:\n{erro}",
+                parent=self.janela
+            )
+            return
+        if not alteracoes:
+            messagebox.showwarning("Histórico vazio", "Ainda não há alterações de CND registradas.", parent=self.janela)
+            return
+
+        df = pd.DataFrame(
+            [
+                {
+                    "Data/Hora": datetime.fromisoformat(item["data_hora"]).strftime("%d/%m/%Y %H:%M:%S"),
+                    "CNPJ": item["cnpj"],
+                    "Certidão": item["certidao"],
+                    "Validade anterior": item["validade_anterior"],
+                    "Status anterior": item["status_anterior"],
+                    "Validade atual": item["validade_atual"],
+                    "Status atual": item["status_atual"],
+                }
+                for item in alteracoes
+            ]
+        )
+        caminho_excel = os.path.join(
+            PASTA_RELATORIOS,
+            "Historico_Alteracoes_CNDs.xlsx"
+        )
+
+        try:
+            with pd.ExcelWriter(caminho_excel, engine="openpyxl") as writer:
+                df.to_excel(writer, index=False, sheet_name="Alterações")
+                worksheet = writer.sheets["Alterações"]
+                worksheet.freeze_panes = "A2"
+                worksheet.auto_filter.ref = worksheet.dimensions
+
+                borda_fina = Border(
+                    left=Side(style="thin", color="000000"),
+                    right=Side(style="thin", color="000000"),
+                    top=Side(style="thin", color="000000"),
+                    bottom=Side(style="thin", color="000000")
+                )
+                preenchimento_cabecalho = PatternFill(
+                    start_color="BAE6FD",
+                    end_color="BAE6FD",
+                    fill_type="solid"
+                )
+                for cell in worksheet[1]:
+                    cell.fill = preenchimento_cabecalho
+                    cell.border = borda_fina
+                for row in worksheet.iter_rows(min_row=2):
+                    for cell in row:
+                        cell.border = borda_fina
+
+                larguras = [20, 18, 24, 20, 30, 20, 30]
+                for indice, largura in enumerate(larguras, start=1):
+                    worksheet.column_dimensions[
+                        worksheet.cell(row=1, column=indice).column_letter
+                    ].width = largura
+
+            messagebox.showinfo("Sucesso", f"Histórico exportado para:\n{caminho_excel}", parent=self.janela)
+        except OSError as erro:
+            messagebox.showerror("Erro ao exportar", f"Não foi possível gravar a planilha:\n{erro}", parent=self.janela)
 
     def fechar(self):
         if self.thread_automacao and self.thread_automacao.is_alive():
@@ -3671,6 +3810,8 @@ class InterfaceAutomacao:
                 parent=self.janela
             )
             return
+        self.usuario_agehab = ""
+        self.senha_agehab = ""
         sys.stdout = self.saida_original
         self.janela.destroy()
 
@@ -3679,10 +3820,25 @@ class InterfaceAutomacao:
 
 
 if __name__ == "__main__":
-    pasta_download = r"N:\19. FERRAMENTAS\Teste selenium\RenomearCNDs\CNDs"
-    try:
-        pasta_raiz_empresas = gerenciador_pastas.obter_pasta_raiz_empresas()
-    except Exception:
-        pasta_raiz_empresas = r"N:\16. CERTIDÕES\1. Empresas"
+    if "--processar-cnds" in sys.argv:
+        indice_pasta = sys.argv.index("--processar-cnds") + 1
+        if indice_pasta >= len(sys.argv):
+            raise SystemExit("Informe a pasta com os PDFs para processar.")
+        pasta_processamento = sys.argv[indice_pasta]
+        caminho_log = os.path.join(
+            obter_pasta_dados_usuario(),
+            "processamento_cnds.log",
+        )
+        arquivo_log = open(caminho_log, "a", encoding="utf-8")
+        sys.stdout = arquivo_log
+        sys.stderr = arquivo_log
+        sys.path.insert(
+            0,
+            os.path.join(obter_pasta_recursos(), "RenomearCNDs"),
+        )
+        central = importlib.import_module("central")
 
-    InterfaceAutomacao().executar()
+        central.processar_todas_cnds(pasta_processamento, modo_debug=False)
+    else:
+        pasta_download = obter_pasta_downloads()
+        InterfaceAutomacao().executar()
