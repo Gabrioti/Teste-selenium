@@ -13,6 +13,9 @@ import subprocess # Essa biblioteca permite que você execute comandos do sistem
 import unicodedata
 import importlib
 
+import requests
+from validate_docbr import CNPJ as ValidadorCNPJ
+
 from selenium import webdriver # Essa biblioteca permite que você automatize ações no navegador.
 from webdriver_manager.chrome import ChromeDriverManager # Essa biblioteca permite que você gerencie o driver do Chrome.
 from selenium.webdriver.chrome.service import Service # Essa biblioteca permite que você configure o driver do Chrome.
@@ -61,6 +64,53 @@ site = [
 
 lista_cnds_manuais = []
 flag_cancelamento = False
+
+def validar_cnpj_completo(cnpj_texto):
+    """
+    Valida um CNPJ em dois níveis:
+    1. Validação Matemática (Dígitos verificadores via validate-docbr)
+    2. Validação de Existência na Receita Federal (via BrasilAPI com tratamento para limite 429)
+    """
+    cnpj_limpo = "".join(filter(str.isdigit, str(cnpj_texto)))
+    
+    # -------------------------------------------------------------
+    # NÍVEL 1: VALIDAÇÃO MATEMÁTICA (Instantânea / Offline)
+    # -------------------------------------------------------------
+    validador = ValidadorCNPJ()
+    if not validador.validate(cnpj_limpo):
+        return False, f"O CNPJ {cnpj_limpo} é matematicamente inválido (dígitos verificadores incorretos)."
+
+    # -------------------------------------------------------------
+    # NÍVEL 2: CONSULTA NA RECEITA FEDERAL (BrasilAPI)
+    # -------------------------------------------------------------
+    url_api = f"https://brasilapi.com.br/api/cnpj/v1/{cnpj_limpo}"
+    try:
+        resposta = requests.get(url_api, timeout=10)
+        
+        if resposta.status_code == 200:
+            dados = resposta.json()
+            razao_social = dados.get("razao_social", "Razão Social não informada")
+            situacao = dados.get("descricao_situacao_cadastral", "DESCONHECIDA")
+            
+            if situacao in ["BAIXADA", "INAPTA", "NULA"]:
+                return False, f"CNPJ existente, porém com situação cadastral '{situacao}' na Receita Federal."
+                
+            return True, f"CNPJ Válido: {razao_social} (Situação: {situacao})"
+            
+        elif resposta.status_code == 404:
+            return False, f"O CNPJ {cnpj_limpo} não foi encontrado na base de dados da Receita Federal."
+            
+        elif resposta.status_code == 429:
+            print("⚠️ Limite de requisições da BrasilAPI atingido (Status 429). Prosseguindo com validação matemática.")
+            return True, "Validação matemática aprovada (Limite de consultas à Receita atingido temporariamente)."
+            
+        else:
+            print(f"⚠️ Alerta API BrasilAPI (Status {resposta.status_code}). Prosseguindo com validação matemática.")
+            return True, "Validação matemática aprovada (Serviço da Receita indisponível no momento)."
+
+    except requests.exceptions.RequestException as e:
+        print(f"⚠️ Erro de conexão com a API de CNPJ ({e}). Prosseguindo com validação matemática.")
+        return True, "Validação matemática aprovada (sem conexão com a internet para consulta na Receita)."
 
 def injetar_cnpj_filial_no_nome(pasta, mapa_vinculos):
     """
@@ -2225,24 +2275,42 @@ class InterfaceAutomacao:
             )
             return
 
-        # Validação do CNPJ
+        # Limpa os caracteres do CNPJ
         cnpj_numeros = "".join(re.findall(r'\d+', cnpj_novo))
-        if len(cnpj_numeros) != 14:
-            self.lbl_status_cadastro.config(
-                text="⚠️ Digite um CNPJ válido com exatamente 14 dígitos numéricos.",
-                fg="#ef4444"
-            )
-            return
 
-        # Verifica duplicidade em dados.py
+        # Check rápido em dados.json para evitar reconsultar CNPJs que já existem no sistema
         if gerenciador_cnpj.cnpj_ja_existe(cnpj_numeros):
             self.lbl_status_cadastro.config(
-                text=f"⚠️ O CNPJ {cnpj_numeros} já está cadastrado em dados.py!",
+                text=f"⚠️ O CNPJ {cnpj_numeros} já está cadastrado no sistema!",
                 fg="#ef4444"
             )
             return
 
-        # Valida cidades selecionadas
+        # =========================================================
+        # EXECUÇÃO DA VALIDAÇÃO NÍVEL 1 E NÍVEL 2
+        # =========================================================
+        self.lbl_status_cadastro.config(
+            text="⏳ Validando CNPJ na Receita Federal...",
+            fg="#facc15"
+        )
+        self.janela.update()  # Atualiza a interface gráfica para mostrar o aviso de carregamento
+
+        valido, motivo_ou_sucesso = validar_cnpj_completo(cnpj_numeros)
+
+        if not valido:
+            # RETORNA O MOTIVO DA INVALIDEZ NA TELA E INTERROMPE O FLUXO
+            self.lbl_status_cadastro.config(
+                text=f"❌ Cadastro cancelado: {motivo_ou_sucesso}",
+                fg="#ef4444"
+            )
+            messagebox.showerror("CNPJ Inválido", motivo_ou_sucesso, parent=self.janela)
+            return  # Interrompe a execução antes de criar a pasta de rede ou gravar no JSON!
+            
+        # =========================================================
+        # SE PASSAR NA VALIDAÇÃO, O FLUXO CRIA A PASTA E SALVA O CADASTRO
+        # =========================================================
+
+        # Valida se foram selecionadas cidades municipais
         if not self.cidades_selecionadas:
             aceita_sem = messagebox.askyesno(
                 "Sem Cidades Municipais",
@@ -2254,46 +2322,38 @@ class InterfaceAutomacao:
                 return
 
         try:
-            # 1. Cria a pasta na rede
+            # 1. Cria a pasta física na rede
             caminho_pasta = gerenciador_pastas.criar_pasta_empreendimento(
                 construtora,
                 nome_emp,
                 cnpj_numeros
             )
 
-            # 2. Configura as cidades
+            # 2. Configura a lista de cidades com as chaves apropriadas
             cidades_config = []
             for cidade_nome in sorted(self.cidades_selecionadas):
                 cidade_info = self.cidades_disponiveis.get(cidade_nome, {})
                 cidades_config.append({
                     "cidade": cidade_nome,
                     "url": cidade_info.get("url", ""),
-                    "tecnologia": cidade_info.get("tecnologia", "selenium") # Nova chave
+                    "tecnologia": cidade_info.get("tecnologia", "selenium")
                 })
 
-            # 3. Salva no banco de dados (dados.json)
+            # 3. Salva no arquivo JSON (dados.json)
             if gerenciador_cnpj.adicionar_cnpj_em_dados(cnpj_numeros, cidades_config, nome_empreendimento=nome_emp):
                 global mapa_municipal
                 mapa_municipal = gerenciador_cnpj.obter_mapa_municipal()
 
-                # Adiciona o novo CNPJ na lista da tela de coleta
-                texto_atual = self.campo_cnpj_coleta.get("1.0", "end").strip()
-                if texto_atual:
-                    if cnpj_numeros not in texto_atual:
-                        self.campo_cnpj_coleta.insert("end", f"\n{cnpj_numeros}")
-                else:
-                    self.campo_cnpj_coleta.insert("1.0", cnpj_numeros)
-
                 nome_pasta_final = os.path.basename(caminho_pasta)
                 self.fila_terminal.put(f"\n\033[32m[PASTAS] Pasta criada na rede: {nome_pasta_final}\033[0m")
-                self.fila_terminal.put(f"\033[32m[CADASTRO] CNPJ {cnpj_numeros} ({nome_emp}) cadastrado com sucesso com {len(cidades_config)} cidade(s)!\033[0m\n")
+                self.fila_terminal.put(f"\033[32m[CADASTRO] CNPJ {cnpj_numeros} ({nome_emp}) cadastrado e validado com sucesso!\033[0m\n")
 
-                # Atualiza as listas de pastas
+                # Atualiza os componentes da interface
                 self.ao_selecionar_construtora()
                 self.combo_empreendimentos_existentes.set(nome_pasta_final)
 
                 self.lbl_status_cadastro.config(
-                    text=f"✅ Pasta '{nome_pasta_final}' criada na rede e CNPJ cadastrado com sucesso! Retornando para a coleta...",
+                    text=f"✅ {motivo_ou_sucesso} | Pasta '{nome_pasta_final}' criada na rede!",
                     fg="#10b981"
                 )
                 self.limpar_formulario_cadastro()
@@ -2304,15 +2364,15 @@ class InterfaceAutomacao:
                 if hasattr(self, 'atualizar_display_cidades_manuais'):
                     self.atualizar_display_cidades_manuais()
 
-                self.janela.after(1400, self.ir_para_coleta)
+                self.janela.after(1800, self.ir_para_coleta)
             else:
                 self.lbl_status_cadastro.config(
-                    text="❌ Ocorreu um erro ao salvar o CNPJ em dados.py.",
+                    text="❌ Ocorreu um erro ao salvar o CNPJ em dados.json.",
                     fg="#ef4444"
                 )
         except Exception as e:
             self.lbl_status_cadastro.config(
-                text=f"❌ Erro: {e}",
+                text=f"❌ Erro ao criar pasta na rede: {e}",
                 fg="#ef4444"
             )
 
@@ -2854,16 +2914,7 @@ class InterfaceAutomacao:
         if "[FGTS]" in up or "CRF" in up or "CAIXA ECONÔMICA" in up or "CAIXA ECONOMICA" in up:
             return "fgts"
         if any(kw in up for kw in [
-            "[MUNICIPAL]", "MUNICÍPIO", "MUNICIPIO", "PREFEITURA", "MUNICIPAL DE",
-            "VALPARAISO", "ÁGUAS LINDAS", "AGUAS LINDAS", "CIDADE OCIDENTAL",
-            "FORMOSA", "CATALÃO", "CATALAO", "APARECIDA DE GOIÂNIA",
-            "APARECIDA DE GOIANIA", "LUZIANA", "LUZIÂNIA", "GOIANÉSIA",
-            "GOIANESIA", "NOVO GAMA", "ARAGOIANIA", "ARAGOIÂNIA", "PARAÚNA",
-            "PARAUNA", "ABADIÂNIA", "ABADIANIA", "SANTO ANTÔNIO", "SANTO ANTONIO",
-            "MARA ROSA", "NERÓPOLIS", "NEROPOLIS", "TEREZÓPOLIS", "TEREZOPOLIS",
-            "PORANGATU", "FLORES", "IPORÁ", "IPORA", "BOM JESUS", "GOIÂNIA",
-            "GOIANIA", "CALDAS NOVAS", "CAMPO ALEGRE", "NOVA VENEZA",
-            "SENADOR CANEDO", "ANÁPOLIS", "ANAPOLIS"
+            "[MUNICIPAL]", "MUNICÍPIO", "MUNICIPIO", "PREFEITURA", "MUNICIPAL DE"
         ]):
             return "municipal"
         return "normal"
