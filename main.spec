@@ -19,6 +19,11 @@ cidades_hiddenimports = [
     for f in os.listdir(os.path.join(project_root, 'Cidades'))
     if f.endswith('.py') and not f.startswith('__')
 ]
+cidades_datas = [
+    (os.path.join(project_root, 'Cidades', f), 'Cidades')
+    for f in os.listdir(os.path.join(project_root, 'Cidades'))
+    if f.endswith('.py') and not f.startswith('__')
+]
 
 a = Analysis(
     ['main.py'],
@@ -39,7 +44,7 @@ a = Analysis(
         (os.path.join(project_root, 'SQL', 'dados.json'), 'SQL'),
         # Inclui arquivo historico_cnds.json base como modelo inicial para o executável
         (os.path.join(project_root, 'SQL', 'historico_cnds.json'), 'SQL'),
-    ] + datas_selenium + datas_wdm + datas_ddddocr + datas_onnxruntime,
+    ] + cidades_datas + datas_selenium + datas_wdm + datas_ddddocr + datas_onnxruntime,
     hiddenimports=[
         # Módulos dentro da pasta Gerenciadores
         'Gerenciadores.gerenciador_cnpj',

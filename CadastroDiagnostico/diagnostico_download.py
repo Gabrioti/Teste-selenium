@@ -2,6 +2,43 @@ import os
 import time
 
 
+def capturar_estado_downloads(pasta_download):
+    """Captura nome, data de modificação e tamanho dos arquivos existentes."""
+    estados = {}
+    for nome in os.listdir(pasta_download):
+        caminho = os.path.join(pasta_download, nome)
+        try:
+            estado = os.stat(caminho)
+        except OSError:
+            continue
+        if os.path.isfile(caminho):
+            estados[nome] = (estado.st_mtime_ns, estado.st_size)
+    return estados
+
+
+def listar_pdfs_novos_ou_atualizados(pasta_download, estados_antes):
+    """Lista PDFs não vazios criados ou modificados desde a captura do estado."""
+    pdfs = []
+    for nome in os.listdir(pasta_download):
+        if not nome.lower().endswith(".pdf"):
+            continue
+
+        caminho = os.path.join(pasta_download, nome)
+        try:
+            estado = os.stat(caminho)
+        except OSError:
+            continue
+
+        if not os.path.isfile(caminho) or estado.st_size == 0:
+            continue
+
+        estado_atual = (estado.st_mtime_ns, estado.st_size)
+        if estados_antes.get(nome) != estado_atual:
+            pdfs.append(nome)
+
+    return sorted(pdfs)
+
+
 def _arquivos_validos(pasta_download):
     """Lista apenas arquivos reais de download, ignorando temporários do browser."""
     if not os.path.exists(pasta_download):

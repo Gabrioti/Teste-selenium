@@ -25,7 +25,7 @@ COR_RESET = "\033[0m"
 def extrair_codigo_captcha(navegador):
     """
     Tenta decifrar o código CAPTCHA do TST usando OCR (ddddocr).
-    O CAPTCHA do TST consiste em 5 caracteres alfanuméricos.
+    O CAPTCHA do TST consiste em 6 caracteres alfanuméricos.
     """
     if _ocr is None:
         print(f"{COR_TRABALHISTA}[TRABALHISTA] OCR (ddddocr) não está disponível no ambiente.{COR_RESET}")
@@ -147,7 +147,7 @@ def preencher_cnpj_e_solicitar_captcha(navegador, cnpj, pasta_download=None, sol
                     print(f"{COR_TRABALHISTA}[TRABALHISTA] Solicitando CAPTCHA ao usuario na interface...{COR_RESET}")
                     codigo_captcha = solicitar_captcha().strip()
                 else:
-                    codigo_captcha = input(f"{COR_TRABALHISTA}[TRABALHISTA] Digite os 5 caracteres do CAPTCHA exibido: {COR_RESET}").strip()
+                    codigo_captcha = input(f"{COR_TRABALHISTA}[TRABALHISTA] Digite os 6 caracteres do CAPTCHA exibido: {COR_RESET}").strip()
 
             if not codigo_captcha:
                 print(f"\033[31m[TRABALHISTA] Nenhum codigo informado. Tentando novamente...\033[0m")

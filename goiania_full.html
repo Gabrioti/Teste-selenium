@@ -1,0 +1,199 @@
+<html><head>
+<title></title>
+<style type="text/css">
+body {
+  color           : black;
+  font-family     : arial;
+  font-size       : 10pt;
+}
+td {
+  color           : black;
+  font-family     : arial;
+  font-size       : 10pt;
+}
+select {
+  border-color    : #CCCCCC;
+  font-family     : verdana;
+  font-size       : 9pt;
+  Color           : #333333;
+  border-width    : 1px;
+  background-color: #FFFFFF;
+  border          : 1px #CCCCCC solid
+}
+a {
+  text-decoration : none
+}
+.link { text-decoration: none }
+a:hover { color: darkred; text-decoration: underline }
+
+.ttl_lbl {
+  font-family     : verdana;
+  font-weight     : bold;
+  font-size       : 10pt;
+  text-align      : left;
+  Color           : white;
+  border-width    : 0px;
+  background-color: darkslategray;
+  border          : 0px #CCCCCC solid
+}
+.mnu_lbl {
+  font-family     : verdana;
+  font-weight     : bold;
+  font-size       : 10pt;
+  text-align      : center;
+  Color           : darkblue;
+  border-width    : 0px;
+  background-color: Wheat;
+  border          : 0px #CCCCCC solid
+}
+.mnu_lbl_msg {
+  font-family     : verdana;
+  font-weight     : bold;
+  font-size       : 10pt;
+  text-align      : center;
+  Color           : red;
+  border-width    : 0px;
+  background-color: Wheat;
+  border          : 0px #CCCCCC solid
+}
+.avs_lbl {
+  font-family     : verdana;
+  font-weight     : bold;
+  font-size       : 10pt;
+  text-align      : center;
+  Color           : saddlebrown;
+  border-width    : 0px;
+  background-color: Wheat;
+  border          : 0px #CCCCCC solid
+}
+.txt {
+  border-color    : #CCCCCC;
+  font-family     : verdana;
+  font-size       : 9pt;
+  Color           : #333333;
+  border-width    : 1px;
+  background-color: #FFFFFF;
+  border          : 1px #CCCCCC solid
+}
+.txt_lnk {
+  font-family     : arial;
+  font-size       : 10pt;
+  Color           : darkblue;
+  text-decoration : none;
+}
+.txt_lnk1 {
+  font-family     : verdana;
+  font-size       : 10pt;
+  Color           : darkblue;
+  text-decoration : none;
+}
+.cpo_lbl {
+  font-family     : arial;
+  font-size       : 10pt;
+  Color           : black;
+}
+.txt_vlr {
+  border-color    : #CCCCCC;
+  font-family     : verdana;
+  font-size       : 9pt;
+  text-align      : right;
+  Color           : #333333;
+  border-width    : 1px;
+  background-color: #FFFFFF;
+  border          : 1px #CCCCCC solid
+}
+.lbl {
+  font-family     : verdana;
+  font-size       : 9pt;
+  text-align      : left;
+  font-weight     : bold;
+  Color           : black;
+  border-width    : 0px;
+  background-color: lightyellow;
+  border          : 0px #CCCCCC solid
+}
+.lbl_txt {
+  font-family     : verdana;
+  font-size       : 9pt;
+  text-align      : left;
+  Color           : black;
+  border-width    : 0px;
+  background-color: lightyellow;
+  border          : 0px #CCCCCC solid
+}
+.lbl_vlr {
+  font-family     : verdana;
+  font-size       : 9pt;
+  text-align      : right;
+  Color           : black;
+  border-width    : 0px;
+  background-color: lightyellow;
+  border          : 0px #CCCCCC solid
+}
+
+
+.fonte {
+   color: darkblue; 
+}
+</style>
+</head>
+<body bgcolor="white" onload="document.frm.txt_nr_cpfcnpj.focus();">
+<font face="arial" size="2" color="black">
+<p>
+</p><form name="frm" method="post" action="sccer00300w0.asp">
+
+<table border="0" align="center">
+	<tbody><tr>
+      <td class="fonte"><b>CPF/CNPJ</b></td>
+      <td>
+        <input type="text" size="15" maxlength="14" name="txt_nr_cpfcnpj" value="" onkeypress="return window.opener.parent.gbl.sonum2(event);">
+        <select name="sel_cpfcnpj">
+          <option value="0"></option>
+          <option value="1">CPF</option>
+          <option value="2">CNPJ</option>          
+        </select>
+			</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="fonte"><br>									
+				Digite os caracteres abaixo para prosseguir<br>
+				
+        <script type="text/javascript" language="javascript">
+            function RefreshImage(valImageId) {
+                var objImage = document.getElementById(valImageId)
+                if (objImage == undefined) {
+                    return;
+                }
+                var now = new Date();
+                objImage.src = objImage.src.split('?')[0] + '?x=' + now.toUTCString();
+            }
+        </script>
+        <div><img src="/sistemas/saces/asp/geral00005p0.asp" id="id_img_captcha">&nbsp;<a style="text-decoration: none;" href="javascript:void(0);" onclick="RefreshImage('id_img_captcha');">Trocar caracteres</a></div>
+        
+        <input type="text" name="txt_captcha" size="13" maxlength="10" id="id_txt_captcha" value="">
+        								
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="submit" value="Emitir Certidão">
+		</td>
+	</tr>
+	<tr style="height: 5px"></tr>
+</tbody></table>
+<table>
+  <tbody><tr>
+    <td class="fonte"><br>     
+        Na tela seguinte, para imprimir a certidão, aperte o botão "Imprimir" (Print) do seu programa de navegação na Internet.<br>   
+        A certidão negativa deverá ser impressa nas seguintes condições:<br>
+        1.Emissão em Impressora a Jato de Tinta ou Laser<br>
+        2.Impressora configurada para Papel Formato A4<br>
+        3.Qualidade de Impressão Normal ou Superio<br>
+    </td>
+  </tr>
+</tbody></table> 
+</form>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;8d7ec16f5090428486d4568efe8ca4fc&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+
+</font></body></html>

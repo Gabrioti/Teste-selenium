@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from CadastroDiagnostico.diagnostico_download import diagnosticar_download_falhou
+from CadastroDiagnostico.diagnostico_download import diagnosticar_download_falhou, capturar_estado_downloads, listar_pdfs_novos_ou_atualizados
 
 siteCadastro = "https://abadiania.megasoftservicos.com.br/cidadao/emissao-certidao-negat"
 
@@ -46,7 +46,7 @@ def recolher(CNPJ, site, navegador, pasta_download):
         )
 
         os.makedirs(pasta_download, exist_ok=True)
-        arquivos_antes = set(os.listdir(pasta_download))
+        arquivos_antes = capturar_estado_downloads(pasta_download)
 
         botao_gerar.click()
         time.sleep(0.5)
@@ -78,14 +78,8 @@ def recolher(CNPJ, site, navegador, pasta_download):
                 return False, f"Bloqueio: {texto_erro_site}"
 
             # 2. Verifica se o PDF foi baixado
-            arquivos_atuais = set(os.listdir(pasta_download))
-            novos = arquivos_atuais - arquivos_antes
-            pdfs_validos = [
-                f for f in novos
-                if f.lower().endswith(".pdf")
-                and not f.lower().endswith((".crdownload", ".tmp", ".part", ".download"))
-                and os.path.getsize(os.path.join(pasta_download, f)) > 0
-            ]
+            pdfs_validos = listar_pdfs_novos_ou_atualizados(pasta_download, arquivos_antes)
+
 
             if pdfs_validos:
                 arquivo_final = os.path.join(pasta_download, sorted(pdfs_validos)[0])
