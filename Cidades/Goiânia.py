@@ -72,6 +72,8 @@ def extrair_codigo_captcha(navegador):
             pass
         cod_pred = _ocr.classification(raw_bytes).strip()
         cod_limpo = "".join(c for c in cod_pred if c.isalnum() and c.isascii()).lower()
+        # Truncate to exactly 5 characters (OCR sometimes returns an extra char)
+        cod_limpo = cod_limpo[:5]
         print(f"{COR_GOIAS}[GOIÂNIA] OCR leu: '{cod_limpo}' ({len(cod_limpo)} chars){COR_RESET}")
         if len(cod_limpo) == 5:
             return cod_limpo
@@ -121,7 +123,7 @@ def preencher_cnpj_e_captcha(navegador, cnpj, pasta_download=None, solicitar_cap
         pasta_download = r"C:\\Users\\FAGabrioti\\Desktop\\Teste selenium\\RenomearCNDs\\CNDs"
     os.makedirs(pasta_download, exist_ok=True)
     tentativas = 0
-    max_ocr = 5
+    max_ocr = 8
     max_total = 8
     while tentativas < max_total:
         tentativas += 1
@@ -138,6 +140,15 @@ def preencher_cnpj_e_captcha(navegador, cnpj, pasta_download=None, solicitar_cap
         campo_cnpj.clear()
         campo_cnpj.send_keys(cnpj_limpo)
         print(f"{COR_GOIAS}[GOIÂNIA] CNPJ preenchido: {cnpj_limpo}{COR_RESET}")
+        # Seleciona tipo CNPJ no dropdown
+        try:
+            select_elem = Select(WebDriverWait(navegador, 5).until(
+                EC.element_to_be_clickable((By.NAME, "sel_cpfcnpj"))
+            ))
+            select_elem.select_by_value("2")
+            print(f"{COR_GOIAS}[GOIÂNIA] Tipo CNPJ selecionado.{COR_RESET}")
+        except Exception as e:
+            print(f"{COR_ERRO}[GOIÂNIA] Falha ao selecionar tipo CNPJ: {e}{COR_RESET}")
         # Resolve CAPTCHA
         codigo = None
         if tentativas <= max_ocr:
@@ -170,10 +181,11 @@ def preencher_cnpj_e_captcha(navegador, cnpj, pasta_download=None, solicitar_cap
         try:
             btn = WebDriverWait(navegador, 5).until(
                 EC.element_to_be_clickable((By.XPATH,
-                    "//input[@value[contains(.,'Consultar')] or @id='consultar'] | //button[contains(.,'Consultar')] | //a[contains(@href,'consultar')]"))
+                    "//input[@type='submit' and contains(@value,'Emitir')]")
+                )
             )
             navegador.execute_script("arguments[0].click();", btn)
-            print(f"{COR_GOIAS}[GOIÂNIA] Botão Consultar clicado.{COR_RESET}")
+            print(f"{COR_GOIAS}[GOIÂNIA] Botão Emitir Certidão clicado.{COR_RESET}")
         except Exception as e:
             print(f"{COR_ERRO}[GOIÂNIA] Botão Consultar não encontrado: {e}{COR_RESET}")
             return False, "Botão Consultar não encontrado"
@@ -188,16 +200,56 @@ def preencher_cnpj_e_captcha(navegador, cnpj, pasta_download=None, solicitar_cap
                 continue
             if any(w in msg for w in ["não cadastrad", "pendênc", "bloque"]):
                 return False, f"Bloqueio do portal: {alerta}"
-        # Attempt download
+        # After clicking "Emitir Certidão" the portal shows the PDF directly.
         try:
-            link = WebDriverWait(navegador, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//a[contains(@title,'Download') or contains(@href,'downloadanexo.action')]") )
+            # Small wait for PDF viewer to load.
+            time.sleep(4)
+            current_url = navegador.current_url
+            # If the current URL points to a PDF, download it.
+            if current_url.lower().endswith('.pdf') or 'downloadanexo' in current_url:
+                import urllib.request
+                cookies = navegador.get_cookies()
+                cookie_header = '; '.join([f"{c['name']}={c['value']}" for c in cookies])
+                req = urllib.request.Request(current_url, headers={
+                    'User-Agent': 'Mozilla/5.0',
+                    'Cookie': cookie_header,
+                })
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    data = resp.read()
+                    if len(data) > 500 and (b"%PDF" in data[:20] or 'pdf' in (resp.headers.get('Content-Type') or '').lower()):
+                        nome = f"CND_Goiania_{cnpj}_{int(time.time())}.pdf"
+                        caminho = os.path.join(pasta_download, nome)
+                        with open(caminho, 'wb') as f:
+                            f.write(data)
+                        print(f"{COR_SUCESSO}[GOIÂNIA] CND salva via stream: {caminho}{COR_RESET}")
+                        return True, ""
+            # Attempt to generate PDF via Chrome DevTools Protocol as fallback
+            try:
+                pdf = navegador.execute_cdp_cmd('Page.printToPDF', {
+                    'printBackground': True,
+                    'marginTop': 0,
+                    'marginBottom': 0,
+                    'marginLeft': 0,
+                    'marginRight': 0,
+                })
+                pdf_bytes = base64.b64decode(pdf['data'])
+                nome = f"CND_Goiania_{cnpj}_{int(time.time())}.pdf"
+                caminho = os.path.join(pasta_download, nome)
+                with open(caminho, 'wb') as f:
+                    f.write(pdf_bytes)
+                print(f"{COR_SUCESSO}[GOIÂNIA] CND salva via CDP printToPDF: {caminho}{COR_RESET}")
+                return True, ""
+            except Exception as e:
+                print(f"{COR_ERRO}[GOIÂNIA] Erro ao gerar PDF via CDP: {e}{COR_RESET}")
+            # Fallback: try to locate a download link (rare case).
+            link = WebDriverWait(navegador, 5).until(
+                EC.presence_of_element_located((By.XPATH, "//a[contains(@title,'Download') or contains(@href,'downloadanexo.action')]"))
             )
             href = link.get_attribute('href') or ''
-            if href and 'downloadanexo.action' in href:
-                import urllib.request
+            if href:
                 if not href.startswith('http'):
                     href = 'https://www.goiania.go.gov.br' + href
+                import urllib.request
                 cookies = navegador.get_cookies()
                 cookie_header = '; '.join([f"{c['name']}={c['value']}" for c in cookies])
                 req = urllib.request.Request(href, headers={
@@ -211,16 +263,16 @@ def preencher_cnpj_e_captcha(navegador, cnpj, pasta_download=None, solicitar_cap
                         caminho = os.path.join(pasta_download, nome)
                         with open(caminho, 'wb') as f:
                             f.write(data)
-                        print(f"{COR_SUCESSO}[GOIÂNIA] CND salva via stream: {caminho}{COR_RESET}")
+                        print(f"{COR_SUCESSO}[GOIÂNIA] CND salva via fallback link: {caminho}{COR_RESET}")
                         return True, ""
-            # Fallback click
-            link.click()
+            # Last resort: wait for a file download triggered by the browser.
             arquivos_antes = set(_arquivos_validos(pasta_download))
             arquivo = esperar_download(navegador, pasta_download, timeout=20, arquivos_antes=arquivos_antes)
             print(f"{COR_SUCESSO}[GOIÂNIA] CND baixada: {arquivo}{COR_RESET}")
             return True, ""
         except Exception as e:
             print(f"{COR_ERRO}[GOIÂNIA] Erro ao obter PDF: {e}{COR_RESET}")
+            # Reset to initial page to allow a new attempt.
             try:
                 navegador.get('https://www.goiania.go.gov.br/sistemas/sccer/asp/sccer00300f0.asp')
                 time.sleep(2)
@@ -234,8 +286,8 @@ def recolher(CNPJ, site, pasta_download=None, solicitar_captcha=None):
     if not pasta_download:
         pasta_download = r"C:\\Users\\FAGabrioti\\Desktop\\Teste selenium\\RenomearCNDs\\CNDs"
     os.makedirs(pasta_download, exist_ok=True)
-    from main import criar_navegador_configurado
-    navegador = criar_navegador_configurado(headless=False)
+    from main import criar_navegador_goiania
+    navegador = criar_navegador_goiania()
     try:
         navegador.get(site)
         time.sleep(2)

@@ -107,12 +107,12 @@ if __name__ == "__main__":
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     from main import criar_navegador_configurado
 
-    cnpj_teste = "39847300000146"
+    cnpj_teste = "31461574000786"
     pasta_teste = r"C:\Users\FAGabrioti\Desktop\Teste selenium\RenomearCNDs\CNDs"
     os.makedirs(pasta_teste, exist_ok=True)
 
     print(f"\033[36m--- Teste Avulso: Águas Lindas (CNPJ: {cnpj_teste}) ---\033[0m")
-    navegador_teste = criar_navegador_configurado()
+    navegador_teste = criar_navegador_configurado(headless=False)
     try:
         sucesso, observacao = recolher(cnpj_teste, siteCadastro, navegador_teste, pasta_teste)
         print(f"\nResultado do Teste -> Sucesso: {sucesso} | Observação: '{observacao}'")

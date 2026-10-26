@@ -98,6 +98,7 @@ exe = EXE(
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
+    icon=os.path.join(project_root, 'icone.ico'),
     codesign_identity=None,
     entitlements_file=None,
 )

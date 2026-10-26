@@ -18,7 +18,7 @@ from selenium.webdriver.chrome.service import Service # Essa biblioteca permite 
 from selenium.webdriver.chrome.options import Options # Essa biblioteca permite que você configure o Chrome.
 
 from Processos import teste_FEDERAL, teste_ESTADUAL, teste_TRABALISTA,teste_COMPRASNET, teste_FGTS, teste_AGEHAB
-from Cidades import Anápolis, Águas_Lindas, Cidade_Ocidental, Formosa, Catalão, Aparecida_de_Goiânia, Luziana, Goianésia, Novo_Gama, Aragoiania, Paraúna, Abadiânia, Santo_Antônio, Mara_Rosa, Nerópolis, Terezópolis, Porangatu, Flores, Iporá, Bom_Jesus, Valparaiso, Goiânia, Caldas_Novas, Campo_Alegre, Nova_Veneza, Senador_Canedo, Planaltina, Itaberai
+from Cidades import Luziania, Anápolis, Águas_Lindas, Cidade_Ocidental, Formosa, Catalão, Aparecida_de_Goiânia, Goianésia, Novo_Gama, Aragoiania, Paraúna, Abadiânia, Santo_Antônio, Mara_Rosa, Nerópolis, Terezópolis, Porangatu, Flores, Iporá, Bom_Jesus, Valparaiso, Goiânia, Caldas_Novas, Campo_Alegre, Nova_Veneza, Senador_Canedo, Planaltina, Itaberai
 
 import pandas as pd
 from openpyxl.styles import PatternFill
@@ -317,7 +317,7 @@ def principal(lista_cnpjs, tipos_cnd, solicitar_captcha=None, interface=None):
                     elif nome_cidade == "Aparecida de Goiânia":
                         tarefas.append(executor.submit(Aparecida_de_Goiânia.recolher, cnpj, site_da_cidade, nav_mun, pasta_download))
                     elif nome_cidade == "Luziana":
-                        tarefas.append(executor.submit(Luziana.recolher, cnpj, site_da_cidade, nav_mun, pasta_download))
+                        tarefas.append(executor.submit(Luziania.recolher, cnpj, site_da_cidade, nav_mun, pasta_download))
                     elif nome_cidade == "Goianésia":
                         tarefas.append(executor.submit(Goianésia.recolher, cnpj, site_da_cidade, nav_mun, pasta_download))
                     elif nome_cidade == "Novo Gama":

@@ -1,17 +1,39 @@
 import os
 import sys
 import time
+import base64
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-from CadastroDiagnostico.diagnostico_download import esperar_download
-
 COR_FGTS = "\033[38;2;51;255;255m"  # Azul claro / Ciano (#33FFFF)
 COR_ERRO = "\033[31m"
 COR_RESET = "\033[0m"
+
+
+def salvar_certificado_como_pdf(navegador, cnpj, pasta_download):
+    resposta_pdf = navegador.execute_cdp_cmd(
+        "Page.printToPDF",
+        {
+            "printBackground": True,
+            "preferCSSPageSize": True,
+        },
+    )
+    conteudo_pdf = base64.b64decode(resposta_pdf["data"], validate=True)
+    if not conteudo_pdf.startswith(b"%PDF-"):
+        raise ValueError("A página de impressão não retornou um PDF válido.")
+
+    cnpj_arquivo = "".join(caractere for caractere in cnpj if caractere.isdigit())
+    arquivo = os.path.join(
+        pasta_download,
+        f"Certidao_FGTS_{cnpj_arquivo}_{time.time_ns()}.pdf",
+    )
+    with open(arquivo, "wb") as pdf:
+        pdf.write(conteudo_pdf)
+
+    return arquivo
 
 
 def recolher_FGTS(CNPJ, site, navegador, pasta_download=None):
@@ -112,21 +134,19 @@ def recolher_FGTS(CNPJ, site, navegador, pasta_download=None):
             print(f"\033[31m[FGTS] Erro: {msg}\033[0m")
             return False, msg
 
-        # 6. Registra arquivos e clica em Imprimir (gera o download do PDF via Chrome)
-        arquivos_antes = set(os.listdir(pasta_download))
-
+        # 6. Aguarda a página pronta para impressão sem acionar a caixa de diálogo do Chrome
         try:
-            btn_imprimir = WebDriverWait(navegador, 12).until(
+            WebDriverWait(navegador, 12).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="mainForm:btImprimir4"] | //input[@value="Imprimir"]'))
             )
-            btn_imprimir.click()
         except TimeoutException:
             msg = "Botão de impressão não encontrado."
             print(f"\033[31m[FGTS] Erro: {msg}\033[0m")
             return False, msg
 
-        # 7. Aguarda a gravação do PDF no disco
-        arquivo = esperar_download(navegador, pasta_download, timeout=25, arquivos_antes=arquivos_antes)
+        # A tela impressao.jsf contém o certificado; o botão Imprimir abre o diálogo nativo.
+        arquivo = salvar_certificado_como_pdf(navegador, CNPJ, pasta_download)
+
         print(f"{COR_FGTS}[FGTS] CND recolhida com sucesso para o CNPJ: {CNPJ}{COR_RESET}")
         print(f"{COR_FGTS}Arquivo baixado: {arquivo}{COR_RESET}")
         

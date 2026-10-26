@@ -108,7 +108,7 @@ if __name__ == "__main__":
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     from main import criar_navegador_configurado
 
-    cnpj_teste = "17920217000112"
+    cnpj_teste = "54806499000158"
     pasta_teste = r"C:\Users\FAGabrioti\Desktop\Teste selenium\RenomearCNDs\CNDs"
     os.makedirs(pasta_teste, exist_ok=True)
 

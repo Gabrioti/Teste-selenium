@@ -55,6 +55,11 @@
                 "cidade": "Formosa",
                 "tecnologia": "selenium",
                 "url": "https://formosa.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Estadual DF",
+                "tecnologia": "assistido",
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             }
         ],
         "50257147000130": [
@@ -81,6 +86,11 @@
                 "cidade": "Águas Lindas",
                 "tecnologia": "selenium",
                 "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Estadual DF",
+                "tecnologia": "assistido",
+                "url": "https://ww1.receita.fazenda.df.gov.br/cidadao/certidoes/Certidao"
             }
         ],
         "53710866000152": [
@@ -637,6 +647,11 @@
                 "cidade": "Luziana",
                 "tecnologia": "selenium",
                 "url": "https://luziania.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Águas Lindas",
+                "tecnologia": "selenium",
+                "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
             }
         ],
         "24657951000104": [
@@ -789,6 +804,11 @@
                 "cidade": "Águas Lindas",
                 "tecnologia": "selenium",
                 "url": "https://aguaslindas.prodataweb.inf.br/sig/app.html#/servicosonline/debito-contribuinte"
+            },
+            {
+                "cidade": "Goiânia",
+                "tecnologia": "selenium",
+                "url": ""
             }
         ],
         "12218450000134": [
@@ -1149,7 +1169,34 @@
         "36985463000105": [],
         "02321115000103": [],
         "01180645000116": [],
-        "01335363000140": []
+        "01335363000140": [],
+        "01788082000143": [],
+        "01753722000180": [],
+        "26873059000188": [],
+        "02451938000153": [],
+        "24850109000186": [],
+        "01134808000124": [],
+        "03294972000124": [],
+        "01146604000103": [],
+        "01067271000127": [],
+        "00167437000114": [],
+        "02321891000103": [],
+        "02922128000138": [],
+        "02321909000177": [],
+        "01789551000149": [],
+        "25043621000183": [],
+        "01799683000151": [],
+        "00006874000156": [],
+        "01178573000172": [],
+        "02394765000189": [],
+        "01168145000169": [],
+        "01791276000106": [],
+        "01617413000182": [],
+        "24852675000127": [],
+        "02056711000103": [],
+        "25107525000151": [],
+        "01343086000118": [],
+        "01217538000115": []
     },
     "mapa_matriz": {
         "13798155001996": "13798155000167",
@@ -1290,6 +1337,33 @@
         "36985463000105": "COCALZINHO DE GOIÁS",
         "02321115000103": "CÓRREGO DO OURO",
         "01180645000116": "CRISTIANÓPOLIS",
-        "01335363000140": "DIORAMA"
+        "01335363000140": "DIORAMA",
+        "01788082000143": "EDEIA",
+        "01753722000180": "GOIATUBA",
+        "26873059000188": "GUARAÍTA",
+        "02451938000153": "ITABERAÍ",
+        "24850109000186": "ITAGUARI",
+        "01134808000124": "ITAPACI",
+        "03294972000124": "ITAPIRAPUÃ",
+        "01146604000103": "ITAPURANGA",
+        "01067271000127": "ITARUMÃ",
+        "00167437000114": "ITAUÇU",
+        "02321891000103": "IVOLANDIA",
+        "02922128000138": "JUSSARA",
+        "02321909000177": "MOIPORA",
+        "01789551000149": "MORRINHOS",
+        "25043621000183": "MORRO AGUDO",
+        "01799683000151": "MUTUNÓPOLIS",
+        "00006874000156": "NOVO BRASIL",
+        "01178573000172": "PALMINOPOLIS",
+        "02394765000189": "PARAÚNA",
+        "01168145000169": "PIRANHAS",
+        "01791276000106": "PONTALINA",
+        "01617413000182": "PORTEIRÃO",
+        "24852675000127": "RIO QUENTE",
+        "02056711000103": "SANTA HELENA DE GOIÁS",
+        "25107525000151": "SENADOR CANEDO",
+        "01343086000118": "SERRANÓPOLIS",
+        "01217538000115": "TRINDADE"
     }
 }

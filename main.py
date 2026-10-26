@@ -336,7 +336,7 @@ def obter_plano_coleta_em_massa(tipos_cnd_selecionados, apenas_vencidas=True, cn
     resumo["total_cnpjs_executar"] = len(lista_cnpjs_executar)
     return lista_cnpjs_executar, plano_coleta, resumo
 
-def criar_navegador_configurado(headless=None):
+def _criar_navegador(headless=None, imprimir_pdf=False):
     from selenium import webdriver
     from selenium.webdriver.chrome.service import Service
     from selenium.webdriver.chrome.options import Options
@@ -357,38 +357,34 @@ def criar_navegador_configurado(headless=None):
     opcoes.add_argument('--safebrowsing-disable-extension-blacklist')
     opcoes.add_argument('--disable-features=InsecureDownloadWarnings')
 
-    # NOVO: Argumento que força o Chrome a "clicar" em imprimir automaticamente sem mostrar a tela
-    opcoes.add_argument('--kiosk-printing')
-
-    # NOVO: Configuração que diz ao Chrome que o destino da impressão é "Salvar como PDF"
-    app_state = {
-        "recentDestinations": [{
-            "id": "Save as PDF",
-            "origin": "local",
-            "account": ""
-        }],
-        "selectedDestinationId": "Save as PDF",
-        "version": 2
-    }
+    # Configurações de impressão em PDF (ativado quando imprimir_pdf=True)
+    if imprimir_pdf:
+        opcoes.add_argument('--kiosk-printing')
+        # Configura o destino de impressão como "Salvar como PDF"
+        app_state = {
+            "recentDestinations": [{
+                "id": "Save as PDF",
+                "origin": "local",
+                "account": ""
+            }],
+            "selectedDestinationId": "Save as PDF",
+            "version": 2
+        }
+    else:
+        app_state = None
 
     preferencias = {
-        # Suas configurações originais
         "download.default_directory": pasta_download,
         "download.prompt_for_download": False,
         "plugins.always_open_pdf_externally": True,
-        "safebrowsing.enabled": True,                      
-        "safebrowsing.disable_download_protection": True,   
+        "safebrowsing.enabled": True,
+        "safebrowsing.disable_download_protection": True,
         "profile.default_content_setting_values.automatic_downloads": 1,
-        
-        # NOVO: Desabilita o visualizador de PDF interno do Chrome por precaução extra
         "plugins.plugins_disabled": ["Chrome PDF Viewer"],
-        
-        # NOVO: Injeta as configurações de "Salvar como PDF" no perfil do Chrome
-        "printing.print_preview_sticky_settings.appState": json.dumps(app_state),
-        
-        # NOVO: Define o diretório padrão para onde os arquivos "Salvos como PDF" vão
-        "savefile.default_directory": pasta_download
     }
+    if imprimir_pdf:
+        preferencias["printing.print_preview_sticky_settings.appState"] = json.dumps(app_state)
+        preferencias["savefile.default_directory"] = pasta_download
 
     opcoes.add_experimental_option("prefs", preferencias)
     # NOVO: Limpeza automática de travas (locks) do webdriver-manager
@@ -407,6 +403,15 @@ def criar_navegador_configurado(headless=None):
 
     # IMPORTANTE: Removi o "detach: True" para que o código Python consiga fechar as janelas no final
     return webdriver.Chrome(service=servico, options=opcoes)
+
+
+def criar_navegador_configurado(headless=None):
+    return _criar_navegador(headless=headless)
+
+
+def criar_navegador_goiania():
+    return _criar_navegador(headless=False, imprimir_pdf=True)
+
 
 def principal(
     lista_cnpjs,
@@ -638,7 +643,7 @@ def principal(
 
                 # 3. FLUXO SELENIUM PADRÃO (Navegador oculto/configurado repassado via nav_mun)
                 else:
-                    nav_mun = criar_navegador_configurado(headless=True)
+                    nav_mun = criar_navegador_configurado(headless=False)
                     if not usar_headless:
                         nav_mun.maximize_window()
                     nav_mun.execute_cdp_cmd('Page.setDownloadBehavior', {
@@ -989,6 +994,11 @@ class InterfaceAutomacao:
         self.janela = tk.Tk()
         self.janela.title("Coleta de Certidoes")
         self.janela.geometry("1000x720")
+
+        try:
+            self.janela.iconbitmap("icone.ico")
+        except Exception:
+            pass
         self.janela.minsize(900, 600)
         self.janela.configure(bg="#002b36")
         self.janela.protocol("WM_DELETE_WINDOW", self.fechar)

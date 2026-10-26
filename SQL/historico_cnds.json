@@ -31,7 +31,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -201,7 +201,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "13.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -554,7 +554,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -847,7 +847,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -913,7 +913,7 @@
         "Formosa": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "CNPJ não cadastrado ou sem débitos encontrados."
+            "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
         },
         "Estadual": {
             "validade": "11.02.27",
@@ -921,7 +921,7 @@
             "observacao": ""
         },
         "Comprasnet": {
-            "validade": "13.11.26",
+            "validade": "25.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -944,6 +944,11 @@
             "validade": "22.03.27",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: Site gera a certidão com erro"
         }
     },
     "50257147000130": {
@@ -953,9 +958,9 @@
             "observacao": "Bloqueio: Contribuinte possui valores em aberto vencidos, favor procurar a prefeitura!"
         },
         "Estadual": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Nenhum arquivo .asp foi encontrado na pasta. O download pode ter falhado ou demorado muito."
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
         },
         "Comprasnet": {
             "validade": "13.11.26",
@@ -1141,8 +1146,13 @@
             "observacao": ""
         },
         "Águas Lindas": {
-            "validade": "25.10.26",
-            "status": "Positiva com Efeito Negativo",
+            "validade": "25.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        },
+        "Estadual DF": {
+            "validade": "24.01.27",
+            "status": "Negativa",
             "observacao": ""
         }
     },
@@ -1309,7 +1319,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -1368,9 +1378,9 @@
             "observacao": ""
         },
         "Abadiânia": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Tempo limite de download excedido (Nenhum PDF baixado)."
+            "validade": "19.11.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "63244973000196": {
@@ -1498,7 +1508,7 @@
         "Estadual DF": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Aviso do Portal: Site pede para entrar com o GOV"
+            "observacao": "Aviso do Portal: Site pede para logar com o gov"
         },
         "Estadual": {
             "validade": "11.02.27",
@@ -1572,7 +1582,7 @@
     },
     "52553529000136": {
         "Águas Lindas": {
-            "validade": "30.10.26",
+            "validade": "25.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -1614,7 +1624,7 @@
     },
     "49260899000170": {
         "Luziania": {
-            "validade": "30.10.26",
+            "validade": "25.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -1656,7 +1666,7 @@
     },
     "31461574000786": {
         "Águas Lindas": {
-            "validade": "30.10.26",
+            "validade": "25.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -1700,7 +1710,7 @@
     },
     "54806499000158": {
         "Luziania": {
-            "validade": "30.10.26",
+            "validade": "25.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -1733,6 +1743,11 @@
             "validade": "30.01.27",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Águas Lindas": {
+            "validade": "25.11.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "13798155000167": {
@@ -1754,7 +1769,7 @@
         "Estadual DF": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Aviso do Portal: Site pede para entrar com o GOV"
+            "observacao": "Aviso do Portal: Site pede para logar com o gov"
         },
         "Águas Lindas": {
             "validade": "05.11.26",
@@ -1812,6 +1827,11 @@
             "validade": "02.11.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "Goiânia": {
+            "validade": "13.01.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "03662952000169": {
@@ -1833,7 +1853,7 @@
         "Estadual DF": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Aviso do Portal: Site pede para logar com o GOV"
+            "observacao": "Aviso do Portal: Site pede para logar com o gov"
         },
         "Estadual": {
             "validade": "11.02.27",
@@ -1865,7 +1885,7 @@
         "Estadual DF": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Aviso do Portal: Site pede para logar com o GOV"
+            "observacao": "Aviso do Portal: Site pede para logar com o gov"
         },
         "Valparaiso": {
             "validade": "01.11.26",
@@ -2014,7 +2034,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "13.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2159,9 +2179,9 @@
     },
     "11325535000159": {
         "Águas Lindas": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Bloqueio: Foram encontradas pendências em seu cadastro que impossibilitam a emissão da certidão. Entre em contato com o responsável na prefeitura para que verifique seu cadastro e/ou imprima sua certidão."
+            "validade": "19.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
         },
         "Formosa": {
             "validade": "30.12.26",
@@ -2330,7 +2350,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "12.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2377,7 +2397,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "12.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2419,7 +2439,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "12.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2483,9 +2503,9 @@
             "observacao": ""
         },
         "Nova Veneza": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Tempo limite de download excedido (Nenhum PDF baixado)."
+            "validade": "20.11.26",
+            "status": "Negativa",
+            "observacao": ""
         },
         "Terezópolis": {
             "validade": "",
@@ -2540,7 +2560,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         }
@@ -2624,7 +2644,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "23.10.26",
+            "validade": "16.11.26",
             "status": "Negativa",
             "observacao": ""
         }
@@ -2661,7 +2681,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "19.10.26",
+            "validade": "13.11.26",
             "status": "Negativa",
             "observacao": ""
         }
@@ -2740,7 +2760,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "20.10.26",
+            "validade": "13.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2782,7 +2802,7 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "20.10.26",
+            "validade": "13.11.26",
             "status": "Negativa",
             "observacao": ""
         },
@@ -2967,9 +2987,9 @@
             "observacao": ""
         },
         "Federal": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Aviso do Portal: As informações disponíveis na Receita Federal sobre o contribuinte 23.061.020/0001-78 são insuficientes para emitir a certidão pela Internet."
+            "validade": "20.02.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
         },
         "Estadual": {
             "validade": "11.02.27",
@@ -2997,9 +3017,9 @@
             "observacao": ""
         },
         "Bom Jesus": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Botão de imprimir não habilitado / Sem CND disponível."
+            "validade": "22.11.26",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "23732109000119": {
@@ -3125,9 +3145,9 @@
             "observacao": ""
         },
         "Estadual": {
-            "validade": "",
-            "status": "Falha na Coleta",
-            "observacao": "Nenhum arquivo .asp foi encontrado na pasta. O download pode ter falhado ou demorado muito."
+            "validade": "18.02.27",
+            "status": "Negativa",
+            "observacao": ""
         },
         "AGEHAB": {
             "validade": "11.02.27",
@@ -3599,18 +3619,18 @@
             "observacao": ""
         },
         "Comprasnet": {
-            "validade": "13.11.26",
+            "validade": "18.11.26",
             "status": "Negativa",
             "observacao": ""
         },
         "Luziania": {
-            "validade": "14.10.26",
-            "status": "Negativa",
+            "validade": "20.11.26",
+            "status": "Positiva",
             "observacao": ""
         },
         "Valparaiso": {
-            "validade": "14.10.26",
-            "status": "Negativa",
+            "validade": "20.11.26",
+            "status": "Positiva",
             "observacao": ""
         },
         "Federal": {
@@ -3989,7 +4009,7 @@
             "observacao": ""
         },
         "Valparaiso": {
-            "validade": "14.10.26",
+            "validade": "20.11.26",
             "status": "Positiva",
             "observacao": ""
         },
@@ -4477,7 +4497,7 @@
         "FGTS": {
             "validade": "",
             "status": "Falha na Coleta",
-            "observacao": "Aviso CAIXA: Não foi possível verificar a regularidade junto à CAIXA. Solicitamos tentar mais tarde. Caso persista solicitamos comparecer a uma das Agências da CAIXA para obter esclarecimentos adicionais."
+            "observacao": "Erro inesperado no fluxo do FGTS: Message: invalid session id: session deleted as the browser has closed the connection\nfrom disconnected: not connected to DevTools\n  (Session info: chrome=156.0.8078.47); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t(No symbol) [0x7ff6164b3f45]\n\t(No symbol) [0x7ff6163b4f90]\n\t(No symbol) [0x7ff616232c53]\n\t(No symbol) [0x7ff616227b9f]\n\t(No symbol) [0x7ff616238f09]\n\t(No symbol) [0x7ff61625dec6]\n\t(No symbol) [0x7ff61626230f]\n\t(No symbol) [0x7ff616247cb9]\n\t(No symbol) [0x7ff616248ff3]\n\t(No symbol) [0x7ff61696e1a1]\n\t(No symbol) [0x7ff61699181b]\n\t(No symbol) [0x7ff616987ece]\n\t(No symbol) [0x7ff6165db10e]\n\t(No symbol) [0x7ff6163c3db5]\n\t(No symbol) [0x7ff6163be694]\n\t(No symbol) [0x7ff6163be824]\n\t(No symbol) [0x7ff6163a6bdc]\n\t(No symbol) [0x7ffcd2c3257d]\n\t(No symbol) [0x7ffcd388af28]\n"
         },
         "Estadual": {
             "validade": "11.02.27",
@@ -4737,6 +4757,36 @@
             "validade": "12.11.26",
             "status": "Negativa",
             "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "03.04.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
         }
     },
     "053764950001711": {
@@ -4773,6 +4823,16 @@
             "validade": "01.02.27",
             "status": "Positiva com Efeito Negativo",
             "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
         }
     },
     "25108291000167": {
@@ -4797,13 +4857,1132 @@
             "observacao": ""
         },
         "FGTS": {
-            "validade": "22.10.26",
+            "validade": "15.11.26",
             "status": "Negativa",
             "observacao": ""
         },
         "Federal": {
             "validade": "21.12.26",
             "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "00006874000156": {
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "13.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "13.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "28.10.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "00007344000122": {
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "13.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "16.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01345537000156": {
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "02922128000138": {
+        "Estadual": {
+            "validade": "18.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "20.04.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "00167437000114": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "13.01.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01067271000127": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "06.01.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01134808000124": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "31.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01146604000103": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "20.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01168145000169": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "31.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01178573000172": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "30.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01180645000116": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "13.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "28.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01217538000115": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "24.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01335363000140": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "30.12.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "01343086000118": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "30.01.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01617413000182": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Positiva",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "13.01.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01753722000180": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "09.02.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01788082000143": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "13.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01791276000106": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "13.04.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "01799683000151": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: As informações disponíveis na Receita Federal sobre o contribuinte 01.799.683/0001-51 são insuficientes para emitir a certidão pela Internet."
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "02056711000103": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "",
+            "status": "Falha na Coleta",
+            "observacao": "Aviso do Portal: As informações disponíveis na Receita Federal sobre o contribuinte 02.056.711/0001-03 são insuficientes para emitir a certidão pela Internet."
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "02321115000103": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "30.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "02321891000103": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "31.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "02321909000177": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "17.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "14.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "02394765000189": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "02451938000153": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "22.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "03294972000124": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Secretaria Da Receita Federal Do Brasil": {
+            "validade": "07.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "24850109000186": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "09.02.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "24852675000127": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "24.04.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "24857096000177": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "05.12.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "24859316000100": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "09.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "25043621000183": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "02.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "08.03.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "26873059000188": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "04.04.27",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "36985463000105": {
+        "AGEHAB": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Estadual": {
+            "validade": "16.02.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "FGTS": {
+            "validade": "15.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Trabalhista": {
+            "validade": "24.04.27",
+            "status": "Negativa",
+            "observacao": ""
+        },
+        "Federal": {
+            "validade": "21.11.26",
+            "status": "Positiva Com Efeito Negativo",
+            "observacao": ""
+        }
+    },
+    "48588600122081": {
+        "Anápolis": {
+            "validade": "13.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "13981500996157": {
+        "Anápolis": {
+            "validade": "13.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "137981550019961": {
+        "Goiânia": {
+            "validade": "13.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "137981550019962": {
+        "Goiânia": {
+            "validade": "13.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "137981550019963": {
+        "Goiânia": {
+            "validade": "13.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "137981550019964": {
+        "Goiânia": {
+            "validade": "13.01.27",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "410882250001291": {
+        "Comprasnet": {
+            "validade": "18.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "398473000001461": {
+        "FGTS": {
+            "validade": "11.11.26",
+            "status": "Negativa",
+            "observacao": ""
+        }
+    },
+    "548064990001581": {
+        "Luziania": {
+            "validade": "25.11.26",
+            "status": "Negativa",
             "observacao": ""
         }
     }
